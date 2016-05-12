@@ -1,9 +1,41 @@
 local _M = {}
 
 
- 
+-- local servers={
+-- 	{["weight"]=1,["name"]="a",["cweight"]=0},
+-- 	{["weight"]=2,["name"]="b",["cweight"]=0},
+-- 	{["weight"]=4,["name"]="c",["cweight"]=0}
+-- }
 
- function next(servers)
+_M.servers={}
+
+function _M:setServers(servers )
+	self.servers=servers
+end
+
+function _M:addServer(server) 
+	table.insert(self.servers,server)
+end
+
+function _M:down(server)  
+	for k,v in pairs(self.servers) do
+		if server.name==v.name then
+			v.up=false
+		end
+	end
+end
+
+function _M:up(server)  
+	for k,v in pairs(self.servers) do
+		if server.name==v.name then
+			v.up=true
+		end
+	end
+end
+
+
+
+function _M:next(servers)
  	local totalWeight = totalWeight(servers)
  	for k,v in pairs(servers) do
 		v.cweight=v.weight+v.cweight
@@ -29,30 +61,5 @@ local _M = {}
  	return totalWeight
  end
 
-
- local servers={
-	{["weight"]=1,["name"]="a",["cweight"]=0},
-	{["weight"]=2,["name"]="b",["cweight"]=0},
-	{["weight"]=4,["name"]="c",["cweight"]=0}
-}
- 
-
-
-for i=1,7 do
-	print(next(servers).name)
-
-end
-
-
-local s1 = "/app1"
-local s2 = "/app1/v1/user"
-
-print("\n"..string.find(s2,s1,1).."\n")
-print("\n"..string.find(s2,"/v1/",1).."\n")
-local  sf 
-if  sf==nil  then
-print(sf)
-end
-
-
+ return _M
 
