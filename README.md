@@ -1,1 +1,1 @@
-#lua_eureka_route
+依赖：lua-resty-http
