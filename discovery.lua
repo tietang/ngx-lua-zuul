@@ -123,12 +123,13 @@ local KEY_LAST_EXECUTED_TIME = "last_executed_time"
 function _M:schedule()
  
     local shared = ngx.shared.apps
-    local interval=1 
+    local interval=10
 
     function getAndSet(premature, shared ) 
 
         
         local c = ngx.worker.count()
+        local id = ngx.worker.id()
         local currentWorkerPid = ngx.worker.pid()--ngx.var.pid -- 
 
         local last_executed_pid = shared:get(KEY_LAST_EXECUTED_PID)
@@ -147,15 +148,14 @@ function _M:schedule()
             -- last_executed_pid_time=now
         -- end
         -- ngx.log(ngx.ERR,"worker count:",c,", PID:",currentWorkerPid,",",last_executed_time,",",now-last_executed_time,",",interval-0.1)
-        --旨在同一时间只有一个worker执行定时任务，并且不一致在同一个worker执行
-        if last_executed_pid ==nil or last_executed_time == nil or last_executed_pid_time==nil
-            or (
-                    (now-last_executed_time) >= interval-0.1 --如果最后执行时间>=设定间隔-0.1，-0.1是纠正偶尔存在的执行时间偏差
-                and last_executed_pid ~= currentWorkerPid -- 如果当前worker pid != 最后一次worker pid
-                and (now-last_executed_pid_time) >= interval*c-0.1 --如果当前worker最后执行时间 >= 设定间隔*worker数量 - 0.1
-
-            ) then
-        -- if ngx.time()%c==currentWorkerPid %c then
+        --旨在同一时间只有一个worker执行定时任务，并且不一致在同一个worker执行，需要运行一段时间调整近似
+        -- if last_executed_pid ==nil or last_executed_time == nil or last_executed_pid_time==nil
+        --     or (
+        --             (now-last_executed_time) >= interval-0.1 --如果最后执行时间>=设定间隔-0.1，-0.1是纠正偶尔存在的执行时间偏差
+        --         and last_executed_pid ~= currentWorkerPid -- 如果当前worker pid != 最后一次worker pid
+        --         and (now-last_executed_pid_time) >= interval*c-0.1 --如果当前worker最后执行时间 >= 设定间隔*worker数量 - 0.1
+        --     ) then
+        if  id % c==0 then --NGINX 1.9.1+ 
 
             local content,hosts,apps=_M:getAllApps()
             
