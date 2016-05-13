@@ -1,6 +1,10 @@
  
 
 local robin = require "robin"
+ 
+print(robin)
+
+
 local servers={
 	{["weight"]=1,["name"]="a",["cweight"]=0},
 	{["weight"]=2,["name"]="b",["cweight"]=0},

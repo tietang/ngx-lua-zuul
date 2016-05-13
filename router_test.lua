@@ -17,13 +17,15 @@ local routingTable = {
    }
    
 }
-router.setRoutingTable(routingTable)
+router:setRoutingTable(routingTable)
  
-print(router:getMatchRouteTargetPath(routingTable,"/app2/v3/cc").."\n")
-print(router:getMatchRouteTargetPath(routingTable,"/app4/v3/cc").."\n")
-print(router:getMatchRouteTargetPath(routingTable,"/app4/v3/e").."\n")
-print(router:getMatchRouteTargetPath(routingTable,"/app1/v1/user").."\n")
-print(router:getMatchRouteTargetPath(routingTable,"/app1/v2/user").."\n")
-print(router:getMatchRouteTargetPath(routingTable,"/app2/v3/f").."\n")
-print(router:getMatchRouteTargetPath(routingTable,"/app3/v3/f").."\n")
+
+
+print(router:getMatchRouteTargetPath("/app2/v3/cc").."\n")
+print(router:getMatchRouteTargetPath("/app4/v3/cc").."\n")
+print(router:getMatchRouteTargetPath("/app4/v3/e").."\n")
+print(router:getMatchRouteTargetPath("/app1/v1/user").."\n")
+print(router:getMatchRouteTargetPath("/app1/v2/user").."\n")
+print(router:getMatchRouteTargetPath("/app2/v3/f").."\n")
+print(router:getMatchRouteTargetPath("/app3/v3/f").."\n")
 

@@ -1,28 +1,109 @@
 -- local balancer = require "ngx.balancer"
 local _M = {}
+ 
+-- local routingTable = {
+--    stripPrefix=false,
+--    routes={
+
+--       {sourcePath="/app1/v1/user",app="app1",targetPath="/v1/user",stripPrefix=false},
+--       {sourcePath="/app1/v2/user",app="app1",targetPath="/app1/v2/user",stripPrefix=false},
+--       {sourcePath="/app2/*",app="app2",targetPath="/app20/*",stripPrefix=true},
+--       {sourcePath="/app3/*",app="app3",stripPrefix=false},
+--       {sourcePath="/app4/*",app="app4",stripPrefix=true}
+--    }
+   
+-- }
 
 _M.routingTable={
    stripPrefix=false,
    routes={}
 }
 
-function _M.addRoute(route)
-   table.insert(self.routingTable,route)
+function _M:addRoute(route)
+   if not route then
+      return
+   end
+-- print(dump(route))
+   local isInit=initRoute(self.routingTable,route)
+   if isInit then 
+      table.insert(self.routingTable.routes,route)
+   end
+   -- print(dump(route))
 end
  
 function _M:setRoutingTable(routingTable)
-  self.routingTable=routingTable
+   if not routingTable then
+      return
+   end
+  
+   for k,v in pairs(routingTable.routes) do
+    -- print(dump(v))
+      self:addRoute(v)
+   end 
+  -- print(dump(self.routingTable))
 end
 
-function _M:getMatchRouteTargetPath( routingTable, path )
-   local route = self.getMatchRoute(routingTable,path)
+function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
+
+function initRoute(routingTable,route)
+   if not route or not route.sourcePath then 
+      return false
+   end
+
+   local sourceFuzzyMatchIndex=string.find(route.sourcePath,"/**",1)
+   if sourceFuzzyMatchIndex and sourceFuzzyMatchIndex>0 then
+      route.sourceIsFuzzyMatch= true
+      route.sourcePrefix=string.sub(route.sourcePath,1,sourceFuzzyMatchIndex)
+   end
+
+   if route.targetPath then
+      local targetFuzzyMatchIndex=string.find(route.targetPath,"/**",1)
+      if targetFuzzyMatchIndex and targetFuzzyMatchIndex>0 then
+         route.targetIsFuzzyMatch = true
+         route.targetPrefix=string.sub(route.targetPath,1,targetFuzzyMatchIndex)
+      end   
+   end
+
    if route.stripPrefix == nil and routingTable.stripPrefix ~= nil then
       route.stripPrefix = routingTable.stripPrefix
    end
+
+   return true
+  
+end
+
+function _M:getMatchRouteTargetPath( path )
+   
+   return getMatchRouteTargetPath(self.routingTable,path)
+end
+
+function _M:getMatchRoute(path)
+
+   return getMatchRoute(self.routingTable,path)
+end
+
+function getMatchRouteTargetPath( routingTable, path )
+   local route = getMatchRoute(routingTable,path)
+   if not route then
+      return nil
+   end
+ 
    return getRouteTargetPath(route,path)
 end
 
-function _M.getMatchRoute(routingTable, path)
+function getMatchRoute(routingTable, path)
 
    for k,v in pairs(routingTable.routes) do
       if  isMatch(path,v) then
@@ -39,11 +120,7 @@ function getRouteTargetPath(route,path )
    local isStrip= false
 
    if route.targetPath then
- 
-      if not route.targetFuzzyMatchIndex then
-         route.targetFuzzyMatchIndex=string.find(route.targetPath,"/**",1)
-     
-      end
+  
       if route.targetFuzzyMatchIndex and route.targetFuzzyMatchIndex>0 then
          if route.targetPath  then
             route.targetPrefix=string.sub(route.targetPath,1,route.targetFuzzyMatchIndex)
@@ -58,53 +135,27 @@ function getRouteTargetPath(route,path )
    end
 
    if isStrip and route.stripPrefix then
-
-      if not route.fuzzyMatchIndex then
-         route.fuzzyMatchIndex= string.find(route.sourcePath,"/**",1)
-      end 
-
-      if not route.prefix then
-         route.prefix=string.sub(route.sourcePath,1,route.fuzzyMatchIndex)
-      end   
-    
-    
-
-      --print(string.format("%s %d %d",tpath,index,string.len(route.prefix)))
       if route.targetPrefix then
-
-         return route.targetPrefix..string.sub(tpath,string.len(route.prefix)+1)
-
+         return route.targetPrefix..string.sub(tpath,string.len(route.sourcePrefix)+1)
       else
-         return  string.sub(tpath,string.len(route.prefix))
-
+         return  string.sub(tpath,string.len(route.sourcePrefix))
       end
    else
-     
       if route.targetPrefix then
-
          return route.targetPrefix..string.sub(tpath,2)
-
       else
           return tpath
-
       end
    end
-   
 end
 
 
 
 function isMatch(path,route)
- 
-   if not route.fuzzyMatchIndex then
-      route.fuzzyMatchIndex= string.find(route.sourcePath,"/**",1)
-   end
 
-   if route.fuzzyMatchIndex and route.fuzzyMatchIndex>0 then
-      if not route.prefix then
-         route.prefix=string.sub(route.sourcePath,1,route.fuzzyMatchIndex)
-      end
-      local foundSub = string.find(path, route.prefix,1)
+   if route.sourceIsFuzzyMatch then
+    
+      local foundSub = string.find(path, route.sourcePrefix,1)
       if foundSub and foundSub==1 then
          return true
       else
