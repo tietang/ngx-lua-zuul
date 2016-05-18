@@ -8,6 +8,7 @@ local _M = {
 
 }
 
+
 local http=require "resty.http"
 -- https://github.com/pintsized/lua-resty-http
 local json=require "cjson"
@@ -16,7 +17,7 @@ local url="http://127.0.0.1:8761/v1/apps"
 --[[
     请求discovery，获取在线服务器列表
 --]]
-function _M:getAllApps()
+function _M:getAllApps2()
     
     local httpc=http.new()
     httpc:set_timeout(1000)
@@ -148,15 +149,15 @@ function _M:schedule()
             -- last_executed_pid_time=now
         -- end
         -- ngx.log(ngx.ERR,"worker count:",c,", PID:",currentWorkerPid,",",last_executed_time,",",now-last_executed_time,",",interval-0.1)
-        --旨在同一时间只有一个worker执行定时任务，并且不一致在同一个worker执行，需要运行一段时间调整近似
+        -- <=NGINX 1.9.1+ 旨在同一时间只有一个worker执行定时任务，并且不一致在同一个worker执行，需要运行一段时间调整近似
         -- if last_executed_pid ==nil or last_executed_time == nil or last_executed_pid_time==nil
         --     or (
         --             (now-last_executed_time) >= interval-0.1 --如果最后执行时间>=设定间隔-0.1，-0.1是纠正偶尔存在的执行时间偏差
         --         and last_executed_pid ~= currentWorkerPid -- 如果当前worker pid != 最后一次worker pid
         --         and (now-last_executed_pid_time) >= interval*c-0.1 --如果当前worker最后执行时间 >= 设定间隔*worker数量 - 0.1
         --     ) then
-        if  id % c==0 then --NGINX 1.9.1+ 
-
+        if  id % c==0 then -->=NGINX 1.9.1+ 
+            -- getApps()
             local content,hosts,apps=_M:getAllApps()
             
             if content ~= nil then
@@ -178,6 +179,7 @@ function _M:schedule()
         local ok,err = ngx.timer.at(interval,getAndSet,shared)
         -- local last=shared:get("lastRenewalTimestamp")
         ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)
+      
     end
     
     local ok,err = ngx.timer.at(interval,getAndSet,shared)
@@ -228,6 +230,190 @@ function getAndSetCountByAppName(shared, appName)
     end
     return v
 end
+
+local appName = "app1"
+
+local allAppUrl="http://120.26.53.156:8761/eureka/apps"
+
+ 
+function _M:getAllApps() 
+
+    ---从Eureka server获取注册的apps
+    --参考https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
+    local httpc=http.new()
+    httpc:set_timeout(1000)
+    local res,err=httpc:request_uri(allAppUrl,{
+        method ="GET",
+        headers = {
+              ["Accept"] = "application/json;charset=UTF-8",
+          },
+
+    })
+    -- 响应ok
+    if not res  or not res.body then
+        ngx.log(ngx.ERR,"getApps failed to request :",err)
+        return nil,nil,nil
+    end
+    
+    --响应数据https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
+    local content=res.body
+    -- ngx.log(ngx.ERR,content)
+    -- json数据转换为lua table
+    local eurekaApps = json.decode(content)
+    -- 定义app对象
+    local apps = {apps={},timestamp=os.time()*1000}
+
+   
+    --[[
+    local hosts = {
+        appName={
+            [1]="http://127.0.0.1:8080",
+            [2]="http://127.0.0.2:8082"
+            [3]="http://127.0.0.3:8083"
+        },
+        app2={
+            [1]="http://127.0.0.1:8080",
+            [2]="http://127.0.0.6:8080"
+        },
+        app3={
+            [1]="http://127.0.0.7:8080",
+            [2]="https://127.0.0.9:8443",
+            [3]="https://127.0.0.1:8443"
+        }  
+
+    }
+    ]]--
+
+
+    local hosts = {} 
+    
+    for k,v in pairs(eurekaApps.applications.application) do
+
+        local app,appHosts = eureka2app(v)
+        table.insert(apps.apps,app)
+
+        hosts[v.name]=appHosts
+        -- ngx.log(ngx.ERR, os.time(),table.getn(appHosts))
+        
+    end
+    
+
+
+    --[[
+        json格式例子
+        {
+            "timestamp": 1452042891719,
+            "apps": [
+                {
+                    "name": "GATEAWAY",
+                    "hosts": [
+                        {
+                            "lastRenewalTimestamp": 1452042964223,
+                            "hostName": "192.168.99.1",
+                            "ip": "192.168.99.1",
+                            "id": "192.168.99.1:gateaway",
+                            "status": "UP",
+                            "sport": null,
+                            "name": "GATEAWAY",
+                            "port": 8080
+                        }
+                    ]
+                }
+            ]
+        }    
+    --]]
+    
+   
+     self.apps=apps 
+   
+    local shared = ngx.shared.apps
+    self.requestTimes = getAndSetCountByAppName(shared,"requestTimes")
+    if apps == nil then
+        return content,nil,nil
+    end
+
+
+    
+    self.hosts=hosts
+
+
+
+
+    -- ngx.log(ngx.ERR, type(apps))
+        -- print(type(apps))
+
+    -- ngx.log(ngx.ERR, "content=",content,", requestTimes: ",self.requestTimes)
+
+    return content,hosts,apps
+end 
+
+function eureka2app(application,hosts )
+
+
+    local appName = application.name
+    local app = {
+            name=appName,
+            hosts={}
+        }
+
+    
+    -- for index,appList in pairs(apps.apps) do
+    --     local x = 1
+    --     hosts[appList.name]={}
+    --     for k,v in pairs(appList.hosts) do
+    --         if v.status=="UP" then
+    --             hosts[v.name][x]="http://" .. v.hostName .. ":" .. v.port
+    --             -- ngx.log(ngx.ERR, self.hosts[v.name][x])
+    --             x=x+1
+                
+    --         end
+    --     -- print(k,v.name)
+    --     end
+    --     -- print(index,appList.name)
+    -- end
+    local hosts = {}  
+ 
+    local x = 1
+    for k,v in pairs(application.instance) do
+        
+        local ip = v.ipAddr
+        local hostName = v.hostName
+        local port = v.port["$"]
+        local schema = "http"
+        if v.securePort["@enabled"] == "true" then
+            port = v.securePort["$"]
+            schema="https"
+        end
+        local url= schema.."://" .. hostName .. ":" .. port
+    
+        local host={
+            name=appName,
+            hostName=hostName,
+            ip=ip,
+            port=port,
+            healthCheckUrl=v.healthCheckUrl,
+            status=v.status,
+            lastRenewalTimestamp=v.leaseInfo.lastRenewalTimestamp,
+            url=url,
+            weight=10,
+            cweight=0
+        }
+
+        table.insert(app.hosts,host)
+
+        if v.status=="UP" then
+            hosts[x]= schema.."://" .. v.hostName .. ":" .. port
+            
+            x=x+1
+                
+        end
+        
+        ngx.log(ngx.ERR,"app=",appName," ip=",ip," hostName=",hostName," port=",port)
+    end
+    return app,hosts
+end
+
+
 -- function _M.getHostByName(shared,name,balance)
 --     local apps=shared:get("apps")
 --     self.apps=

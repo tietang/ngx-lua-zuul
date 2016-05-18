@@ -1,8 +1,7 @@
  
 
-local robin = require "robin"
- 
-print(robin)
+local robinObj = require "robin"
+
 
 
 local servers={
@@ -10,11 +9,15 @@ local servers={
 	{["weight"]=2,["name"]="b",["cweight"]=0},
 	{["weight"]=4,["name"]="c",["cweight"]=0}
 }
- 
-robin:setServers(servers)
+local robin =robinObj:new(nil,servers)
+local robin2 =robinObj:new(nil,servers)
+
+print(robin)
+print(robin2)
+
 
 for i=1,7 do
-	print(robin:next(servers).name)
+	print(robin:next().name)
 
 end
 

@@ -8,10 +8,16 @@ local _M = {}
 -- }
 
 _M.servers={}
-
-function _M:setServers(servers )
+function _M:new(o,servers)
+	o = o or {}
+	setmetatable(o,self)
+	self.__index=self
 	self.servers=servers
+	return o
 end
+--function _M:setServers(servers )
+--	self.servers=servers
+--end
 
 function _M:addServer(server) 
 	table.insert(self.servers,server)
@@ -20,7 +26,7 @@ end
 function _M:down(server)  
 	for k,v in pairs(self.servers) do
 		if server.name==v.name then
-			v.up=false
+			v.status="DOWN"
 		end
 	end
 end
@@ -28,14 +34,15 @@ end
 function _M:up(server)  
 	for k,v in pairs(self.servers) do
 		if server.name==v.name then
-			v.up=true
+			v.status="UP"
 		end
 	end
 end
 
 
 
-function _M:next(servers)
+function _M:next()
+	local servers=self.servers
  	local totalWeight = totalWeight(servers)
  	for k,v in pairs(servers) do
 		v.cweight=v.weight+v.cweight
@@ -61,5 +68,5 @@ function _M:next(servers)
  	return totalWeight
  end
 
- return _M
+return _M
 
