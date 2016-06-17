@@ -10,7 +10,6 @@ local _M = {}
 --       {sourcePath="/app2/*",app="app2",targetPath="/app20/*",stripPrefix=true},
 --       {sourcePath="/app3/*",app="app3",stripPrefix=false},
 --       {sourcePath="/app4/*",app="app4",stripPrefix=true}
---       {sourcePath="/app4/*",app="app4",stripPrefix=true}
 --    }
    
 -- }
@@ -19,32 +18,8 @@ _M.routingTable={
    stripPrefix=false,
    routes={}
 }
+_M.stripPrefix=false
 
-function _M:addRoute(route)
-   if not route then
-      return
-   end
--- print(dump(route))
-   local isInit=initRoute(self.routingTable,route)
-   if isInit then 
-      table.insert(self.routingTable.routes,route)
-   end
-   -- print(dump(route))
-
-
-end
- 
-function _M:setRoutingTable(routingTable)
-   if not routingTable then
-      return
-   end
-  
-   for k,v in pairs(routingTable.routes) do
-    -- print(dump(v))
-      self:addRoute(v)
-   end 
-  -- print(dump(self.routingTable))
-end
 
 function dump(o)
    if type(o) == 'table' then
@@ -60,7 +35,7 @@ function dump(o)
 end
 
 
-function initRoute(routingTable,route)
+function initRoute(route)
    if not route or not route.sourcePath then 
       return false
    end
@@ -79,57 +54,87 @@ function initRoute(routingTable,route)
       end   
    end
 
-   if route.stripPrefix == nil and routingTable.stripPrefix ~= nil then
-      route.stripPrefix = routingTable.stripPrefix
+   if route.stripPrefix == nil  then
+      route.stripPrefix = false
    end
 
    return true
   
 end
 
-function _M:getMatchRouteTargetPath( path )
-   
-   return getMatchRouteTargetPath(self.routingTable,path)
-end
+function _M:getMatchSourcePathKey(path,keys )
+   for i,v in pairs(keys) do
 
- 
-
-function _M:getMatchRoute(path) 
-    -- ngx.log(ngx.ERR, "$$$$$$:", json.encode(self.routingTable))
-   -- print( "$$$$$$:", json.encode(self.routingTable))
-   return getMatchRoute(self.routingTable,path)
-end
-
-function _M:getRouteTargetPath(route,path )
-
-   return getRouteTargetPath(route,path )
-end
-
-function getMatchRouteTargetPath( routingTable, path )
-   local route = getMatchRoute(routingTable,path)
-   if not route then
-      return nil
-   end
- 
-   return getRouteTargetPath(route,path)
-end
-
-function getMatchRoute(routingTable, path)
-
-   for k,v in pairs(routingTable.routes) do
       if  isMatch(path,v) then
          return v
       end
    end
+
+   -- print(path)
+    -- print(dump(keys))
+
    return nil
 end
 
+function _M:getMatchRoute(path,keys,shareRoutes )
+   local key = self:getMatchSourcePathKey(path,keys)
+   -- print(key)
+   if key== nil then
+      return nil
+   end
+   --[
+   --   {sourcePath="/app1/v1/user",app="app1",targetPath="/v1/user",stripPrefix=false}
+   --]
+   local targetJson = shareRoutes:get(key)
+   if targetJson==nil then
+      return nil
+   end
+
+   
+
+   local route = json.decode(targetJson)
+
+   initRoute(route)
+
+   if route.targetPath then
+      local targetFuzzyMatchIndex=string.find(route.targetPath,"/**",1)
+      route.targetFuzzyMatchIndex=targetFuzzyMatchIndex
+      if targetFuzzyMatchIndex and targetFuzzyMatchIndex>0 then
+         route.targetIsFuzzyMatch = true
+         route.targetPrefix=string.sub(route.targetPath,1,targetFuzzyMatchIndex)
+      end   
+   end
+
+   if route.stripPrefix == nil and routingTable.stripPrefix ~= nil then
+      route.stripPrefix = routingTable.stripPrefix
+   end
+
+   return route
+end
+
+
+
+function _M:getRouteTargetPath(route,path )
+   return getRouteTargetPath(route,path )
+end
+
+ 
+
+function _M:getMatchRouteTargetPath(path,keys,shareRoutes )
+   local route = self:getMatchRoute(path,keys,shareRoutes)
+
+   if not route then
+      return ""
+   end
+ 
+   return self:getRouteTargetPath(route,path) 
+end
 
 function getRouteTargetPath(route,path )
 
    local tpath = path
    local isStrip= false
-
+-- print(dump(route))
    if route.targetPath then
   
       if route.targetFuzzyMatchIndex and route.targetFuzzyMatchIndex>0 then
@@ -162,11 +167,19 @@ end
 
 
 
-function isMatch(path,route)
+function isMatch(path,sourcePath)
 
-   if route.sourceIsFuzzyMatch then
-    
-      local foundSub = string.find(path, route.sourcePrefix,1)
+   local sourceFuzzyMatchIndex=string.find(sourcePath,"/**",1)
+   local sourceIsFuzzyMatch= false
+   local sourcePrefix=sourcePath
+   if sourceFuzzyMatchIndex and sourceFuzzyMatchIndex>0 then
+      sourceIsFuzzyMatch= true
+      sourcePrefix=string.sub(sourcePath,1,sourceFuzzyMatchIndex)
+   end
+   -- print(path,sourcePath,sourceFuzzyMatchIndex,sourceIsFuzzyMatch,sourcePrefix)
+
+   if sourceIsFuzzyMatch then
+      local foundSub = string.find(path, sourcePrefix,1)
       if foundSub and foundSub==1 then
          return true
       else
@@ -174,7 +187,7 @@ function isMatch(path,route)
       end
 
    else 
-      if path==route.sourcePath then
+      if path==sourcePath then
          return true
       else
          return false

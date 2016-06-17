@@ -10,7 +10,6 @@ local _M = {}
 --       {sourcePath="/app2/*",app="app2",targetPath="/app20/*",stripPrefix=true},
 --       {sourcePath="/app3/*",app="app3",stripPrefix=false},
 --       {sourcePath="/app4/*",app="app4",stripPrefix=true}
---       {sourcePath="/app4/*",app="app4",stripPrefix=true}
 --    }
    
 -- }

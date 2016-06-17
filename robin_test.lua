@@ -1,4 +1,4 @@
- 
+
 
 local robinObj = require "robin"
 
@@ -27,10 +27,7 @@ local s2 = "/app1/v1/user"
 
 print("\n"..string.find(s2,s1,1).."\n")
 print("\n"..string.find(s2,"/v1/",1).."\n")
-local  sf 
+local  sf
 if  sf==nil  then
 print(sf)
 end
-
-
-
