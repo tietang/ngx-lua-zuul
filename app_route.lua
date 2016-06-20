@@ -68,14 +68,16 @@ local targetAppName, targetPath=getTarget()
 local appName = string.upper(targetAppName)
 local hosts =shared:get(appName)
 
-ngx.log(ngx.ERR,"^^^^^^^^^", targetAppName," ",targetPath)
  
+ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
 
  
 ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
 local robin = newRobin(targetAppName)
 
 ngx.log(ngx.ERR, "^^^^^^^^^",  json.encode(robin) )
+
+
 
 if robin==nil then
 	ngx.status=ngx.HTTP_NOT_FOUND
@@ -86,8 +88,11 @@ end
 host=robin:next()
 
 ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
- 
-ngx.var.bk_host= host.ip .. ":" .. host.port
+ -- ngx.req.set_uri(targetPath, true) 
+-- ngx.var.targetUri=targetPath
 
+ngx.var.bk_host= host.ip .. ":" .. host.port..targetPath
+
+ 
 
 

@@ -84,7 +84,8 @@ function _M:schedule()
                 for k,v in pairs(hosts) do
                     shared:set(k,json.encode(v))
                     local appName = string.lower(k)
-                    local route= {sourcePath="/"..appName.."/**",app=appName ,stripPrefix=true}
+                    --- 默认以serviceId名称匹配
+                    local route= {sourcePath="/"..appName.."/**",app=appName,stripPrefix=true}
                     routesCache:set(route.sourcePath,json.encode(route))
                     table.insert(routeKeys,route.sourcePath)
                     ngx.log(ngx.ERR, "add route:", json.encode(route))
