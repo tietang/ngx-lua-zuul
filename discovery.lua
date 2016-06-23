@@ -23,13 +23,14 @@ local allAppUrl = "http://120.26.53.156:8761/eureka/apps"
 local KEY_LAST_EXECUTED_PID = "last_executed_pid"
 local KEY_LAST_EXECUTED_PID_TIME = "last_executed_pid_time"
 local KEY_LAST_EXECUTED_TIME = "last_executed_time"
-local KEY_ROUTERS = "ROUTERS"
+local KEY_ROUTERS = "__ROUTERS"
 
 
 function _M:schedule()
  
     local shared = ngx.shared.apps
     local routesCache = ngx.shared.routes
+    local route_matching_keys = ngx.shared.route_matching_keys
 
     local interval=10 
 
@@ -88,7 +89,7 @@ function _M:schedule()
                     local route= {sourcePath="/"..appName.."/**",app=appName,stripPrefix=true}
                     routesCache:set(route.sourcePath,json.encode(route))
                     table.insert(routeKeys,route.sourcePath)
-                    ngx.log(ngx.ERR, "add route:", json.encode(route))
+                    -- ngx.log(ngx.ERR, "add route:", json.encode(route))
                 end
             else
                 ngx.log(ngx.ERR, "hosts is nil" )
@@ -99,7 +100,7 @@ function _M:schedule()
             shared:set(KEY_LAST_EXECUTED_PID,currentWorkerPid)
             shared:set(keyPidTime,now)
             routesCache:set(KEY_ROUTERS,json.encode(routeKeys))
-            ngx.log(ngx.ERR, "add routeKeys:", json.encode(routeKeys))
+            -- ngx.log(ngx.ERR, "add routeKeys:", json.encode(routeKeys))
 
             -- ngx.log(ngx.ERR, "add route:", json.encode(router.routingTable))
            
@@ -107,12 +108,12 @@ function _M:schedule()
 
         local ok,err = ngx.timer.at(interval,getAndSet,shared)
         -- local last=shared:get("lastRenewalTimestamp")
-        ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)
+        -- ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)
       
     end
     
     local ok,err = ngx.timer.at(1,getAndSet,shared)
-    ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)  
+    -- ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)  
 
 end
 
@@ -268,7 +269,7 @@ function _M:getAllApps()
 
     -- ngx.log(ngx.ERR, "content=",content,", requestTimes: ",self.requestTimes)
 
-    ngx.log(ngx.ERR, json.encode(hosts))
+    -- ngx.log(ngx.ERR, json.encode(hosts))
 
     return content,hosts,apps
 end 

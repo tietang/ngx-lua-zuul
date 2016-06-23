@@ -48,7 +48,7 @@ function getTarget( )
 	-- ngx.log(ngx.ERR,"^^^^^^^^^", uri," ",ngx.var.request_uri)
 	 
 	local router = require "router2"
-	local routingKeysStr = routes:get("ROUTERS")
+	local routingKeysStr = routes:get("__ROUTERS")
 	ngx.log(ngx.ERR,"^^^^^^^^^", routingKeysStr)
 	local routingKeys = json.decode(routingKeysStr)
 	local route=router:getMatchRoute(uri,routingKeys,routes)
@@ -63,8 +63,13 @@ function getTarget( )
 	return targetAppName,targetPath
 end
 
+local apps_count = ngx.shared.apps_count
+local api_count = ngx.shared.api_count
 
 local targetAppName, targetPath=getTarget()
+if targetAppName==nil then
+	return
+end
 local appName = string.upper(targetAppName)
 local hosts =shared:get(appName)
 
@@ -90,9 +95,18 @@ host=robin:next()
 ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
  -- ngx.req.set_uri(targetPath, true) 
 -- ngx.var.targetUri=targetPath
+-- local newval,err=apps_count:incr(appName, 1)
+-- if newval==nil then
+-- 	apps_count:set(appName,1)
+-- end
+-- local newval,err=api_count:incr(ngx.var.uri, 1)
+-- if newval==nil then
+-- 	api_count:set(ngx.var.uri,1)
+-- end 
+ 
+ngx.ctx.appName=appName
+ngx.ctx.uri=ngx.var.uri
 
 ngx.var.bk_host= host.ip .. ":" .. host.port..targetPath
-
- 
 
 
