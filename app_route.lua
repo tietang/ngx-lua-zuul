@@ -110,3 +110,5 @@ ngx.ctx.uri=ngx.var.uri
 ngx.var.bk_host= host.ip .. ":" .. host.port..targetPath
 
 
+
+

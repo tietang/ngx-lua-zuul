@@ -1,6 +1,6 @@
  local json=require "cjson"
 
-
+--在指定共享缓存shared中对指定key做incr操作
 function incr(shared, key)
     local v,e = shared:incr(key, 1)
     if v ==nil then
@@ -10,61 +10,74 @@ function incr(shared, key)
     return v
 end
 
+--在指定共享缓存shared中对指定key，累积总请求时间req_time和后端响应时间res_time
+function sumTime(shared,key,req_time,res_time )
+	-- body
+
+	local req_time_key = "REQ:"..key
+
+	local sum = shared:get(req_time_key) or 0
+	sum = sum + req_time
+	shared:set(req_time_key, sum)
 
 
+	local res_time_key = "RES:"..key
+	local sum = shared:get(res_time_key) or 0
+	sum = sum + res_time
+	shared:set(res_time_key, sum)
+
+
+end
+
+
+--- app统计
 local apps_count = ngx.shared.apps_count
 local apps_res_time = ngx.shared.apps_res_time
+---API 操作
 local api_res_time= ngx.shared.api_res_time
 local api_count = ngx.shared.api_count
 
- 
--- count:{key}
--- sum:{key}
--- max:{key}
--- min:{key}
-
--- count_60:{key}
--- sum_60:{key}
--- max_60:{key}
--- min_60:{key}
 
 local appName=ngx.ctx.appName
+local uri = ngx.var.uri
+local allRequest = "AllRequest"
+--- count
+incr(apps_count,appName)
+incr(api_count,uri)
+incr(api_count,allRequest)
 
-local newval,err=apps_count:incr(appName, 1)
-if newval==nil then
-	apps_count:set(appName,1)
-end
-local newval,err=api_count:incr(ngx.var.uri, 1)
-if newval==nil then
-	api_count:set(ngx.var.uri,1)
-end 
- 
- -- req:
+
+--- response time
 local request_time = tonumber(ngx.var.request_time)
-
-local request_time_var = "REQ:"..appName
-local sum = apps_res_time:get(request_time_var) or 0
-sum = sum + request_time
-apps_res_time:set(request_time_var, sum)
-
-local request_time_var_url = "REQ:"..ngx.var.uri
-local sum1 = api_res_time:get(request_time_var_url) or 0
-sum1 = sum1 + request_time
-api_res_time:set(request_time_var_url, sum1)
-
-
---RES:
 local res_time = tonumber(ngx.var.upstream_response_time)
 
-local res_time_var = "RES:"..appName
-local sum = apps_res_time:get(res_time_var) or 0
-sum = sum + res_time
-apps_res_time:set(res_time_var, sum)
+sumTime(apps_res_time,appName,request_time,res_time)
+sumTime(api_res_time,uri,request_time,res_time)
+sumTime(api_res_time,allRequest,request_time,res_time)
 
-local res_time_var_url = "RES:"..ngx.var.uri
-local sum = api_res_time:get(res_time_var_url) or 0
-sum = sum + res_time
-api_res_time:set(res_time_var_url, sum)       
+--- 2xx 4xx 5xx
 
+local status_code = tonumber(ngx.var.status)
+local statusKey = status_code..""
+incr(api_count,statusKey)
+sumTime(api_res_time,statusKey,request_time,res_time)
+
+
+-- if status_code>=200 and status_code<300 then 
+-- 	incr(api_count,"2xx")
+-- 	sumTime(api_res_time,"2xx",request_time,res_time)
+-- end
+
+-- if status_code>=400 and status_code<500 then 
+-- 	incr(api_count,"4xx")
+-- 	sumTime(api_res_time,"4xx",request_time,res_time)
+-- end
+
+-- if status_code>=500 then 
+-- 	incr(api_count,"5xx")
+-- 	sumTime(api_res_time,"5xx",request_time,res_time)
+-- end
+
+ 
 
   
