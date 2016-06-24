@@ -12,7 +12,7 @@ local router = require "router2"
 -- https://github.com/pintsized/lua-resty-http
 local json=require "cjson"
 local url="http://127.0.0.1:8761/v1/apps"
-local allAppUrl = "http://120.26.53.156:8761/eureka/apps"
+local allAppUrl = "http://127.0.0.1:8761/eureka/apps"
  
 
 --[[
