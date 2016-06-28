@@ -1,5 +1,5 @@
 local _M={}
-local allApp="http://dev.discovery.shishike.com/eureka/apps"
+local allApp="http://127.0.0.1:8761/eureka/apps"
 local http = require "resty.http"
 
 function getApps() 
