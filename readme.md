@@ -22,7 +22,7 @@
 
 ```
 
-
+ 
 #user  nobody;
 worker_processes  2;
 
@@ -56,66 +56,79 @@ http {
 
     #gzip  on;
 
-    lua_package_path "/Users/tietang/nginx/nginx/lua_lib/lib/?.lua;;";
-    lua_shared_dict apps 10m; 
-    # lua_shared_dict route_matching_keys 1m;
-    lua_shared_dict routes 2m;
+    lua_package_path "/Users/tietang/nginx/nginx/lua/lib/?.lua;;";
+    lua_shared_dict discovery 10m;
+
     lua_shared_dict apps_count 1m;
     lua_shared_dict apps_res_time 10m;
     lua_shared_dict api_count 10m;
     lua_shared_dict api_res_time 10m;
-    init_worker_by_lua  '
-          discovery = require "discovery"
-          discovery:schedule() 
-    '; 
- 
+
+    init_by_lua '
+        discovery = require "discovery"
+        json=require "cjson"
+        balancer=require "robin"
+        router = require "router" 
+
+    
+
+    ';
+    init_worker_by_lua '
+        discovery:schedule() 
+    ';
+
     server {
         listen       8000;
         server_name  localhost;
-        default_type text/html;
 
-        charset utf8;
+        #charset koi8-r;
 
-       
-
-         location /_admin/stats {
+        #access_log  logs/host.access.log  main;
+        location /_admin/stats {
+            # default_type text/html;
              default_type application/json;
-             content_by_lua_file lua_lib/lib/show_stats.lua;
+            content_by_lua_file lua/lib/show_stats.lua;
          }
 
+        location /_admin/stats.json {
+             default_type application/json;
+             content_by_lua_file lua/lib/show_stats_json.lua;
+        }
         location / {
             set $bk_host '';
-            set $targetUri '';
-
+     
 
             # default_type text/html;
-            access_by_lua_file lua_lib/lib/app_route.lua;
- 
-
-            log_by_lua_file lua_lib/lib/stats.lua;
+            access_by_lua_file lua/lib/app_route.lua;
+                    
+        
+            log_by_lua_file lua/lib/stats.lua;
             proxy_set_header Host   $host;
             proxy_set_header   X-Real-IP        $remote_addr;
             proxy_pass http://$bk_host;
 
-
+            #  
         }
 
-       
- 
-
-        #error_page  404              /404.html;
-
-        # redirect server error pages to the static page /50x.html
-        #
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-            root   html;
+        location /haha {
+        
+            default_type text/html;
+            # access_by_lua_file demo/demo.lua;
+           content_by_lua '
+                --- discovery:say()
+                ngx.say( json.encode(router.routingTable) .."<br/>") 
+                 ngx.say(  "<br/>")
+                ngx.say(json.encode(discovery.hosts ) .."<br/>")
+              
+            ';
+            #  
         }
 
- 
+        
     }
 
 
+  
 
 }
 
