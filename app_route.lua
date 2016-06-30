@@ -66,22 +66,21 @@ local api_count = ngx.shared.api_count
 local targetAppName, targetPath=getTarget()
 
 if targetAppName==nil then
-	ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
-
+	-- ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
+	ngx.say("targetAppName is nil for uri:  ".. ngx.var.request_uri)
 	return
 end
 
 local appName = string.upper(targetAppName)
-local hosts =discovery.hosts[targetAppName]
 
  
-ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
+-- ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
 
  
-ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
+-- ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
 local robin = newRobin(targetAppName)
 
-ngx.log(ngx.ERR, "^^^^^^^^^",  json.encode(robin) )
+-- ngx.log(ngx.ERR, "^^^^^^^^^",  json.encode(robin) )
 
 
 
@@ -93,7 +92,7 @@ end
  
 host=robin:next()
 
-ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
+-- ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
  -- ngx.req.set_uri(targetPath, true) 
 -- ngx.var.targetUri=targetPath
 -- local newval,err=apps_count:incr(appName, 1)

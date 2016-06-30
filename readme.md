@@ -12,7 +12,8 @@
 
 ## 架构图：
 
-![](<doc/zuul Eureka for nginx&lua.png>)
+
+![](<doc/arch.png>)
 
 
 

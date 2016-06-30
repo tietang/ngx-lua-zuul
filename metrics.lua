@@ -1,31 +1,36 @@
- local json=require "cjson"
+
+local metrics = require "metrics"
+
+
+local json=require "cjson"
 
 --在指定共享缓存shared中对指定key做incr操作
 local function incr(shared, key)
-    local v,e = shared:incr(key, 1)
-    if v ==nil then
-        shared:set(key,1)
-        return 1
-    end
-    return v
+   local v,e = shared:incr(key, 1)
+   if v ==nil then
+       shared:set(key,1)
+       return 1
+   end
+   return v
 end
+
+
 
 --在指定共享缓存shared中对指定key，累积总请求时间req_time和后端响应时间res_time
 local function sumTime(shared,key,req_time,res_time )
-	-- body
+ -- body
 
-	local req_time_key = "REQ:"..key
+ local req_time_key = "REQ:"..key
 
-	local sum = shared:get(req_time_key) or 0
-	sum = sum + req_time
-	shared:set(req_time_key, sum)
+ local sum = shared:get(req_time_key) or 0
+ sum = sum + req_time
+ shared:set(req_time_key, sum)
 
 
-	local res_time_key = "RES:"..key
-	local sum = shared:get(res_time_key) or 0
-	sum = sum + res_time
-	shared:set(res_time_key, sum)
-
+ local res_time_key = "RES:"..key
+ local sum = shared:get(res_time_key) or 0
+ sum = sum + res_time
+ shared:set(res_time_key, sum)
 
 end
 
@@ -36,8 +41,6 @@ local apps_count = ngx.shared.apps_count
 local apps_res_time = ngx.shared.apps_res_time
 local appName=ngx.ctx.appName or "NULL"
 --- count
-
-
 
 
 ---API 操作
