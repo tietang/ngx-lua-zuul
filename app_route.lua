@@ -106,7 +106,6 @@ host=robin:next()
  
 ngx.ctx.appName=appName
 ngx.ctx.uri=ngx.var.uri
-
 ngx.var.bk_host= host.ip .. ":" .. host.port..targetPath
 
 
