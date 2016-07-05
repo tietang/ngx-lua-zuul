@@ -67,3 +67,15 @@ local status_code = tonumber(ngx.var.status) or 0
 local statusKey = status_code..""
 incr(api_count,statusKey)
 sumTime(api_res_time,statusKey,request_time,res_time)
+
+
+local metrics = ngx.shared.metrics
+
+local now =ngx.time()
+local time_window = 60 --seconds
+local time_key = time_window*math.floor(now/60)
+
+incr(metrics,time_key,1) 
+sumTime(metrics,time_key,request_time,res_time)
+
+

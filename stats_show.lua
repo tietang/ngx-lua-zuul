@@ -9,8 +9,7 @@ local json=require "cjson"
 -- }
 
 function show(shared,shared_time)
-    local kv = {}
-
+ 
 
     local keys = shared:get_keys()
     for k,key in pairs(keys) do
@@ -19,19 +18,18 @@ function show(shared,shared_time)
         local restime = shared_time:get("RES:"..key) or 0
         local avg = restime/value
         local avg2 = reqtime/value
-        table.insert(kv,{key=key,value=value,resValue=restime,reqValue=reqtime})
-
-
+      
 
         ngx.say(key .. "= count: " .. value .. ","..avg2..", req_time: "..reqtime..", res_time: "..restime.. "")
     end
     ngx.say("\n")
-    ngx.log(ngx.ERR, "^^^^^^^^^  ",  table.getn(keys ))
-
-    ngx.say(json.encode(kv))
-
+   
 end
 
+ngx.say("<pre>")
 show(ngx.shared.apps_count,ngx.shared.apps_res_time)
 show(ngx.shared.api_count, ngx.shared.api_res_time )
+show(ngx.shared.metrics, ngx.shared.api_res_time )
+
+ngx.say("</pre>")
 

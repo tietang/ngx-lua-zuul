@@ -1,4 +1,4 @@
- local json=require "cjson"
+ -- local json=require "cjson"
 
 
 -- local kv = {
@@ -20,18 +20,25 @@ function show(shared,shared_time)
 	 	 local avg = restime/value
 	 	 local avg2 = reqtime/value
 	 	table.insert(kv,{key=key,value=value,resValue=restime,reqValue=reqtime})
-	  
-	 
 
-	 	 ngx.say(key .. "= count: " .. value .. ","..avg2..", req_time: "..reqtime..", res_time: "..restime.. "")
 	end
-	ngx.say("\n")
-	ngx.log(ngx.ERR, "^^^^^^^^^  ",  table.getn(keys ))
-
-	ngx.say(json:encode(kv))
+ 
+	
+	return kv
+	
 
 end
 
-show(ngx.shared.apps_count,ngx.shared.apps_res_time)
-show(ngx.shared.api_count, ngx.shared.api_res_time )
+
+
+local kvapp=show(ngx.shared.apps_count,ngx.shared.apps_res_time)
+local kvapi=show(ngx.shared.api_count, ngx.shared.api_res_time) 
+local metrics=show(ngx.shared.metrics, ngx.shared.api_res_time )
+
+local kv = {
+	apps=kvapp,
+	apis=kvapi,
+	metrics=metrics
+}
+ngx.say(json.encode(kv))
 
