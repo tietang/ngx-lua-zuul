@@ -12,7 +12,7 @@ local http=require "resty.http"
 local json=require "cjson"
 local url="http://127.0.0.1:8761/v1/apps"
 local allAppUrl = "http://120.26.53.156:8761/eureka/apps"
- 
+
 
 --[[
 
@@ -26,37 +26,37 @@ local KEY_ROUTERS = "__ROUTERS"
 
 function _M:init( )
     self.router=router or {}
-     
+
 end
 
 function _M:schedule()
- 
+
     local shared = ngx.shared.discovery
-   
-    local interval=10 
+
+    local interval=10
 
 
-    function getAndSet(premature, shared ) 
+    function getAndSet(premature, shared )
 
-        
+
         local c = ngx.worker.count()
         local id = ngx.worker.id()
-        local currentWorkerPid = ngx.worker.pid()--ngx.var.pid -- 
+        local currentWorkerPid = ngx.worker.pid()--ngx.var.pid --
 
         local last_executed_pid = shared:get(KEY_LAST_EXECUTED_PID)
         local last_executed_time = shared:get(KEY_LAST_EXECUTED_TIME)
         local keyPidTime = KEY_LAST_EXECUTED_PID_TIME.."-"..currentWorkerPid
         local last_executed_pid_time = shared:get(keyPidTime)
-      
 
-    
-       
+
+
+
         local now = ngx.now()
         local rt = shared:get("requestTimes")
         -- ngx.log(ngx.ERR," ",currentWorkerPid," ",currentWorkerPid%c,",",ngx.time()%c,",",rt)
 
         -- if last_executed_pid_time == nil then
-            -- last_executed_pid_time=now
+        -- last_executed_pid_time=now
         -- end
         -- ngx.log(ngx.ERR,"worker count:",c,", PID:",currentWorkerPid,",",last_executed_time,",",now-last_executed_time,",",interval-0.1)
         -- <=NGINX 1.9.1+ 旨在同一时间只有一个worker执行定时任务，并且不一致在同一个worker执行，需要运行一段时间调整近似
@@ -66,31 +66,31 @@ function _M:schedule()
         --         and last_executed_pid ~= currentWorkerPid -- 如果当前worker pid != 最后一次worker pid
         --         and (now-last_executed_pid_time) >= interval*c-0.1 --如果当前worker最后执行时间 >= 设定间隔*worker数量 - 0.1
         --     ) then
-        -- if  id % c==0 then -->=NGINX 1.9.1+ 
-        if  true then -->=NGINX 1.9.1+ 
+        -- if  id % c==0 then -->=NGINX 1.9.1+
+        if  true then -->=NGINX 1.9.1+
             -- getApps()
             local content,hosts,apps=_M:getAllApps()
             self:dealApps()
-            
-           
- 
+
+
+
             shared:set(KEY_LAST_EXECUTED_TIME,now)
             shared:set(KEY_LAST_EXECUTED_PID,currentWorkerPid)
             shared:set(keyPidTime,now)
-            -- 
+            --
 
             -- ngx.log(ngx.ERR, "getAllApps", json.encode(hosts))
-           
+
         end
 
         local ok,err = ngx.timer.at(interval,getAndSet,shared)
         -- local last=shared:get("lastRenewalTimestamp")
         -- ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)
-      
+
     end
-    
+
     local ok,err = ngx.timer.at(1,getAndSet,shared)
-    -- ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)  
+    -- ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)
 
 end
 
@@ -104,10 +104,10 @@ function _M:dealApps( )
 
     if self.hosts ~= nil then
         for k,v in pairs(self.hosts) do
-         
+
             local appName = string.lower(k)
             --- 默认以serviceId名称匹配
-            local route= {sourcePath="/"..appName.."/**",app=appName,stripPrefix=true} 
+            local route= {sourcePath="/"..appName.."/**",app=appName,stripPrefix=true}
             router:addRoute(route)
 
         end
@@ -115,16 +115,16 @@ function _M:dealApps( )
     else
         ngx.log(ngx.ERR, "hosts is nil" )
     end
-    
+
     -- ngx.log(ngx.ERR, "routes:", json.encode(router.routingTable))
-   
+
 
 end
 
- 
+
 
 function isUP(url)
-    
+
     local httpc=http.new()
     httpc:set_timeout(1000)
     local res,err=httpc:request_uri(url,{
@@ -133,8 +133,8 @@ function isUP(url)
 
     if not res or res.status == ngx.HTTP_OK then
         ngx.log(ngx.ERR,"failed to request :",err)
-        return false 
-    end    
+        return false
+    end
 end
 
 
@@ -158,7 +158,7 @@ function _M:getAndSetCountByAppName( appName)
 end
 
 function getAndSetCountByAppName(shared, appName)
-    
+
     local v,e = shared:incr(appName, 1)
     if v ==nil then
         shared:set(appName,1)
@@ -166,9 +166,9 @@ function getAndSetCountByAppName(shared, appName)
     end
     return v
 end
- 
- 
-function _M:getAllApps() 
+
+
+function _M:getAllApps()
 
     ---从Eureka server获取注册的apps
     --参考https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
@@ -177,8 +177,8 @@ function _M:getAllApps()
     local res,err=httpc:request_uri(allAppUrl,{
         method ="GET",
         headers = {
-              ["Accept"] = "application/json;charset=UTF-8",
-          },
+            ["Accept"] = "application/json;charset=UTF-8",
+        },
 
     })
     -- 响应ok
@@ -186,7 +186,7 @@ function _M:getAllApps()
         ngx.log(ngx.ERR,"getApps failed to request :",err)
         return nil,nil,nil
     end
-    
+
     --响应数据https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
     local content=res.body
     -- ngx.log(ngx.ERR,content)
@@ -195,7 +195,7 @@ function _M:getAllApps()
     -- 定义app对象
     local apps = {apps={},timestamp=os.time()*1000}
 
-   
+
     --[[
     local hosts = {
         appName={
@@ -217,17 +217,17 @@ function _M:getAllApps()
     ]]--
 
 
-    local hosts = {}  
+    local hosts = {}
     for k,v in pairs(eurekaApps.applications.application) do
 
         local app,appHosts = eureka2app(v)
         table.insert(apps.apps,app)
 
-        hosts[v.name]=app.hosts --appHosts 
+        hosts[v.name]=app.hosts --appHosts
         -- ngx.log(ngx.ERR, os.time(),table.getn(appHosts))
-        
+
     end
-    
+
 
 
     --[[
@@ -253,10 +253,10 @@ function _M:getAllApps()
             ]
         }    
     --]]
-    
-   
-     self.apps=apps 
-   
+
+
+    self.apps=apps
+
     local shared = ngx.shared.discovery
     self.requestTimes = getAndSetCountByAppName(shared,"requestTimes")
     if apps == nil then
@@ -264,24 +264,24 @@ function _M:getAllApps()
     end
 
 
-    
+
     self.hosts=hosts
-   
+
 
 
 
     -- ngx.log(ngx.ERR, type(apps))
-        -- print(type(apps))
+    -- print(type(apps))
 
     -- ngx.log(ngx.ERR, "content=",content,", requestTimes: ",self.requestTimes)
 
     -- ngx.log(ngx.ERR, json.encode(self.hosts))
 
     return hosts,apps
-end 
+end
 
 function _M:getHosts()
-    
+
     -- ngx.log(ngx.ERR, json.encode(self.hosts))
     return self.hosts
 end
@@ -291,11 +291,11 @@ function eureka2app(application,hosts )
 
     local appName = application.name
     local app = {
-            name=appName,
-            hosts={}
-        }
+        name=appName,
+        hosts={}
+    }
 
-    
+
     -- for index,appList in pairs(apps.apps) do
     --     local x = 1
     --     hosts[appList.name]={}
@@ -304,17 +304,17 @@ function eureka2app(application,hosts )
     --             hosts[v.name][x]="http://" .. v.hostName .. ":" .. v.port
     --             -- ngx.log(ngx.ERR, self.hosts[v.name][x])
     --             x=x+1
-                
+
     --         end
     --     -- print(k,v.name)
     --     end
     --     -- print(index,appList.name)
     -- end
-    local hosts = {}   
- 
- 
+    local hosts = {}
+
+
     for k,v in pairs(application.instance) do
-        
+
         local ip = v.ipAddr
         local hostName = v.hostName
         local port = v.port["$"]
@@ -325,7 +325,7 @@ function eureka2app(application,hosts )
         end
         local url= schema.."://" .. hostName .. ":" .. port
         local hostStr = hostName .. ":" .. port
-    
+
         local host={
             name=appName,
             hostName=hostName,
@@ -342,8 +342,8 @@ function eureka2app(application,hosts )
 
         table.insert(app.hosts,host)
 
-        
-        
+
+
         -- ngx.log(ngx.ERR,"app=",appName," ip=",ip," hostName=",hostName," port=",port)
     end
     return app,hosts
@@ -353,7 +353,7 @@ end
 -- function _M.getHostByName(shared,name,balance)
 --     local apps=shared:get("apps")
 --     self.apps=
-     
+
 -- end
 
 -- apps={
@@ -367,7 +367,7 @@ end
 --             sport=null,
 --             status="UP",
 --             lastRenewalTimestamp=1451030859398
- 
+
 --         }
 --     }
 -- }
@@ -381,8 +381,8 @@ function requestMappings(host)
     local res,err=httpc:request_uri(url,{
         method ="GET",
         headers = {
-              ["Accept"] = "application/json;charset=UTF-8",
-          },
+            ["Accept"] = "application/json;charset=UTF-8",
+        },
 
     })
     -- 响应ok
@@ -390,14 +390,14 @@ function requestMappings(host)
         ngx.log(ngx.ERR,"getApps failed to request :",err)
         return nil,nil,nil
     end
-    
+
     --响应数据https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
     local content=res.body
     -- ngx.log(ngx.ERR,content)
     -- json数据转换为lua table
     local mappings = json.decode(content)
     for k,v in pairs(table_name) do
-        
+
     end
 
 
@@ -438,3 +438,4 @@ return _M
                 -- end
                 -- local content=res.body
                 -- ngx.log(ngx.ERR,content)
+
