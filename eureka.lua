@@ -1,5 +1,8 @@
+ 
 local _M ={}
-
+ 
+local allApp="http://127.0.0.1:8761/eureka/apps"
+ 
 -- https://github.com/pintsized/lua-resty-http
 local http=require "resty.http"
 
@@ -193,3 +196,4 @@ function eureka2app(application,hosts )
     return app,hosts
 end
 
+ 
