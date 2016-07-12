@@ -55,7 +55,7 @@ incr(api_count,allRequest,1)
 --- response time
 local request_time = tonumber(ngx.var.request_time) or 0
 local res_time = tonumber(ngx.var.upstream_response_time) or 0
-ngx.log(ngx.ERR,"^^^^^^^^^  ", request_time,",  ",res_time)
+-- ngx.log(ngx.ERR,"^^^^^^^^^  ", request_time,",  ",res_time)
 
 sumTime(apps_res_time,appName,request_time,res_time)
 sumTime(api_res_time,uri,request_time,res_time)
@@ -68,14 +68,13 @@ local statusKey = status_code..""
 incr(api_count,statusKey)
 sumTime(api_res_time,statusKey,request_time,res_time)
 
-
-local metrics = ngx.shared.metrics
-
+-- metrics
 local now =ngx.time()
 local time_window = 60 --seconds
 local time_key = time_window*math.floor(now/60)
 
-incr(metrics,time_key,1) 
-sumTime(metrics,time_key,request_time,res_time)
+incr(ngx.shared.metrics,time_key,1) 
+sumTime(ngx.shared.metrics_time,time_key,request_time,res_time)
 
+ngx.log(ngx.ERR,"^^^^^^^^^  ", ngx.var.upstream_connect_time,",  ",ngx.var.upstream_response_time)
 

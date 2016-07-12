@@ -10,8 +10,8 @@ local _M = {
 local http=require "resty.http"
 -- https://github.com/pintsized/lua-resty-http
 local json=require "cjson"
-local url="http://127.0.0.1:8761/v1/apps"
-local allAppUrl = "http://120.26.53.156:8761/eureka/apps"
+local url="http://172.16.1.248:8761/v1/apps"
+local allAppUrl = "http://172.16.1.248:8761/eureka/apps"
 
 
 --[[
@@ -373,37 +373,11 @@ end
 -- }
 
 
-function requestMappings(host)
-    -- body
-    local url = host.."/mappings"
-    local httpc=http.new()
-    httpc:set_timeout(1000)
-    local res,err=httpc:request_uri(url,{
-        method ="GET",
-        headers = {
-            ["Accept"] = "application/json;charset=UTF-8",
-        },
-
-    })
-    -- 响应ok
-    if not res  or not res.body then
-        ngx.log(ngx.ERR,"getApps failed to request :",err)
-        return nil,nil,nil
-    end
-
-    --响应数据https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
-    local content=res.body
-    -- ngx.log(ngx.ERR,content)
-    -- json数据转换为lua table
-    local mappings = json.decode(content)
-    for k,v in pairs(table_name) do
-
-    end
-
-
-end
+ 
 
 return _M
+
+
 
 -- {
 --     "apps": [

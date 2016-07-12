@@ -29,7 +29,11 @@ end
 ngx.say("<pre>")
 show(ngx.shared.apps_count,ngx.shared.apps_res_time)
 show(ngx.shared.api_count, ngx.shared.api_res_time )
-show(ngx.shared.metrics, ngx.shared.api_res_time )
+
+
+
+
+show(ngx.shared.metrics, ngx.shared.metrics_time )
 
 ngx.say("</pre>")
 

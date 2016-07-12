@@ -29,7 +29,7 @@ function show(shared,shared_time)
 
 end
 
-local metrics=show(ngx.shared.metrics, ngx.shared.api_res_time )
+local metrics=show(ngx.shared.metrics, ngx.shared.metrics_time )
 
 local kv = {
 	apps=kvapp,
