@@ -1,9 +1,14 @@
 依赖：lua-resty-http
 
-基于Nginx&Lua 和Netflix Eureka的微服务网关。
+基于Nginx&Lua 和Netflix Eureka的微服务网关，用于替代netflix/zuul，注重性能和更丰富的路由功能。
 
-- 动态路由
-- 简单监控
+- 动态路由，
+	- 比zuul更丰富，one to one 映射
+	- 多域名路由支持
+- 简单监控，stats
+
+- eureka 服务发现
+- 加权robin round 负载均衡
 - 隔离降级？规划中。。。
 - 认证安全？规划中。。。
  
