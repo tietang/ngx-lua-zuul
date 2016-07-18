@@ -1,23 +1,58 @@
  
 local _M ={}
  
-local allApp="http://127.0.0.1:8761/eureka/apps"
- 
 -- https://github.com/pintsized/lua-resty-http
 local http=require "resty.http"
 
 
-
-function _M:queryAllApps(allAppUrl)
-    ---从Eureka server获取注册的apps
-    --参考https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
-    httpc:set_timeout(1000)
-    local obj,err= self:httpRequest("GET",allAppUrl)
-    return obj
+function _M:setDiscoveryServers( ... )
+    self.discoveryServers=arg
+end
+function _M:setTimeout( timeout )
+    self.timeout=timeout
 end
 
-function _M:getAllAppHosts( allAppUrl)
-    local eurekaApps = self:queryAllApps(allAppUrl)
+
+
+
+
+function _M:queryAllApps()
+    ---从Eureka server获取注册的apps
+    --参考https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
+
+    -- ngx.log(ngx.ERR,dump(self.discoveryServers))
+     
+    for i, url in ipairs(self.discoveryServers ) do
+        local baseUrl = url 
+        if endswith(url,"/") then
+            baseUrl=string.sub(url, 1, string.len( url )) 
+        end
+
+        local allAppUrl = baseUrl.."/apps"
+        local obj,err= self:httpRequest("GET",allAppUrl)
+        if err==nil and obj then
+            return obj
+        end
+    end
+    return nil
+end
+
+--[[判断str是否以substr结尾。是返回true，否返回false，失败返回失败信息]]
+function endswith(str, substr)
+    if str == nil or substr == nil then
+        return nil, "the string or the sub-string parameter is nil"
+    end
+    local str_tmp = string.reverse(str)
+    local substr_tmp = string.reverse(substr)
+    if string.find(str_tmp, substr_tmp) ~= 1 then
+        return false
+    else
+        return true
+    end
+end
+
+function _M:getAllAppHosts()
+    local eurekaApps = self:queryAllApps()
     -- 定义app对象
     local apps = {apps={},timestamp=os.time()*1000}
 
@@ -78,20 +113,14 @@ function _M:getAllAppHosts( allAppUrl)
         }    
     --]]
 
-
-    self.apps=apps
-
+ 
     local shared = ngx.shared.discovery
     self.requestTimes = getAndSetCountByAppName(shared,"requestTimes")
     if apps == nil then
         return content,nil,nil
     end
 
-
-
-    self.hosts=hosts
-
-
+ 
 
 
     -- ngx.log(ngx.ERR, type(apps))
@@ -99,7 +128,7 @@ function _M:getAllAppHosts( allAppUrl)
 
     -- ngx.log(ngx.ERR, "content=",content,", requestTimes: ",self.requestTimes)
 
-    -- ngx.log(ngx.ERR, json.encode(self.hosts))
+    -- ngx.log(ngx.ERR, json.encode(hosts))
 
     return hosts,apps
 end
@@ -108,8 +137,8 @@ end
 function _M:httpRequest(method,url)
 
     local httpc=http.new()
-    httpc:set_timeout(1000)
-    local res,err=httpc:request_uri(allAppUrl,{
+    httpc:set_timeout(self.timeout or 2000)
+    local res,err=httpc:request_uri(url,{
         method = method,
         headers = {
             ["Accept"] = "application/json",
@@ -196,4 +225,4 @@ function eureka2app(application,hosts )
     return app,hosts
 end
 
- 
+return _M

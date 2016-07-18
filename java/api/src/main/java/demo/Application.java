@@ -23,7 +23,7 @@ import java.util.Random;
 @SpringBootApplication
 @EnableDiscoveryClient
 @Controller
-public class Application {
+public class Application  {
 
     @ResponseBody
     @RequestMapping("/")
