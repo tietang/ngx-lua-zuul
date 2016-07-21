@@ -4,7 +4,6 @@
 client_body_temp/
 fastcgi_temp/
 logs/
-html/
 proxy_temp/
 sbin/
 scgi_temp/
