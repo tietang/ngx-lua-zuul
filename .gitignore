@@ -12,7 +12,7 @@ uwsgi_temp/
 conf/
 !nginx.conf
 lua_lib/
-
+ 
 *.pydevproject
 .project
 .metadata

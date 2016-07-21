@@ -41,7 +41,7 @@ function readRoutes()
 
     for i, line in ipairs( lines ) do
 
-        if not (line == "" ) or not (string.sub( line, 1, 1 ) =="#")  or not (string.sub( line, 1, 1 ) =="--") then 
+        if not (line == "" ) then 
              ngx.log(ngx.ERR, "routes", line)
             local words = string.split(line,"=")
             if table.maxn( words )==2 then
@@ -205,6 +205,7 @@ function _M:getAllApps()
 
     ---从Eureka server获取注册的apps
     local hosts,apps =eureka:getAllAppHosts()
+
 
     self.apps=apps
     self.hosts=hosts

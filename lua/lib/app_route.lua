@@ -57,14 +57,13 @@ function getTarget( )
 
 	targetAppName=route.app
 	targetPath=router:getRouteTargetPath(route,uri)
-
-	return targetAppName,targetPath,route.url
+	return targetAppName,targetPath
 end
 
 local apps_count = ngx.shared.apps_count
 local api_count = ngx.shared.api_count
 
-local targetAppName, targetPath,url=getTarget()
+local targetAppName, targetPath=getTarget()
 
 if targetAppName==nil then
 	-- ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
@@ -72,36 +71,9 @@ if targetAppName==nil then
 	return
 end
 
---TODO  appName匹配 完整域名，用于域名路由
-
--- if url or string.match(targetAppName, "https?://[%w-_%.%?%.:/%+=&]+" ) then
-if url or string.match(targetAppName, "https?://[%w-_%.%?%.:/%+=&]+" ) then
-	ngx.ctx.appName=appName
-	ngx.ctx.uri=ngx.var.uri
-
-	local baseUrl = url or targetAppName 
-	local len =string.len( baseUrl ) 
-
-	-- if string.sub(baseUrl,1 , 8 )=="https://"  then
-	-- 	baseUrl=string.sub(baseUrl,9,len )
-	-- end		
-	-- if string.sub(baseUrl,1 , 7 )=="http://" then
-	-- 	baseUrl=string.sub(baseUrl,8,len )
-	-- end	 
-
-	if string.sub(baseUrl,len , len )=="/" then
-		baseUrl=string.sub(baseUrl,1 , len-1 )
-	end
-
-	ngx.var.bk_host= baseUrl .. targetPath
-
-	return
-end
-
-
 local appName = string.upper(targetAppName)
 
-
+ 
 -- ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
 
  

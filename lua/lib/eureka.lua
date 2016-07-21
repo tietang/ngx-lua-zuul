@@ -1,6 +1,7 @@
  
 local _M ={}
  
+local   json=require "cjson"
 -- https://github.com/pintsized/lua-resty-http
 local http=require "resty.http"
 
@@ -25,7 +26,8 @@ function _M:queryAllApps()
     for i, url in ipairs(self.discoveryServers ) do
         local baseUrl = url 
         if endswith(url,"/") then
-            baseUrl=string.sub(url, 1, string.len( url )) 
+            baseUrl=string.sub(url, 1, string.len( url )-1) 
+            -- ngx.log(ngx.ERR,baseUrl)
         end
 
         local allAppUrl = baseUrl.."/apps"
@@ -53,6 +55,9 @@ end
 
 function _M:getAllAppHosts()
     local eurekaApps = self:queryAllApps()
+    if not eurekaApps then
+        return nil,nil
+    end
     -- 定义app对象
     local apps = {apps={},timestamp=os.time()*1000}
 
@@ -147,13 +152,13 @@ function _M:httpRequest(method,url)
 
     })
     -- 响应ok
-    if not res  or not res.body then
+    if not res  or not res.body or res.status ~= 200 then
         ngx.log(ngx.ERR,"getApps failed to request :",err)
         return nil,err 
     end
     
     local content=res.body
-    -- ngx.log(ngx.ERR,content)
+    -- ngx.log(ngx.ERR,url)
     -- json数据转换为lua table
     local obj = json.decode(content)
     return obj,err
