@@ -15,3 +15,7 @@ spring:
   application:
     name: zuul
 
+
+zuul.host.maxTotalConnections: 200
+zuul.host.maxPerRouteConnections: 20
+

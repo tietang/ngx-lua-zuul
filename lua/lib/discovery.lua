@@ -41,7 +41,7 @@ function readRoutes()
 
     for i, line in ipairs( lines ) do
 
-        if not (line == "" ) then 
+        if not (line == "" ) or not (string.sub( line, 1, 1 ) =="#")  or not (string.sub( line, 1, 1 ) =="--") then 
              ngx.log(ngx.ERR, "routes", line)
             local words = string.split(line,"=")
             if table.maxn( words )==2 then

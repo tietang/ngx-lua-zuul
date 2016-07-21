@@ -71,7 +71,7 @@ sumTime(api_res_time,statusKey,request_time,res_time)
 -- metrics
 local now =ngx.time()
 local time_window = 60 --seconds
-local time_key = time_window*math.floor(now/60)
+local time_key = time_window*math.floor(now/time_window)
 
 incr(ngx.shared.metrics,time_key,1) 
 sumTime(ngx.shared.metrics_time,time_key,request_time,res_time)
