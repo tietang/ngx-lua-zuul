@@ -9,6 +9,8 @@ proxy_temp/
 sbin/
 scgi_temp/
 uwsgi_temp/
+conf/
+!nginx.conf
 lua_lib/
 
 *.pydevproject
