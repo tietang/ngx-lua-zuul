@@ -10,7 +10,7 @@ sbin/
 scgi_temp/
 uwsgi_temp/
 conf/
-!conf/nginx.conf
+!nginx.conf
 lua_lib/
  
 *.pydevproject
