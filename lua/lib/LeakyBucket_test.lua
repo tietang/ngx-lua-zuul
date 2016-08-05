@@ -7,7 +7,18 @@
 
 
 
-local LeakyBucket = require "LeakyBucket"
+
+
+local config = {
+    default = { [1] = 3, [2] = 1, [3] = 60 },
+    ["UserService"] = { [1] = 3, [2] = 1, [3] = 60 },
+    ["/api/v1/users"] = { [1] = 3, [2] = 1, [3] = 60 },
+    ["/api/v2/users"] = {
+        maxRequests = 3,
+        windowSeconds = 1,
+        maxSaveSize = 60
+    }
+}
 
 local share = {}
 
@@ -15,9 +26,9 @@ function share:incr(key, value, initValue)
     self[key] = (self[key] or 0) + value + (initValue or 0);
     return self[key]
 end
-
 function share:delete(key)
     self[key] = nil
+--    table.remove(self,key)
 end
 
 
@@ -25,67 +36,9 @@ function share:size()
     return table.maxn(share)
 end
 
-function sleep(n)
-    os.execute("sleep " .. n)
+local leakyBucket = require "LeakyBucket"
+leakyBucket:init(share,config)
+
+for i = 1, 10 do
+    print(leakyBucket:acquire())
 end
-
-local lb = LeakyBucket:new({}, share, 3, 1, 10)
-local key = "/api/v1/users"
---
---timer = function(time)
---    local init = os.time()
---    local diff = os.difftime(os.time(), init)
---    while diff < time do
---        coroutine.yield(diff)
---        diff = os.difftime(os.time(), init)
---    end
---    print('Timer timed out at ' .. time .. ' seconds!')
---end
---co = coroutine.create(timer)
---coroutine.resume(co, 10) -- timer starts here!
---while coroutine.status(co) ~= "dead" do
---    select(2, coroutine.resume(co))
---- -    print("time passed",)
----- print('', coroutine.status(co))
--- print(share:size())
--- if lb:acquire(key) then
--- print("get continue"..share:size())
--- else
--- print("can't get pasue"..share:size())
--- end
--- lb:release(key)
--- sleep(.100)
--- end
-
-co = coroutine.create(function(i)
-    for i = 1, 100 do
-        local has=lb:acquire(key)
-        print(has)
-        if has then
-            print("get continue " .. share:size())
-        else
-            print("can't get pasue " .. share:size())
-        end
-        sleep(math.random(1000)/1000)
-        lb:release(key)
-
-    end
-end)
-
-co2 = coroutine.create(function(i)
-    for i = 1, 100 do
-        sleep(math.random(1000)/1000)
-        lb:release(key)
-    end
-end)
-
-coroutine.resume(co, 1) -- 1
---coroutine.resume(co2, 1) -- 1
---coroutine.resume(co, 1) -- 1
---coroutine.resume(co2, 1) -- 1
---coroutine.resume(co, 1) -- 1
---coroutine.resume(co2, 1) -- 1
---coroutine.resume(co, 1) -- 1
---coroutine.resume(co2, 1) -- 1
-
-

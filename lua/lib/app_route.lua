@@ -1,74 +1,78 @@
+function newRobin(appName)
+
+    local hosts = discovery.hosts[string.upper(appName)]
+    -- ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(discovery.hosts))
 
 
-function newRobin( appName )
-  
-	local hosts = discovery.hosts[string.upper(appName)]
- 	-- ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(discovery.hosts))
-	
-	 
-	if hosts == nil then
-		ngx.log(ngx.ERR, "^^^^^^^^^",  "hosts is nil", appName )
-	 	return nil
-	end
+    if hosts == nil then
+        ngx.log(ngx.ERR, "^^^^^^^^^", "hosts is nil", appName)
+        return nil
+    end
 
 
-	--local robin={
-	--        {
-	--            "lastRenewalTimestamp": 1452042964223,
-	--            "hostName": "192.168.99.1",
-	--            "ip": "192.168.99.1",
-	--            "id": "192.168.99.1:gateaway",
-	--            "status": "UP",
-	--            "sport": null,
-	--            "name": "GATEAWAY",
-	--            "port": 8080
-	--        }
-	--}
+    --local robin={
+    --        {
+    --            "lastRenewalTimestamp": 1452042964223,
+    --            "hostName": "192.168.99.1",
+    --            "ip": "192.168.99.1",
+    --            "id": "192.168.99.1:gateaway",
+    --            "status": "UP",
+    --            "sport": null,
+    --            "name": "GATEAWAY",
+    --            "port": 8080
+    --        }
+    --}
 
-	 
- 
-	local robin =balancer:new(nil,hosts)
- 
-	return robin
+
+
+    local robin = balancer:new(nil, hosts)
+
+    return robin
 end
 
-function getTarget( )
-	
-	local uri = ngx.var.uri
-	-- ngx.log(ngx.ERR,"^^^^^^^^^", uri," ",ngx.var.request_uri)
-	 
+function getTarget()
 
- 	-- ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(router.routingTable))
-	
-	route=router:getMatchRoute(uri)
+    local uri = ngx.var.uri
+    -- ngx.log(ngx.ERR,"^^^^^^^^^", uri," ",ngx.var.request_uri)
 
-	 
-	if route == nil then
-		ngx.status=ngx.HTTP_NOT_FOUND
-		ngx.say(" not found available target route for uri ", ngx.req.get_method() ," ", uri)
-		return
-	end
 
-	targetAppName=route.app
-	targetPath=router:getRouteTargetPath(route,uri)
-	return targetAppName,targetPath
+    -- ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(router.routingTable))
+
+    route = router:getMatchRoute(uri)
+
+
+    if route == nil then
+        ngx.status = ngx.HTTP_NOT_FOUND
+        ngx.say(" not found available target route for uri ", ngx.req.get_method(), " ", uri)
+        return
+    end
+
+    targetAppName = route.app
+    targetPath = router:getRouteTargetPath(route, uri)
+    return targetAppName, targetPath
+end
+
+if not rateLimiter:acquire() then
+    ngx.status = ngx.HTTP_SERVICE_UNAVAILABLE
+    ngx.say(" not available ", ngx.req.get_method(), " ", uri)
+    return
 end
 
 
-local targetAppName, targetPath=getTarget()
+local targetAppName, targetPath = getTarget()
 
-if targetAppName==nil then
-	-- ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
-	ngx.say("targetAppName is nil for uri:  ".. ngx.var.request_uri)
-	return
+if targetAppName == nil then
+    -- ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
+    ngx.say("targetAppName is nil for uri:  " .. ngx.var.request_uri)
+    return
 end
 
 local appName = string.upper(targetAppName)
 
- 
+
 -- ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
 
- 
+
 -- ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
 local robin = newRobin(targetAppName)
 
@@ -76,20 +80,20 @@ local robin = newRobin(targetAppName)
 
 
 
-if robin==nil then
-	ngx.status=ngx.HTTP_NOT_FOUND
-	ngx.say(" not found available target instance for uri ", ngx.req.get_method() ," ", uri)
-	return
+if robin == nil then
+    ngx.status = ngx.HTTP_NOT_FOUND
+    ngx.say(" not found available target instance for uri ", ngx.req.get_method(), " ", uri)
+    return
 end
- 
-host=robin:next()
+
+host = robin:next()
 
 if not host then
-	ngx.say(" not found available target instance for uri ", ngx.req.get_method() ," ", uri)
-	return
+    ngx.say(" not found available target instance for uri ", ngx.req.get_method(), " ", uri)
+    return
 end
 -- ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
- -- ngx.req.set_uri(targetPath, true) 
+-- ngx.req.set_uri(targetPath, true)
 -- ngx.var.targetUri=targetPath
 -- local newval,err=apps_count:incr(appName, 1)
 -- if newval==nil then
@@ -99,10 +103,10 @@ end
 -- if newval==nil then
 -- 	api_count:set(ngx.var.uri,1)
 -- end 
- 
-ngx.ctx.appName=appName
-ngx.ctx.uri=ngx.var.uri
-ngx.var.bk_host= host.ip .. ":" .. host.port..targetPath
+
+ngx.ctx.appName = appName
+ngx.ctx.uri = ngx.var.uri
+ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
 
 
 

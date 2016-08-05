@@ -8,59 +8,99 @@
 
 
 local LeakyBucket = {
-    maxRequests = 10000, -- 单位时间窗口的最大请求数,默认10k
-    windowSeconds = 1, -- 时间窗口,单位s 1~60s
-    maxSaveSize = 60
+    config = {
+        default = {
+            maxRequests = 10000, -- 单位时间窗口的最大请求数,默认10k
+            windowSeconds = 1, -- 时间窗口,单位s 1~60s
+            maxSaveSize = 60
+        }
+    }
 }
 
-function LeakyBucket:new(o, share, maxRequests, windowSeconds, maxSaveSize)
-    o = o or {}
-    setmetatable(o, self)
-    self.__index = self
+--[
+
+config = {
+    default = { [1] = 100, [2] = 1, [3] = 60 },
+    ["UserService"] = { [1] = 100, [2] = 1, [3] = 60 },
+    ["/api/v1/users"] = { [1] = 100, [2] = 1, [3] = 60 },
+    ["/api/v2/users"] = {
+        maxRequests = 10000,
+        windowSeconds = 1,
+        maxSaveSize = 60
+    }
+}
+
+--]
+
+
+function LeakyBucket:init(share, config)
     self.share = share
-    self.maxRequests = maxRequests or self.maxRequests
+    if not config then
+        return
+    end
+
+    if config.default then
+        self.config.default.maxRequests = config.default[1] or config.default.maxRequests or self.config.default.maxRequests
+        self.config.default.windowSeconds = dealWindowSeconds(config.default[2] or config.default.windowSeconds or self.config.default.windowSeconds)
+        self.config.default.maxSaveSize = config.default[3] or config.default.maxSaveSize or self.config.default.maxSaveSize
+    end
+
+    for k, v in pairs(config) do
+        self.config[k] = self.config[k] or {}
+        self.config[k].maxRequests = v[1] or v.maxRequests or self.config.default.maxRequests
+        self.config[k].windowSeconds = dealWindowSeconds(v[2] or v.windowSeconds or self.config.default.windowSeconds)
+        self.config[k].maxSaveSize = v[3] or v.maxSaveSize or self.config.default.maxSaveSize
+    end
+end
+
+function dealWindowSeconds(windowSeconds)
     if windowSeconds and windowSeconds < 1 then
         windowSeconds = 1
     end
     if windowSeconds and windowSeconds > 60 then
         windowSeconds = 60
     end
-    self.windowSeconds = windowSeconds or self.windowSeconds
-    self.maxSaveSize = maxSaveSize or self.maxSaveSize
-    return o
+    return windowSeconds
 end
 
 
 function LeakyBucket:incr(share, key, value)
-    return share:incr(self:genCurrentKey(key, 0), value,0)
+    return share:incr(self:genCurrentKey(key, 0), value)
 end
 
 function LeakyBucket:delete(share, key)
-    return share:delete(self:genCurrentKey(key, self.maxSaveSize))
+    local maxSaveSize = self.config[key].maxSaveSize or self.config.default.maxSaveSize
+    return share:delete(self:genCurrentKey(key, maxSaveSize))
 end
 
 function LeakyBucket:genCurrentKey(key, prevUnit)
     local now = os.time() --  ngx.time()
-    local time_key = self.windowSeconds * (math.floor(now / self.windowSeconds) - (prevUnit or 0))
+    local windowSeconds = self.config[key].windowSeconds or self.config.default.windowSeconds
+    local time_key = windowSeconds * (math.floor(now / windowSeconds) - (prevUnit or 0))
     local finalKey = key .. ":" .. time_key
-    print(finalKey)
+    --    print(finalKey)
     return finalKey
 end
 
 function LeakyBucket:acquire(key, permits)
+    key = key or "default"
     self:delete(self.share, key)
---    print(self.maxRequests)
+    --    print(self.maxRequests)
+    local maxRequests = self.config[key].maxRequests or self.config.default.maxRequests
     local newval, err, forcible = self:incr(self.share, key, permits or 1)
-    local s=(newval or 0) >= self.maxRequests
-    print( newval .. " " .. self.maxRequests .. " " )
-    if (newval or 0) >= self.maxRequests then
+    --    local newval, flags = self.share:get(key) or 1
+    newval = newval or 0
+    local s = (newval or 0) >= maxRequests
+        print(newval .. " " .. maxRequests .. " ")
+    if (newval or 0) >= maxRequests then
         return false
     end
     return true
 end
 
 function LeakyBucket:release(key, permits)
-    self:incr(self.share, key, -(permits or 1))
+    --    self:incr(self.share, key, -(permits or 1))
+    --Nothing
 end
 
 return LeakyBucket
