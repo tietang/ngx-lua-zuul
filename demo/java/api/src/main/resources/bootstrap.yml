@@ -1,6 +1,6 @@
 server:
   port: 7912
-
+banner.image.location: banner.jpg
 eureka:
   instance:
     preferIpAddress: true

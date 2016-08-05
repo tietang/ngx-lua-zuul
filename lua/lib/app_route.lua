@@ -1,9 +1,4 @@
 
-local json=require "cjson"
-local shared = ngx.shared.discovery
-local routes = ngx.shared.routes
-
- 
 
 function newRobin( appName )
   
@@ -16,7 +11,6 @@ function newRobin( appName )
 	 	return nil
 	end
 
-	
 
 	--local robin={
 	--        {
@@ -60,8 +54,6 @@ function getTarget( )
 	return targetAppName,targetPath
 end
 
-local apps_count = ngx.shared.apps_count
-local api_count = ngx.shared.api_count
 
 local targetAppName, targetPath=getTarget()
 
@@ -92,6 +84,10 @@ end
  
 host=robin:next()
 
+if not host then
+	ngx.say(" not found available target instance for uri ", ngx.req.get_method() ," ", uri)
+	return
+end
 -- ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
  -- ngx.req.set_uri(targetPath, true) 
 -- ngx.var.targetUri=targetPath

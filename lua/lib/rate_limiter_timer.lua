@@ -6,7 +6,7 @@ lastCleanSeconds=0
 local time_window = 60 --seconds
 local delay = 10 
 
-local handler=function clear(premature)
+local handler=function(premature)
 	if premature then
          return
     end

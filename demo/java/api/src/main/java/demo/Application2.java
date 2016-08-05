@@ -4,9 +4,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.turbine.EnableTurbine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * @author Tietang Wang 铁汤
@@ -15,23 +22,12 @@ import org.springframework.stereotype.Controller;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-//@EnableTurbineStream
-@EnableTurbine
 @Controller
-public class Application {
+public class Application2 {
 
-
-    @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        FilterRegistrationBean bean = new FilterRegistrationBean();
-        bean.setFilter(new StatsFilter());
-        bean.addUrlPatterns(new String[]{"/*"});
-
-        return bean;
-    }
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Application2.class, args);
     }
 
 }
