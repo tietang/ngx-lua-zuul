@@ -3,7 +3,6 @@ function newRobin(appName)
     local hosts = discovery.hosts[string.upper(appName)]
     -- ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(discovery.hosts))
 
-
     if hosts == nil then
         ngx.log(ngx.ERR, "^^^^^^^^^", "hosts is nil", appName)
         return nil
@@ -22,8 +21,6 @@ function newRobin(appName)
     --            "port": 8080
     --        }
     --}
-
-
 
     local robin = balancer:new(nil, hosts)
 
@@ -52,15 +49,33 @@ function getTarget()
     return targetAppName, targetPath
 end
 
+function limit(limitLevel, givenlimitLevel, key)
 
-
-if not rateLimiter:acquire() then
-    ngx.status = ngx.HTTP_SERVICE_UNAVAILABLE
---    ngx.log(ngx.ERR,"-----------", "can't acquire ")
-    ngx.say(" not available ", ngx.req.get_method(), " ", uri)
-    return
+    -- 流量全局限制
+    if limitLevel == givenlimitLevel and not rateLimiter:acquire(key) then
+        ngx.status = ngx.HTTP_SERVICE_UNAVAILABLE
+        --    ngx.log(ngx.ERR,"-----------", "can't acquire ")
+        ngx.say(" not available for ", limitLevel, " ", key or "", ", ", ngx.req.get_method(), " ", ngx.var.uri)
+        return true
+    end
+    return false
 end
 
+local limitLevel = "global"
+if globalConfig and globalConfig.limiter and globalConfig.limiter.limitLevel then
+    limitLevel = globalConfig.limiter.limitLevel
+end
+
+--local auth_jwt = require "auth_jwt"
+--if config.auth.type == "jwt" and not auth_jwt.jwt_verify() then
+--    ngx.status = ngx.HTTP_UNAUTHORIZED
+--    ngx.say(" not available ", ngx.req.get_method(), " ", uri)
+--    return true
+--end
+
+
+if limit(limitLevel, "global", nil) then return end
+if limit(limitLevel, "api", ngx.var.uri) then return end
 
 local targetAppName, targetPath = getTarget()
 
@@ -69,6 +84,8 @@ if targetAppName == nil then
     ngx.say("targetAppName is nil for uri:  " .. ngx.var.request_uri)
     return
 end
+
+if limit(limitLevel, "service", targetAppName) then return end
 
 local appName = string.upper(targetAppName)
 
@@ -109,6 +126,9 @@ end
 
 ngx.ctx.appName = appName
 ngx.ctx.uri = ngx.var.uri
+
+
+
 ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
 
 

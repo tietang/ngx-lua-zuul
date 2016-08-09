@@ -84,6 +84,7 @@ end
 
 function LeakyBucket:incr(shared, key, value)
     local x = value or 1
+    key=self:genCurrentKey(key, 0)
     local v, e, f = shared:incr(key, x)
     if v == nil then
         local succ, err, forcible = shared:set(key, x)
@@ -109,7 +110,7 @@ function LeakyBucket:genCurrentKey(key, prevUnit)
     local time_key = windowSeconds * (math.floor(now / windowSeconds) - (prevUnit or 0))
     local finalKey = key .. ":" .. time_key
     --    print(finalKey)
-    --    ngx.log(ngx.ERR,"-----------",now," ", finalKey," ",prevUnit)
+        ngx.log(ngx.ERR,"-----------",now," ", finalKey," ",prevUnit)
     return finalKey
 end
 
@@ -124,7 +125,7 @@ function LeakyBucket:acquire(key, permits)
     newval = newval or 0
     --    local s = (newval or 0) >= maxRequests
     --    print(newval .. " " .. maxRequests .. " ")
---    ngx.log(ngx.ERR, "-----------", newval, " ", maxRequests, " ", dump(self.share))
+    ngx.log(ngx.ERR, "-----------", newval, " ", maxRequests, " ", dump(self.share))
     if (newval or 0) >= maxRequests then
         return false
     end

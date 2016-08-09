@@ -19,6 +19,20 @@ _M.limiter =
         ["UserService"] = { [1] = 100, [2] = 1, [3] = 60 },
     }
 }
+-- # 预先提供,调用方和服务方共同持有同样的
+_M.auth = {
+    type = "jwt",--none,jwt,
+    loginUrl = "/_admin/login",
+    logoutUrl = "/_admin/logout",
+    homeUrl = "/home",
+}
+
+_M.jwt = {
+    secret = {
+        default = "your-own-jwt-secret",
+        ["userService"] = "7c4c8d455df311e6811590b11c1a55bf"
+    }
+}
 
 
 return _M
