@@ -15,6 +15,15 @@ local function incr(shared, key, value)
     return v,e
 end
 
+
+-- for lua-nginx-module version >= v0.10.6
+local function incr2(shared, key, value)
+     local v, e, f = shared:incr(key, value, 0)
+     return v, e
+ end
+
+
+
 --在指定共享缓存shared中对指定key，累积总请求时间req_time和后端响应时间res_time
 local function sumTime(shared,key,req_time,res_time )
 

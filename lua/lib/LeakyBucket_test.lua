@@ -20,24 +20,25 @@ local config = {
     }
 }
 
-local share = {}
+local ShareTest = {}
 
-function share:incr(key, value, initValue)
+
+function ShareTest:incr(key, value, initValue)
     self[key] = (self[key] or 0) + value + (initValue or 0);
     return self[key]
 end
-function share:delete(key)
+function ShareTest:delete(key)
     self[key] = nil
 --    table.remove(self,key)
 end
 
 
-function share:size()
+function ShareTest:size()
     return table.maxn(share)
 end
 
 local leakyBucket = require "LeakyBucket"
-leakyBucket:init(share,config)
+leakyBucket:init(ShareTest,config)
 
 for i = 1, 10 do
     print(leakyBucket:acquire())

@@ -9,28 +9,28 @@
 
 local LeakyBucket = require "LeakyBucketObject"
 
-local share = {}
+local ShareTest = {}
 
-function share:incr(key, value, initValue)
+function ShareTest:incr(key, value, initValue)
     self[key] = (self[key] or 0) + value + (initValue or 0);
     return self[key]
 end
 
-function share:delete(key)
+function ShareTest:delete(key)
     self[key] = nil
     table.remove(self,key)
 end
 
 
-function share:size()
-    return table.maxn(share)
+function ShareTest:size()
+    return table.maxn(ShareTest)
 end
 
 function sleep(n)
     os.execute("sleep " .. n)
 end
 
-local lb = LeakyBucket:new({}, share, 3, 60, 10)
+local lb = LeakyBucket:new({}, ShareTest, 3, 60, 10)
 local key = "/api/v1/users"
 --
 --timer = function(time)

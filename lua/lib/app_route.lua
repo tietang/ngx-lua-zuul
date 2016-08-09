@@ -52,8 +52,11 @@ function getTarget()
     return targetAppName, targetPath
 end
 
+
+
 if not rateLimiter:acquire() then
     ngx.status = ngx.HTTP_SERVICE_UNAVAILABLE
+--    ngx.log(ngx.ERR,"-----------", "can't acquire ")
     ngx.say(" not available ", ngx.req.get_method(), " ", uri)
     return
 end

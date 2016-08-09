@@ -5,21 +5,20 @@
 --
 
 
-
-
 local LeakyBucket = {
+    limitLevel = "global",
     config = {
         default = {
             maxRequests = 10000, -- 单位时间窗口的最大请求数,默认10k
             windowSeconds = 1, -- 时间窗口,单位s 1~60s
-            maxSaveSize = 60
+            maxSaveSize = 60 --最大保留的时间窗口size,
         }
     }
 }
 
 --[
 
-config = {
+params = {
     default = { [1] = 100, [2] = 1, [3] = 60 },
     ["UserService"] = { [1] = 100, [2] = 1, [3] = 60 },
     ["/api/v1/users"] = { [1] = 100, [2] = 1, [3] = 60 },
@@ -35,6 +34,18 @@ config = {
 
 function LeakyBucket:init(share, config)
     self.share = share
+    --    if not config then
+    --        return
+    --    end
+    self:updateConfig(config.params)
+    self:updateLimitLevel(config.limitLevel)
+end
+
+function LeakyBucket:updateLimitLevel(limitLevel)
+    self.limitLevel = limitLevel or self.limitLevel
+end
+
+function LeakyBucket:updateConfig(config)
     if not config then
         return
     end
@@ -63,10 +74,29 @@ function dealWindowSeconds(windowSeconds)
     return windowSeconds
 end
 
+-- for lua-nginx-module version >= v0.10.6
+function LeakyBucket:incr2(share, key, value)
 
-function LeakyBucket:incr(share, key, value)
-    return share:incr(self:genCurrentKey(key, 0), value)
+    local v, e, f = share:incr(self:genCurrentKey(key, 0), value, 0)
+--    ngx.log(ngx.ERR, "-----------", key, " ", value, "v=", v, " e=", e, "f=", f)
+    return v, e, f
 end
+
+function LeakyBucket:incr(shared, key, value)
+    local x = value or 1
+    local v, e, f = shared:incr(key, x)
+    if v == nil then
+        local succ, err, forcible = shared:set(key, x)
+        if forcible then
+            return 0, err, forcible
+        else
+            return x, err, forcible
+        end
+    end
+    return v, e, f
+end
+
+
 
 function LeakyBucket:delete(share, key)
     local maxSaveSize = self.config[key].maxSaveSize or self.config.default.maxSaveSize
@@ -79,6 +109,7 @@ function LeakyBucket:genCurrentKey(key, prevUnit)
     local time_key = windowSeconds * (math.floor(now / windowSeconds) - (prevUnit or 0))
     local finalKey = key .. ":" .. time_key
     --    print(finalKey)
+    --    ngx.log(ngx.ERR,"-----------",now," ", finalKey," ",prevUnit)
     return finalKey
 end
 
@@ -89,9 +120,11 @@ function LeakyBucket:acquire(key, permits)
     local maxRequests = self.config[key].maxRequests or self.config.default.maxRequests
     local newval, err, forcible = self:incr(self.share, key, permits or 1)
     --    local newval, flags = self.share:get(key) or 1
+
     newval = newval or 0
-    local s = (newval or 0) >= maxRequests
-        print(newval .. " " .. maxRequests .. " ")
+    --    local s = (newval or 0) >= maxRequests
+    --    print(newval .. " " .. maxRequests .. " ")
+--    ngx.log(ngx.ERR, "-----------", newval, " ", maxRequests, " ", dump(self.share))
     if (newval or 0) >= maxRequests then
         return false
     end
