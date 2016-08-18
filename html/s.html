@@ -39,10 +39,10 @@
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script>
         var limit = 60 * 1,
-            duration = 750,
+            duration = 1000,
             now = new Date(Date.now() - duration)
 
-        var width = 500,
+        var width = 300,
             height = 200
 
         var groups = {
@@ -52,21 +52,23 @@
                 data: d3.range(limit).map(function() {
                     return 0
                 })
-            },
-            target: {
-                value: 0,
-                color: 'green',
-                data: d3.range(limit).map(function() {
-                    return 0
-                })
-            },
-            output: {
-                value: 0,
-                color: 'grey',
-                data: d3.range(limit).map(function() {
-                    return 0
-                })
             }
+
+            <!--,-->
+            <!--target: {-->
+                <!--value: 0,-->
+                <!--color: 'green',-->
+                <!--data: d3.range(limit).map(function() {-->
+                    <!--return 0-->
+                <!--})-->
+            <!--},-->
+            <!--output: {-->
+                <!--value: 0,-->
+                <!--color: 'grey',-->
+                <!--data: d3.range(limit).map(function() {-->
+                    <!--return 0-->
+                <!--})-->
+            <!--}-->
         }
 
         var x = d3.time.scale()
@@ -91,10 +93,10 @@
             .attr('width', width)
             .attr('height', height + 50)
 
-        var axis = svg.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', 'translate(0,' + height + ')')
-            .call(x.axis = d3.svg.axis().scale(x).orient('bottom'))
+//        var axis = svg.append('g')
+//            .attr('class', 'x axis')
+//            .attr('transform', 'translate(0,' + height + ')')
+//            .call(x.axis = d3.svg.axis().scale(x).orient('bottom'))
 
         var paths = svg.append('g')
 
@@ -113,7 +115,7 @@
             for (var name in groups) {
                 var group = groups[name];
                 //group.data.push(group.value) // Real values arrive at irregular intervals
-                group.data.push(20 + Math.random() * 100);
+                group.data.push( Math.random() * 100);
                 // group.data.push(20  );
                 group.path.attr('d', line);
             }
@@ -122,15 +124,15 @@
             x.domain([now - (limit - 2) * duration, now - duration])
 
             // Slide x-axis left
-            axis.transition()
-                .duration(duration)
-                .ease('linear')
-                .call(x.axis)
+//            axis.transition()
+//                .duration(500)
+//                .ease('linear')
+//                .call(x.axis)
 
             // Slide paths left
             paths.attr('transform', null)
                 .transition()
-                .duration(duration)
+                .duration(500)
                 .ease('linear')
                 .attr('transform', 'translate(' + x(now - (limit - 1) * duration) + ')')
                 // .each('end', tick)

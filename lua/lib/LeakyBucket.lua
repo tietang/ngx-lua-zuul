@@ -10,13 +10,13 @@ local utils = require("utils")
 local LeakyBucket = {
     limitLevel = "global",
     maxRequests = 10000, -- 单位时间窗口的最大请求数,默认10k
-    windowSeconds = 1, -- 时间窗口,单位s 1~60s
+    windowSeconds = 10, -- 时间窗口,单位s 1~60s
     maxSaveSize = 60, --最大保留的时间窗口size,
     allKeys = {},
     config = {
         default = {
             maxRequests = 10000, -- 单位时间窗口的最大请求数,默认10k
-            windowSeconds = 1, -- 时间窗口,单位s 1~60s
+            windowSeconds = 10, -- 时间窗口,单位s 1~60s
             maxSaveSize = 60 --最大保留的时间窗口size,
         }
     }
@@ -135,6 +135,25 @@ end
 function LeakyBucket:release(key, permits)
     --    self:incr(self.share, key, -(permits or 1))
     --Nothing
+end
+
+function LeakyBucket:report()
+    local r = {
+        metrics = {},
+        limitLevel = self.limitLevel,
+        maxRequests = self.maxRequests,
+        windowSeconds = self.windowSeconds,
+        maxSaveSize = self.maxRequests,
+        allKeys = self.allKeys,
+        config = self.config
+    }
+
+    local keys = self.share:get_keys()
+    for i, key in pairs(keys) do
+        local value = self.share:get(key)
+        r.metrics[key] = value
+    end
+    return r
 end
 
 

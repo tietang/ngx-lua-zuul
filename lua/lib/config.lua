@@ -18,12 +18,12 @@ _M.metrics = {
 _M.limiter =
 {
     limitLevel = "global", --global,service,api
-    windowSeconds = 1, -- 时间窗口,单位s 1~60s
-    maxSaveSize = 60, --最大保留size
-    maxRequests = 10, -- 单位时间窗口的最大请求数,默认10k
+    windowSeconds = 10, -- 时间窗口,单位s 1~60s
+    maxSaveSize = 10, --最大保留size
+    maxRequests = 1000, -- 单位时间窗口的最大请求数,默认10k
     params = {
         default = {
-            maxRequests = 10, -- 单位时间窗口的最大请求数,默认10k
+            maxRequests = 1000, -- 单位时间窗口的最大请求数,默认10k
         },
         ["UserService"] = { [1] = 100, [2] = 1, [3] = 60 },
     }
