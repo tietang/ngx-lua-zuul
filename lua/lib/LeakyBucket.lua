@@ -110,7 +110,7 @@ function LeakyBucket:genCurrentKey(key, prevUnit)
     local time_key = windowSeconds * (math.floor(now / windowSeconds) - (prevUnit or 0))
     local finalKey = key .. ":" .. time_key
     --    print(finalKey)
---    ngx.log(ngx.ERR, "-----------", now, " ", finalKey, " ", prevUnit)
+    --    ngx.log(ngx.ERR, "-----------", now, " ", finalKey, " ", prevUnit)
     return finalKey
 end
 
@@ -125,7 +125,7 @@ function LeakyBucket:acquire(key, permits)
     newval = newval or 0
     --    local s = (newval or 0) >= maxRequests
     --    print(newval .. " " .. maxRequests .. " ")
---    ngx.log(ngx.ERR, "-----------", newval, " ", maxRequests, " ", utils.dump(self.share))
+    --    ngx.log(ngx.ERR, "-----------", newval, " ", maxRequests, " ", utils.dump(self.share))
     if (newval or 0) >= maxRequests then
         return false
     end
@@ -140,15 +140,13 @@ end
 
 --
 
-local metrics = ngx.shared.metrics
-
-local function delete(key)
-    local s, e, f = metrics:delete(key)
---    ngx.log(ngx.ERR, "deleted: ", key, "=", s, " ", e, " ", f)
+local function delete(share, key)
+    local s, e, f = share:delete(key)
+    --    ngx.log(ngx.ERR, "deleted: ", key, "=", s, " ", e, " ", f)
 end
 
-local function deleteKey(metrics, timeKey)
-    local keys = metrics:get_keys()
+local function deleteKey(share, timeKey)
+    local keys = share:get_keys()
 
     for k, v in pairs(keys) do
         --        ngx.log(ngx.ERR, "keys: ", k, "=", v)
@@ -156,10 +154,10 @@ local function deleteKey(metrics, timeKey)
 
         local kk = strings:split(v, "_ - : @");
         for tk, tv in pairs(kk) do
---            ngx.log(ngx.ERR, "split: ", tk, "=", tv, "   ", type(tv))
+            --            ngx.log(ngx.ERR, "split: ", tk, "=", tv, "   ", type(tv))
             local time = tonumber(tv)
             if time and time <= timeKey then
-                delete(v)
+                delete(share, v)
             end
         end
 
@@ -190,24 +188,20 @@ function LeakyBucket:handler()
     local maxSaveSize = self.maxSaveSize
     local time_key = windowSeconds * math.floor(now / windowSeconds)
 
-    local keys = metrics:get_keys()
+    local keys = self.share:get_keys()
     local len = table.maxn(keys)
---    ngx.log(ngx.ERR, len, "  ", maxSaveSize, "  ", time_key) --, "   ", utils.dump(keys))
+    --    ngx.log(ngx.ERR, len, "  ", maxSaveSize, "  ", time_key) --, "   ", utils.dump(keys))
     if len >= maxSaveSize then
         local size = len - maxSaveSize + 1
         for i = 1, size do
             local key = time_key - maxSaveSize - i
-            delete(key)
-            delete("REQ:" .. key)
-            delete("RES:" .. key)
-            deleteKey(metrics, key)
+            delete(self.share, key)
+            deleteKey(self.share, key)
         end
     end
     local lastDeleteKey = time_key - maxSaveSize
-    delete(lastDeleteKey)
-    delete("REQ:" .. lastDeleteKey)
-    delete("RES:" .. lastDeleteKey)
-    deleteKey(metrics, lastDeleteKey)
+    delete(self.share, lastDeleteKey)
+    deleteKey(self.share, lastDeleteKey)
 
     local ok, err = ngx.timer.at(windowSeconds, LeakyBucket.timerHandler)
     if not ok then

@@ -3,10 +3,12 @@
 -- Date: 16/8/18 13:59
 -- Blog: http://tietang.wang
 --
+metricsTimer:init(globalConfig.metrics)
+metricsTimer:start()
 
-rateLimiter:init(ngx.shared.metrics, globalConfig.limiter)
+rateLimiter:init(ngx.shared.limiter, globalConfig.limiter)
 rateLimiter:start()
 
-discovery:init("http://172.16.1.248:8761/eureka/")
+discovery:init(globalConfig.eureka.serverUrl)
 discovery:schedule()
 

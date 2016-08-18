@@ -6,6 +6,14 @@
 
 local _M = {}
 
+_M.eureka = {
+    serverUrl = "http://172.16.1.248:8761/eureka/"
+}
+
+_M.metrics = {
+    timeWindowInSeconds = 60,
+    maxSaveSize = 60,
+}
 
 _M.limiter =
 {

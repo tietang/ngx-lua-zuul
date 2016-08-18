@@ -1,7 +1,14 @@
+--
+-- User: Tietang Wang 铁汤 
+-- Date: 16/8/18 17:09
+-- Blog: http://tietang.wang
+--
+
+
+
 local json = require "cjson"
 
-local _M = {}
---在指定共享缓存shared中对指定key做incr操作,增加 
+--在指定共享缓存shared中对指定key做incr操作,增加
 local function incr(shared, key, value)
     local x = value or 1
     local v, e = shared:incr(key, x)
@@ -34,12 +41,10 @@ local function sumTime(shared, key, req_time, res_time)
     incr(shared, res_time_key, res_time or 0)
 end
 
-
-
 --- app统计
 local apps_count = ngx.shared.apps_count
 local apps_res_time = ngx.shared.apps_res_time
-local appName = ngx.ctx.appName or "Nil"
+local appName = ngx.ctx.appName or "NULL"
 --- count
 
 --- API 操作
@@ -71,32 +76,13 @@ local statusKey = status_code .. ""
 incr(api_count, statusKey)
 sumTime(api_res_time, statusKey, request_time, res_time)
 
-
 -- metrics
 local now = ngx.time()
-local windowSeconds = rateLimiter.windowSeconds
+local windowSeconds = globalConfig.metrics.timeWindowInSeconds
 local time_key = windowSeconds * math.floor(now / windowSeconds)
 
 incr(ngx.shared.metrics, time_key, 1)
 sumTime(ngx.shared.metrics_time, time_key, request_time, res_time)
-
-local function allReuqest(time_key, request_time, res_time)
-    local key = allRequest .. ":" .. time_key
-    incr(ngx.shared.metrics, key, 1)
-    sumTime(ngx.shared.metrics_time, key, request_time, res_time)
-end
-
-local function app(time_key, request_time, res_time)
-    local key = appName .. ":" .. time_key
-    incr(ngx.shared.metrics, key, 1)
-    sumTime(ngx.shared.metrics_time, key, request_time, res_time)
-end
-
-local function api(time_key, request_time, res_time)
-    local key = uri .. ":" .. time_key
-    incr(ngx.shared.metrics, key, 1)
-    sumTime(ngx.shared.metrics_time, key, request_time, res_time)
-end
 
 -- ngx.log(ngx.ERR,"^^^^^^^^^  ", ngx.var.upstream_connect_time,",  ",ngx.var.upstream_response_time)
 
