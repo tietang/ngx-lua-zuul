@@ -6,6 +6,9 @@
 
 
 
+local strings = require("strings")
+local utils = require("utils")
+
 --
 local _M = {}
 
@@ -37,9 +40,10 @@ local function deleteKey(share, timeKey)
     end
 end
 
-function _M:init(config)
+function _M:init(share, config)
     self.timeWindowInSeconds = config.timeWindowInSeconds or 60
     self.maxSaveSize = config.maxSaveSize or 60
+    self.share = share
 end
 
 function _M:start()

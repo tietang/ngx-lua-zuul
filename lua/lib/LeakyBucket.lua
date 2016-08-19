@@ -53,10 +53,11 @@ function LeakyBucket:updateConfig(config)
     if not config then
         return
     end
-
-    self.maxRequests = config.default[1] or config.default.maxRequests or self.maxRequests
-    self.windowSeconds = dealWindowSeconds(config.default[2] or config.default.windowSeconds or self.windowSeconds)
-    self.maxSaveSize = config.default[3] or config.default.maxSaveSize or self.maxSaveSize
+    if config.default then
+        self.maxRequests = config.default[1] or config.default.maxRequests or self.maxRequests
+        self.windowSeconds = dealWindowSeconds(config.default[2] or config.default.windowSeconds or self.windowSeconds)
+        self.maxSaveSize = config.default[3] or config.default.maxSaveSize or self.maxSaveSize
+    end
 
     for k, v in pairs(config) do
         self.config[k] = self.config[k] or {}
@@ -64,7 +65,7 @@ function LeakyBucket:updateConfig(config)
     end
 end
 
-function dealWindowSeconds(windowSeconds)
+local function dealWindowSeconds(windowSeconds)
     if windowSeconds and windowSeconds < 1 then
         windowSeconds = 1
     end

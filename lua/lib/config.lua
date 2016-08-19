@@ -11,7 +11,7 @@ _M.eureka = {
 }
 
 _M.metrics = {
-    timeWindowInSeconds = 60,
+    timeWindowInSeconds = 1,
     maxSaveSize = 60,
 }
 
@@ -20,11 +20,8 @@ _M.limiter =
     limitLevel = "global", --global,service,api
     windowSeconds = 10, -- 时间窗口,单位s 1~60s
     maxSaveSize = 10, --最大保留size
-    maxRequests = 1000, -- 单位时间窗口的最大请求数,默认10k
+    maxRequests = 10000, -- 单位时间窗口的最大请求数,默认10k
     params = {
-        default = {
-            maxRequests = 1000, -- 单位时间窗口的最大请求数,默认10k
-        },
         ["UserService"] = { [1] = 100, [2] = 1, [3] = 60 },
     }
 }
