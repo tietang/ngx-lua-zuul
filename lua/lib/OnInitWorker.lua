@@ -3,7 +3,7 @@
 -- Date: 16/8/18 13:59
 -- Blog: http://tietang.wang
 --
-metricsTimer:init(ngx.shared.metrics,globalConfig.metrics)
+metricsTimer:init(ngx.shared.metrics,globalConfig.stats)
 metricsTimer:start()
 
 rateLimiter:init(ngx.shared.limiter, globalConfig.limiter)

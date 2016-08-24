@@ -10,10 +10,15 @@ local _M = {
 }
 
 function _M:use(middleware)
-    table.insert(self.middlewares, middleware)
+    self.middlewares[middleware.name] = middleware
 end
 
 function _M:use(middlewareName, middleware)
+    self.middlewares[middlewareName] = middleware
+end
+
+function _M:useByName(middlewareName)
+    middleware = require "plugins." .. middlewareName .. "handler"
     self.middlewares[middlewareName] = middleware
 end
 
@@ -69,6 +74,16 @@ function _M:log()
     for k, v in pairs(self.middlewares) do
         if v.log then v.log() end
     end
+end
+
+function _M:report(name)
+    for k, v in pairs(self.middlewares) do
+        if v.report and k == name then v.report() end
+    end
+end
+
+function _M:get(name)
+    return self.middlewares[name]
 end
 
 return _M

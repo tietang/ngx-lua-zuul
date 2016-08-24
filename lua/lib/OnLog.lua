@@ -6,39 +6,16 @@
 
 
 
-local json = require "cjson"
-
---在指定共享缓存shared中对指定key做incr操作,增加
-local function incr(shared, key, value)
-    local x = value or 1
-    local v, e = shared:incr(key, x)
-    if v == nil then
-        local succ, err, forcible = shared:set(key, x)
-        if forcible then
-            return 0, err
-        else
-            return x, err
-        end
-    end
-    return v, e
-end
-
-
--- for lua-nginx-module version >= v0.10.6
-local function incr2(shared, key, value)
-    local v, e, f = shared:incr(key, value, 0)
-    return v, e
-end
-
+local utils = require "utils"
 
 
 --在指定共享缓存shared中对指定key，累积总请求时间req_time和后端响应时间res_time
 local function sumTime(shared, key, req_time, res_time)
     local req_time_key = "REQ:" .. key
-    incr(shared, req_time_key, req_time or 0)
+    utils:incr(shared, req_time_key, req_time or 0)
 
     local res_time_key = "RES:" .. key
-    incr(shared, res_time_key, res_time or 0)
+    utils:incr(shared, res_time_key, res_time or 0)
 end
 
 --- app统计
@@ -55,9 +32,9 @@ local api_count = ngx.shared.api_count
 local uri = ngx.var.uri
 local allRequest = "AllRequest"
 --- count
-incr(apps_count, appName, 1)
-incr(api_count, uri, 1)
-incr(api_count, allRequest, 1)
+utils:incr(apps_count, appName, 1)
+utils:incr(api_count, uri, 1)
+utils:incr(api_count, allRequest, 1)
 
 
 --- response time
@@ -73,7 +50,7 @@ sumTime(api_res_time, allRequest, request_time, res_time)
 
 local status_code = tonumber(ngx.var.status) or 0
 local statusKey = status_code .. ""
-incr(api_count, statusKey)
+utils:incr(api_count, statusKey)
 sumTime(api_res_time, statusKey, request_time, res_time)
 
 -- metrics
@@ -81,7 +58,7 @@ local now = ngx.time()
 local windowSeconds = globalConfig.metrics.timeWindowInSeconds
 local time_key = windowSeconds * math.floor(now / windowSeconds)
 
-incr(ngx.shared.metrics, time_key, 1)
+utils:incr(ngx.shared.metrics, time_key, 1)
 sumTime(ngx.shared.metrics_time, time_key, request_time, res_time)
 
 -- ngx.log(ngx.ERR,"^^^^^^^^^  ", ngx.var.upstream_connect_time,",  ",ngx.var.upstream_response_time)
