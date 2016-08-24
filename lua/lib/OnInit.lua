@@ -10,10 +10,11 @@ json = require "cjson"
 balancer = require "robin"
 router = require "router"
 rateLimiter = require "LeakyBucket"
-middlewares = require "middlewares"
+--middlewares = require "middlewares"
 
 metricsTimer=require "metrics_timer"
 
 
-middlewares.useByName(metrics)
+--middlewares.useByName("metrics")
+--middlewares.useByName("eureka")
 

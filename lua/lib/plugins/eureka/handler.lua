@@ -4,14 +4,23 @@
 -- Blog: http://tietang.wang
 --
 
+
+discovery = require "discovery"
+json = require "cjson"
+balancer = require "robin"
+router = require "router"
+rateLimiter = require "LeakyBucket"
+
 local _M = {
     name = "eureka",
     version = "1.0"
 }
+function _M:initWorker()
+    discovery:init(globalConfig.eureka.serverUrl)
+    discovery:schedule()
+end
 
 function _M:access()
-
-
 
     local limitLevel = "global"
     if globalConfig and globalConfig.limiter and globalConfig.limiter.limitLevel then

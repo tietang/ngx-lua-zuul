@@ -25,17 +25,17 @@ function show(shared, shared_time)
     ngx.say("\n")
 end
 
-ngx.say("<pre>")
-show(ngx.shared.apps_count, ngx.shared.apps_res_time)
-show(ngx.shared.api_count, ngx.shared.api_res_time)
-
-
-
-
-show(ngx.shared.metrics, ngx.shared.metrics_time)
-
-ngx.say("</pre>")
-
+--ngx.say("<pre>")
+--show(ngx.shared.apps_count, ngx.shared.apps_res_time)
+--show(ngx.shared.api_count, ngx.shared.api_res_time)
+--
+--
+--
+--
+--show(ngx.shared.metrics, ngx.shared.metrics_time)
+--
+--ngx.say("</pre>")
+--
 
 
 local function showH5(shared, shared_time)
@@ -78,5 +78,7 @@ local function sayHtml()
     showH5(ngx.shared.metrics, ngx.shared.metrics_time)
     ngx.say("</pre>")
 end
+
+--ngx.say('<meta http-equiv="refresh" content="5">')
 
 sayHtml()

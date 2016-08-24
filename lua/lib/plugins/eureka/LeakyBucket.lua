@@ -139,6 +139,7 @@ function LeakyBucket:release(key, permits)
 end
 
 function LeakyBucket:report()
+
     local r = {
         metrics = {},
         limitLevel = self.limitLevel,
@@ -156,6 +157,7 @@ function LeakyBucket:report()
     end
     return r
 end
+
 
 
 --
