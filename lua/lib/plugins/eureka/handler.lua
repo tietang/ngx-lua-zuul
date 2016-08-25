@@ -5,94 +5,18 @@
 --
 
 
-discovery = require "discovery"
-json = require "cjson"
-balancer = require "robin"
-router = require "router"
-rateLimiter = require "LeakyBucket"
+discovery = require "plugins.eureka.discovery"
+--json = require "cjson"
+balancer = require "plugins.eureka.robin"
+router = require "plugins.eureka.router"
+rateLimiter = require "plugins.eureka.LeakyBucket"
+
+
 
 local _M = {
     name = "eureka",
     version = "1.0"
 }
-function _M:initWorker()
-    discovery:init(globalConfig.eureka.serverUrl)
-    discovery:schedule()
-end
-
-function _M:access()
-
-    local limitLevel = "global"
-    if globalConfig and globalConfig.limiter and globalConfig.limiter.limitLevel then
-        limitLevel = globalConfig.limiter.limitLevel
-    end
-
-    --local auth_jwt = require "auth_jwt"
-    --if config.auth.type == "jwt" and not auth_jwt.jwt_verify() then
-    --    ngx.status = ngx.HTTP_UNAUTHORIZED
-    --    ngx.say(" not available ", ngx.req.get_method(), " ", uri)
-    --    return true
-    --end
-
-
-    --if limit(limitLevel, "global", nil) then return end
-    --if limit(limitLevel, "api", ngx.var.uri) then return end
-
-    local targetAppName, targetPath = getTarget()
-
-    if targetAppName == nil then
-        -- ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
-        ngx.say("targetAppName is nil for uri:  " .. ngx.var.request_uri)
-        return
-    end
-
-    if limit(limitLevel, "service", targetAppName) then return end
-
-    local appName = string.upper(targetAppName)
-
-
-    -- ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
-
-
-    -- ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
-    local robin = newRobin(targetAppName)
-
-    -- ngx.log(ngx.ERR, "^^^^^^^^^",  json.encode(robin) )
-
-
-
-    if robin == nil then
-        ngx.status = ngx.HTTP_NOT_FOUND
-        ngx.say(" not found available target instance for uri ", ngx.req.get_method(), " ", uri)
-        return
-    end
-
-    host = robin:next()
-
-    if not host then
-        ngx.say(" not found available target instance for uri ", ngx.req.get_method(), " ", uri)
-        return
-    end
-    -- ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
-    -- ngx.req.set_uri(targetPath, true)
-    -- ngx.var.targetUri=targetPath
-    -- local newval,err=apps_count:incr(appName, 1)
-    -- if newval==nil then
-    -- 	apps_count:set(appName,1)
-    -- end
-    -- local newval,err=api_count:incr(ngx.var.uri, 1)
-    -- if newval==nil then
-    -- 	api_count:set(ngx.var.uri,1)
-    -- end
-
-    ngx.ctx.appName = appName
-    ngx.ctx.uri = ngx.var.uri
-
-
-
-    ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
-end
-
 
 
 local function newRobin(appName)
@@ -157,5 +81,95 @@ local function limit(limitLevel, givenlimitLevel, key)
     end
     return false
 end
+
+function _M:init()
+
+end
+
+function _M:initWorker()
+
+    rateLimiter:init(ngx.shared.limiter, globalConfig.limiter)
+    rateLimiter:start()
+
+    discovery:init(globalConfig.eureka.serverUrl)
+    discovery:schedule()
+end
+
+
+function _M:access()
+
+    local limitLevel = "global"
+    if globalConfig and globalConfig.limiter and globalConfig.limiter.limitLevel then
+        limitLevel = globalConfig.limiter.limitLevel
+    end
+
+    --local auth_jwt = require "auth_jwt"
+    --if config.auth.type == "jwt" and not auth_jwt.jwt_verify() then
+    --    ngx.status = ngx.HTTP_UNAUTHORIZED
+    --    ngx.say(" not available ", ngx.req.get_method(), " ", uri)
+    --    return true
+    --end
+
+
+    if limit(limitLevel, "global", nil) then return end
+    if limit(limitLevel, "api", ngx.var.uri) then return end
+
+    local targetAppName, targetPath = getTarget()
+
+    if targetAppName == nil then
+--         ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
+        ngx.say("targetAppName is nil for uri:  " .. ngx.var.request_uri)
+        return
+    end
+
+    if limit(limitLevel, "service", targetAppName) then return end
+
+    local appName = string.upper(targetAppName)
+
+
+--     ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
+
+
+--     ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
+    local robin = newRobin(targetAppName)
+
+--     ngx.log(ngx.ERR, "^^^^^^^^^",  json.encode(robin) )
+
+
+
+    if robin == nil then
+        ngx.status = ngx.HTTP_NOT_FOUND
+        ngx.say(" not found available target instance for uri ", ngx.req.get_method(), " ", uri)
+        return
+    end
+
+    host = robin:next()
+
+    if not host then
+        ngx.say(" not found available target instance for uri ", ngx.req.get_method(), " ", uri)
+        return
+    end
+    -- ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
+    -- ngx.req.set_uri(targetPath, true)
+    -- ngx.var.targetUri=targetPath
+    -- local newval,err=apps_count:incr(appName, 1)
+    -- if newval==nil then
+    -- 	apps_count:set(appName,1)
+    -- end
+    -- local newval,err=api_count:incr(ngx.var.uri, 1)
+    -- if newval==nil then
+    -- 	api_count:set(ngx.var.uri,1)
+    -- end
+
+    ngx.ctx.appName = appName
+    ngx.ctx.uri = ngx.var.uri
+
+
+
+    ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
+end
+
+
+
 
 return _M

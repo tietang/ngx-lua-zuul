@@ -18,19 +18,21 @@ function _M:use(middlewareName, middleware)
 end
 
 function _M:useByName(middlewareName)
-    middleware = require "plugins." .. middlewareName .. "handler"
+    local module = "plugins." .. middlewareName .. ".handler"
+
+    middleware = require(module)
     self.middlewares[middlewareName] = middleware
 end
 
 function _M:init()
     for k, v in pairs(self.middlewares) do
-        if v.set then v.set() end
+        if v.init then v.init() end
     end
 end
 
 function _M:initWorker()
     for k, v in pairs(self.middlewares) do
-        if v.set then v.set() end
+        if v.initWorker then v.initWorker() end
     end
 end
 
@@ -78,8 +80,16 @@ end
 
 function _M:report(name)
     for k, v in pairs(self.middlewares) do
-        if v.report and k == name then v.report() end
+        if v.report and k == name then return v.report() end
     end
+    return nil
+end
+
+function _M:reportHtml(name)
+    for k, v in pairs(self.middlewares) do
+        if v.reportHtml and k == name then return v.reportHtml() end
+    end
+    return nil
 end
 
 function _M:get(name)

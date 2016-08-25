@@ -3,10 +3,10 @@
 -- Date: 16/8/24 14:00
 -- Blog: http://tietang.wang
 --
-local utils = require "utils"
-local strings = require("strings")
+local utils = require "utils.utils"
+local strings = require("utils.strings")
 
-metricsTimer = require "metrics_timer"
+metricsTimer = require "plugins.metrics.metrics_timer"
 
 local _M = {
     name = "metrics",
@@ -81,14 +81,13 @@ function _M:log()
 end
 
 function _M:report()
-    --    local contentType = ngx.req.get_headers()["Content-Type"]
-    local accept = ngx.req.get_headers()["Accept"]
-    if string.match(accept, "application/json") then
-        sayJson();
-    else
-        sayHtml();
-    end
+    return showAll()
 end
+
+function _M:reportHtml()
+    sayHtml()
+end
+
 
 
 local function show(shared, shared_time)
@@ -107,19 +106,18 @@ local function show(shared, shared_time)
     return kv
 end
 
-local function sayJson()
+
+local function showAll()
     local kvapp = show(ngx.shared.apps_count, ngx.shared.apps_res_time)
     local kvapi = show(ngx.shared.api_count, ngx.shared.api_res_time)
     local metrics = show(ngx.shared.metrics, ngx.shared.metrics_time)
 
-    local kv = {
+    return {
         apps = kvapp,
         apis = kvapi,
         metrics = metrics
     }
-    ngx.say(json.encode(kv))
 end
-
 
 
 
@@ -163,6 +161,7 @@ local function sayHtml()
     showH5(ngx.shared.metrics, ngx.shared.metrics_time)
     ngx.say("</pre>")
 end
+
 
 
 return _M

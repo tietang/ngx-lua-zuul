@@ -8,11 +8,10 @@ local _M = {
 
 
 local http=require "resty.http"
-local eureka=require "eureka"
+local eureka=require "plugins.eureka.eureka"
 -- https://github.com/pintsized/lua-resty-http
-local json=require "cjson"
 
-local routes=require "routes"
+local routes=require "plugins.eureka.routes"
 
 
 --[[

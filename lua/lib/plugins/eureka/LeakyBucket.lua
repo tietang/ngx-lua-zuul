@@ -4,8 +4,8 @@
 -- Blog: http://tietang.wang
 --
 
-local strings = require("strings")
-local utils = require("utils")
+local strings = require("utils.strings")
+local utils = require("utils.utils")
 
 local LeakyBucket = {
     limitLevel = "global",

@@ -12,6 +12,7 @@ local mt = MediaTypes.new([[
 print(mt:getMIME("my"))
 print( mt:getMIME('my') ); -- 'my/mimetype'
 print( mt:getMIME('myfile') ); -- 'my/mimetype'
+print( mt:getExt('my/mimetype') ); -- 'my/mimetype'
 
 
 local mt2=MediaTypes.new([[
@@ -21,3 +22,9 @@ application/json+zip json;
 ]])
 
 print(mt2:equals("application/json"))
+print(mt2:equals("application/json, application/json+zip"))
+
+
+accept = "text/*;q=0.3, text/html;q=0.7, text/html;level=1, text/html;level=2;q=0.4, */*;q=0.5"
+
+

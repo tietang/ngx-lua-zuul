@@ -6,8 +6,8 @@
 
 
 
-local strings = require("strings")
-local utils = require("utils")
+local utils = require "utils.utils"
+local strings = require("utils.strings")
 
 --
 local _M = {}
