@@ -111,8 +111,8 @@ function _M:access()
     --end
 
 
-    if limit(limitLevel, "global", nil) then return end
-    if limit(limitLevel, "api", ngx.var.uri) then return end
+--    if limit(limitLevel, "global", nil) then return end
+--    if limit(limitLevel, "api", ngx.var.uri) then return end
 
     local targetAppName, targetPath = getTarget()
 
