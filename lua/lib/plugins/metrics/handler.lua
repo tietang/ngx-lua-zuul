@@ -33,7 +33,21 @@ local function sumTime(shared, key, req_time, res_time)
 end
 
 
+local function showMetrics(shared, shared_time)
+    local kv = {}
 
+    local keys = shared:get_keys()
+    for i, key in pairs(keys) do
+        local value = shared:get(key)
+        local reqtime = shared_time:get("REQ:" .. key) or 0
+        local restime = shared_time:get("RES:" .. key) or 0
+        local avg = restime / value
+        local avg2 = reqtime / value
+        table.insert(kv, { key = key, value = value, resValue = restime, reqValue = reqtime })
+    end
+
+    return kv
+end
 local function show(shared, shared_time)
     local kv = {}
 
@@ -147,9 +161,24 @@ function _M:log()
     local now = ngx.time()
     local windowSeconds = globalConfig.metrics.timeWindowInSeconds
     local time_key = windowSeconds * math.floor(now / windowSeconds)
+    local allKey = allRequest .. ":" .. time_key
 
-    utils:incr(ngx.shared.metrics, time_key, 1)
-    sumTime(ngx.shared.metrics_time, time_key, request_time, res_time)
+    utils:incr(ngx.shared.metrics, allKey, 1)
+    sumTime(ngx.shared.metrics_time, allKey, request_time, res_time)
+
+    -- service metrics
+    if globalConfig.metrics.enabledService then
+        local appNameTimeKey = appName .. ":" .. time_key
+        utils:incr(ngx.shared.metrics, appNameTimeKey, 1)
+        sumTime(ngx.shared.metrics_time, appNameTimeKey, request_time, res_time)
+    end
+    -- request metrics
+    if globalConfig.metrics.enabledRequest then
+        local requestTimeKey = uri .. ":" .. time_key
+        utils:incr(ngx.shared.metrics, requestTimeKey, 1)
+        sumTime(ngx.shared.metrics_time, requestTimeKey, request_time, res_time)
+    end
+
 
     -- ngx.log(ngx.ERR,"^^^^^^^^^  ", ngx.var.upstream_connect_time,",  ",ngx.var.upstream_response_time)
 end

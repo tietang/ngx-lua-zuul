@@ -12,13 +12,15 @@ _M.eureka = {
 
 _M.metrics = {
     timeWindowInSeconds = 1,
-    maxSaveSize = 60,
+    maxSaveSize = 10,
+    enabledService = true,
+    enabledRequest = false,
+    showTopNum = 100
 }
 
 
 
-_M.limiter =
-{
+_M.limiter = {
     limitLevel = "global", --global,service,api
     windowSeconds = 10, -- 时间窗口,单位s 1~60s
     maxSaveSize = 10, --最大保留size
