@@ -8,6 +8,7 @@ local _M = {}
 -- }
 
 _M.servers={}
+
 function _M:new(o,servers)
     o = o or {}
     setmetatable(o,self)
@@ -15,6 +16,7 @@ function _M:new(o,servers)
     self.servers=servers
     return o
 end
+
 --function _M:setServers(servers )
 --  self.servers=servers
 --end
@@ -60,7 +62,7 @@ function _M:next()
 
 end
 
-function totalWeight( servers)
+function totalWeight(servers)
     local totalWeight = 0
     for i,v in ipairs(servers) do
         totalWeight=totalWeight+v.weight

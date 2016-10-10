@@ -1,16 +1,16 @@
- 
-local _M ={}
- 
-local   json=require "cjson"
+local _M = {}
+
+local json = require "cjson"
 -- https://github.com/pintsized/lua-resty-http
-local http=require "resty.http"
+local http = require "resty.http"
 
 
-function _M:setDiscoveryServers( ... )
-    self.discoveryServers=arg
+function _M:setDiscoveryServers(...)
+    self.discoveryServers = arg
 end
-function _M:setTimeout( timeout )
-    self.timeout=timeout
+
+function _M:setTimeout(timeout)
+    self.timeout = timeout
 end
 
 
@@ -18,21 +18,21 @@ end
 
 
 function _M:queryAllApps()
-    ---从Eureka server获取注册的apps
-    --参考https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
+    --- 从Eureka server获取注册的apps
+    -- 参考https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
 
     -- ngx.log(ngx.ERR,dump(self.discoveryServers))
-     
-    for i, url in ipairs(self.discoveryServers ) do
-        local baseUrl = url 
-        if endswith(url,"/") then
-            baseUrl=string.sub(url, 1, string.len( url )-1) 
+
+    for i, url in ipairs(self.discoveryServers) do
+        local baseUrl = url
+        if endswith(url, "/") then
+            baseUrl = string.sub(url, 1, string.len(url) - 1)
             -- ngx.log(ngx.ERR,baseUrl)
         end
 
-        local allAppUrl = baseUrl.."/apps"
-        local obj,err= self:httpRequest("GET",allAppUrl)
-        if err==nil and obj then
+        local allAppUrl = baseUrl .. "/apps"
+        local obj, err = self:httpRequest("GET", allAppUrl)
+        if err == nil and obj then
             return obj
         end
     end
@@ -56,10 +56,10 @@ end
 function _M:getAllAppHosts()
     local eurekaApps = self:queryAllApps()
     if not eurekaApps then
-        return nil,nil
+        return nil, nil
     end
     -- 定义app对象
-    local apps = {apps={},timestamp=os.time()*1000}
+    local apps = { apps = {}, timestamp = os.time() * 1000 }
 
 
     --[[
@@ -80,16 +80,15 @@ function _M:getAllAppHosts()
         }  
 
     }
-    ]]--
+    ]] --
     local hosts = {}
-    for k,v in pairs(eurekaApps.applications.application) do
+    for k, v in pairs(eurekaApps.applications.application) do
 
-        local app,appHosts = eureka2app(v)
-        table.insert(apps.apps,app)
+        local app, appHosts = eureka2app(v)
+        table.insert(apps.apps, app)
 
-        hosts[v.name]=app.hosts --appHosts
+        hosts[v.name] = app.hosts --appHosts
         -- ngx.log(ngx.ERR, os.time(),table.getn(appHosts))
-
     end
 
 
@@ -118,14 +117,14 @@ function _M:getAllAppHosts()
         }    
     --]]
 
- 
+
     local shared = ngx.shared.discovery
-    self.requestTimes = getAndSetCountByAppName(shared,"requestTimes")
+    self.requestTimes = getAndSetCountByAppName(shared, "requestTimes")
     if apps == nil then
-        return content,nil,nil
+        return content, nil, nil
     end
 
- 
+
 
 
     -- ngx.log(ngx.ERR, type(apps))
@@ -135,45 +134,43 @@ function _M:getAllAppHosts()
 
     -- ngx.log(ngx.ERR, json.encode(hosts))
 
-    return hosts,apps
+    return hosts, apps
 end
- 
 
-function _M:httpRequest(method,url)
 
-    local httpc=http.new()
+function _M:httpRequest(method, url)
+
+    local httpc = http.new()
     httpc:set_timeout(self.timeout or 2000)
-    local res,err=httpc:request_uri(url,{
+    local res, err = httpc:request_uri(url, {
         method = method,
         headers = {
             ["Accept"] = "application/json",
             ["Content-Type"] = "application/json;charset=UTF-8",
         },
-
     })
     -- 响应ok
-    if not res  or not res.body or res.status ~= 200 then
-        ngx.log(ngx.ERR,"getApps failed to request :",err)
-        return nil,err 
+    if not res or not res.body or res.status ~= 200 then
+        ngx.log(ngx.ERR, "getApps failed to request :", err)
+        return nil, err
     end
-    
-    local content=res.body
+
+    local content = res.body
     -- ngx.log(ngx.ERR,url)
     -- json数据转换为lua table
     local obj = json.decode(content)
-    return obj,err
-
+    return obj, err
 end
 
 
 
-function eureka2app(application,hosts )
+function eureka2app(application, hosts)
 
 
     local appName = application.name
     local app = {
-        name=appName,
-        hosts={}
+        name = appName,
+        hosts = {}
     }
 
 
@@ -194,7 +191,7 @@ function eureka2app(application,hosts )
     local hosts = {}
 
 
-    for k,v in pairs(application.instance) do
+    for k, v in pairs(application.instance) do
 
         local ip = v.ipAddr
         local hostName = v.hostName
@@ -202,32 +199,34 @@ function eureka2app(application,hosts )
         local schema = "http"
         if v.securePort["@enabled"] == "true" then
             port = v.securePort["$"]
-            schema="https"
+            schema = "https"
         end
-        local url= schema.."://" .. hostName .. ":" .. port
+        local url = schema .. "://" .. hostName .. ":" .. port
         local hostStr = hostName .. ":" .. port
+        local id = hostName .. ":" .. ip .. ":" .. port
 
-        local host={
-            name=appName,
-            hostName=hostName,
-            ip=ip,
-            port=port,
-            healthCheckUrl=v.healthCheckUrl,
-            status=v.status,
-            lastRenewalTimestamp=v.leaseInfo.lastRenewalTimestamp,
-            url=url,
-            hostStr=hostStr,
-            weight=10,
-            cweight=0
+        local host = {
+            id = id,
+            name = appName,
+            hostName = hostName,
+            ip = ip,
+            port = port,
+            healthCheckUrl = v.healthCheckUrl,
+            status = v.status,
+            lastRenewalTimestamp = v.leaseInfo.lastRenewalTimestamp,
+            url = url,
+            hostStr = hostStr,
+            weight = 10,
+            cweight = 0
         }
 
-        table.insert(app.hosts,host)
+        table.insert(app.hosts, host)
 
 
 
         -- ngx.log(ngx.ERR,"app=",appName," ip=",ip," hostName=",hostName," port=",port)
     end
-    return app,hosts
+    return app, hosts
 end
 
 return _M
