@@ -9,6 +9,10 @@
     <artifactId>demo</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
+    <properties>
+        <spring.boot.version>1.4.1.RELEASE</spring.boot.version>
+        <spring.cloud.version>Camden.SR1</spring.cloud.version>
+    </properties>
     <modules>
         <module>discovery</module>
         <module>api</module>
@@ -20,7 +24,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.4.0.RELEASE</version>
+                <version>${spring.boot.version}</version>
                 <configuration>
                     <executable>true</executable>
                     <classifier>exec</classifier>
@@ -54,14 +58,14 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>1.4.0.RELEASE</version>
+                <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Brixton.SR4</version>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
