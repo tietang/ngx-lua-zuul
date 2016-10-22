@@ -36,12 +36,10 @@ function _M:reWeight()
     end
 
 
-    for i, server in pairs(self.servers) do
+    for i, server in pairs(self.hosts) do
         local key = server.id .. ":RES:" .. time_key
         local value = shared:get(key) or 0
     end
-
-
 end
 
 return _M
