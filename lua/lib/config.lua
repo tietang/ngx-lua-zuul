@@ -9,7 +9,9 @@ local _M = {}
 _M.eureka = {
     serverUrl = "http://172.16.1.248:8761/eureka/"
 }
-
+_M.routes = {
+    demoRoute="routes"
+}
 _M.metrics = {
     timeWindowInSeconds = 1,
     maxSaveSize = 10,
@@ -17,8 +19,6 @@ _M.metrics = {
     enabledRequest = false,
     showTopNum = 100
 }
-
-
 
 _M.limiter = {
     limitLevel = "global", --global,service,api

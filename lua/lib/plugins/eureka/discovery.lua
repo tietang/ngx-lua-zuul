@@ -1,17 +1,16 @@
 local _M = {
-    _VERSION="1.0",
-    requestTimes=0,
-    loadTime=os.date(),
-    apps={},
-    hosts={},
+    _VERSION = "1.0",
+    requestTimes = 0,
+    loadTime = os.date(),
+    apps = {},
+    hosts = {},
 }
 
 
-local http=require "resty.http"
-local eureka=require "plugins.eureka.eureka"
+local http = require "resty.http"
+local eureka = require "plugins.eureka.eureka"
 -- https://github.com/pintsized/lua-resty-http
 
-local routes=require "plugins.eureka.routes"
 
 
 --[[
@@ -24,60 +23,73 @@ local KEY_LAST_EXECUTED_PID_TIME = "last_executed_pid_time"
 local KEY_LAST_EXECUTED_TIME = "last_executed_time"
 local KEY_ROUTERS = "__ROUTERS"
 
-function _M:init(...)
-    self.router=router or {}
-    -- ngx.log(ngx.ERR, "arg", arg[1] )
 
-    eureka:setDiscoveryServers(unpack(arg))
+local function readRoute(routeStr)
 
-    readRoutes()
 
-end
+     ngx.log(ngx.ERR, "route", routeStr)
+    local lines = string.split(routeStr, "\n")
 
-function readRoutes()
-    -- ngx.log(ngx.ERR, "routes", routes)
-    local lines = string.split(routes,"\n")
+    for i, line in ipairs(lines) do
 
-    for i, line in ipairs( lines ) do
+        if not (line == "") then
+            ngx.log(ngx.ERR, "routes", line)
+            local words = string.split(line, "=")
+            if table.maxn(words) == 2 then
 
-        if not (line == "" ) then 
-             ngx.log(ngx.ERR, "routes", line)
-            local words = string.split(line,"=")
-            if table.maxn( words )==2 then
-
-                local sourcePath =words[1]
-                local appPath=string.split(words[2],",")
-                if table.maxn( appPath )==2 then
-                    local appName,targetPath=appPath[1],appPath[2]
-                    local route= {sourcePath=sourcePath,app=appName,targetPath=targetPath,stripPrefix=false}
+                local sourcePath = words[1]
+                local appPath = string.split(words[2], ",")
+                if table.maxn(appPath) == 2 then
+                    local appName, targetPath = appPath[1], appPath[2]
+                    local route = { sourcePath = sourcePath, app = appName, targetPath = targetPath, stripPrefix = false }
                     router:addRoute(route)
+                    ngx.log(ngx.ERR, "add route: ", line)
                 end
             end
         end
     end
 end
 
+local function readRoutes()
+    for k, v in pairs(globalConfig.routes) do
+        local route = require(v)
+        readRoute(route)
+
+    end
+end
+
 string.split = function(s, p)
-    local rt= {}
-    string.gsub(s, '[^'..p..']+', function(w) table.insert(rt, w) end )
+    local rt = {}
+    string.gsub(s, '[^' .. p .. ']+', function(w) table.insert(rt, w) end)
     return rt
+end
+
+
+function _M:init(...)
+    self.router = router or {}
+    local arg = {...}
+    ngx.log(ngx.ERR, "arg", arg[1] )
+
+    eureka:setDiscoveryServers(unpack(arg))
+
+    readRoutes()
 end
 
 function _M:schedule()
 
     local shared = ngx.shared.discovery
-    local interval=10
+    local interval = 10
 
-    function getAndSet(premature, shared )
+    function getAndSet(premature, shared)
 
 
         local c = ngx.worker.count()
         local id = ngx.worker.id()
-        local currentWorkerPid = ngx.worker.pid()--ngx.var.pid --
+        local currentWorkerPid = ngx.worker.pid() --ngx.var.pid --
 
         local last_executed_pid = shared:get(KEY_LAST_EXECUTED_PID)
         local last_executed_time = shared:get(KEY_LAST_EXECUTED_TIME)
-        local keyPidTime = KEY_LAST_EXECUTED_PID_TIME.."-"..currentWorkerPid
+        local keyPidTime = KEY_LAST_EXECUTED_PID_TIME .. "-" .. currentWorkerPid
         local last_executed_pid_time = shared:get(keyPidTime)
 
 
@@ -99,72 +111,66 @@ function _M:schedule()
         --         and (now-last_executed_pid_time) >= interval*c-0.1 --如果当前worker最后执行时间 >= 设定间隔*worker数量 - 0.1
         --     ) then
         -- if  id % c==0 then -->=NGINX 1.9.1+
-        if  true then -->=NGINX 1.9.1+
-            -- getApps()
-            local content,hosts,apps=_M:getAllApps()
-            self:dealApps()
+        if true then -->=NGINX 1.9.1+
+        -- getApps()
+        local content, hosts, apps = _M:getAllApps()
+        self:dealApps()
 
 
 
-            shared:set(KEY_LAST_EXECUTED_TIME,now)
-            shared:set(KEY_LAST_EXECUTED_PID,currentWorkerPid)
-            shared:set(keyPidTime,now)
-            --
+        shared:set(KEY_LAST_EXECUTED_TIME, now)
+        shared:set(KEY_LAST_EXECUTED_PID, currentWorkerPid)
+        shared:set(keyPidTime, now)
+        --
 
-            -- ngx.log(ngx.ERR, "getAllApps", json.encode(hosts))
-
+        -- ngx.log(ngx.ERR, "getAllApps", json.encode(hosts))
         end
 
-        local ok,err = ngx.timer.at(interval,getAndSet,shared)
+        local ok, err = ngx.timer.at(interval, getAndSet, shared)
         -- local last=shared:get("lastRenewalTimestamp")
         -- ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)
-
     end
 
-    local ok,err = ngx.timer.at(1,getAndSet,shared)
+    local ok, err = ngx.timer.at(1, getAndSet, shared)
     -- ngx.log(ngx.DEBUG, "ok:", ok, " err:", err)
-
 end
 
-function _M:say( )
-    ngx.say(json.encode(self.hosts or {}).."<br/>")
+function _M:say()
+    ngx.say(json.encode(self.hosts or {}) .. "<br/>")
 end
 
-function _M:dealApps( )
+function _M:dealApps()
 
 
 
     if self.hosts ~= nil then
-        for k,v in pairs(self.hosts) do
+        for k, v in pairs(self.hosts) do
 
             local appName = string.lower(k)
             --- 默认以serviceId名称匹配
-            local route= {sourcePath="/"..appName.."/**",app=appName,stripPrefix=true}
+            local route = { sourcePath = "/" .. appName .. "/**", app = appName, stripPrefix = true }
             router:addRoute(route)
-
         end
 
     else
-        ngx.log(ngx.ERR, "hosts is nil" )
+        ngx.log(ngx.ERR, "hosts is nil")
     end
 
     -- ngx.log(ngx.ERR, "routes:", json.encode(router.routingTable))
-
-
 end
 
 
 
 function isUP(url)
 
-    local httpc=http.new()
+    local httpc = http.new()
     httpc:set_timeout(1000)
-    local res,err=httpc:request_uri(url,{
-        method ="GET",
+    local res, err = httpc:request_uri(url, {
+        method = "GET",
     })
 
     if not res or res.status == ngx.HTTP_OK then
-        ngx.log(ngx.ERR,"failed to request :",err)
+        ngx.log(ngx.ERR, "failed to request :", err)
         return false
     end
 end
@@ -173,27 +179,27 @@ end
 
 function _M:getHttpEndpont(path)
     local shared = ngx.shared.apps
-    local apps =shared:get("apps")
+    local apps = shared:get("apps")
     local uri = ngx.var.uri
-    local first,last = string.find(uri,"/",2)
-    local appName = string.upper(string.sub(s,0,first-1))
+    local first, last = string.find(uri, "/", 2)
+    local appName = string.upper(string.sub(s, 0, first - 1))
     -- local hosts=self.hosts[appName]
-    local hostsStr=shared:get(string.upper(appName))
+    local hostsStr = shared:get(string.upper(appName))
     local hosts = json.decode(hostsStr)
-    local x = self:getAndSetCountByAppName(appName)%table.nums(hosts)+1
+    local x = self:getAndSetCountByAppName(appName) % table.nums(hosts) + 1
     return hosts[x]
 end
 
-function _M:getAndSetCountByAppName( appName)
+function _M:getAndSetCountByAppName(appName)
     local shared = ngx.shared.apps_count
-    return getAndSetCountByAppName(shared,appName)
+    return getAndSetCountByAppName(shared, appName)
 end
 
 function getAndSetCountByAppName(shared, appName)
 
-    local v,e = shared:incr(appName, 1)
-    if v ==nil then
-        shared:set(appName,1)
+    local v, e = shared:incr(appName, 1)
+    if v == nil then
+        shared:set(appName, 1)
         return 1
     end
     return v
@@ -202,14 +208,14 @@ end
 
 function _M:getAllApps()
 
-    ---从Eureka server获取注册的apps
-    local hosts,apps =eureka:getAllAppHosts()
+    --- 从Eureka server获取注册的apps
+    local hosts, apps = eureka:getAllAppHosts()
 
 
-    self.apps=apps
-    self.hosts=hosts
+    self.apps = apps
+    self.hosts = hosts
     -- ngx.log(ngx.ERR, "content=",content,", requestTimes: ",self.requestTimes)
-    return hosts,apps
+    return hosts, apps
 end
 
 function _M:getHosts()
@@ -268,19 +274,19 @@ return _M
 --     ],
 --     "timestamp": 1451030794105
 -- }
-                -- local http=require "resty.http"
-                -- local httpc=http.new()
-                -- httpc:set_timeout(1000)
-                -- local res,err=httpc:request_uri("http://127.0.0.1:8761/v1/apps",{
-                --     method ="GET"
-                -- })
+-- local http=require "resty.http"
+-- local httpc=http.new()
+-- httpc:set_timeout(1000)
+-- local res,err=httpc:request_uri("http://127.0.0.1:8761/v1/apps",{
+--     method ="GET"
+-- })
 
-                -- if not res then
-                --     ngx.say("failed to request :",err)
-                --     return
-                -- end
-                -- local content=res.body
-                -- ngx.log(ngx.ERR,content)
+-- if not res then
+--     ngx.say("failed to request :",err)
+--     return
+-- end
+-- local content=res.body
+-- ngx.log(ngx.ERR,content)
 
 
 
