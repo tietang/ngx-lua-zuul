@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+</html>
+  <meta charset="utf-8">
+  <head>
+    <style>
+      .axis path {
+          fill: none;
+          stroke: #777;
+          shape-rendering: crispEdges;
+      }
+      .axis text {
+          font-family: Lato;
+          font-size: 13px;
+      }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <button onclick="generate()"> Generate</button>
+    <svg id="visualisation" width="1000" height="500"></svg>
+
+    <script>
+      var data=[];
+
+      function generate(){
+        updateData(randomData());
+      }
+
+      function randomData(){
+        data = [{
+            "sale": Math.floor((Math.random() * 100) + 1),
+            "year": "2000"
+        }, {
+            "sale": Math.floor((Math.random() * 100) + 1),
+            "year": "2001"
+        }, {
+            "sale": Math.floor((Math.random() * 100) + 1),
+            "year": "2002"
+        }, {
+            "sale": Math.floor((Math.random() * 100) + 1),
+            "year": "2003"
+        }, {
+            "sale": Math.floor((Math.random() * 100) + 1),
+            "year": "2003"
+        }, {
+            "sale": Math.floor((Math.random() * 100) + 1),
+            "year": "2010"
+        }];
+        return data;
+      }
+
+      randomData();
+
+      var vis = d3.select("#visualisation"),
+          WIDTH = 1000,
+          HEIGHT = 500,
+          MARGINS = {
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 50
+          }
+      var color= "red";
+
+      xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right])
+        .domain([d3.min(data, function(d) {
+          return d.year;
+        }), d3.max(data, function(d) {
+          return d.year;
+        })]);
+
+      yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom])
+        .domain([d3.min(data, function(d) {
+          return d.sale;
+        }), d3.max(data, function(d) {
+          return d.sale;
+        })]);
+
+      xAxis = d3.svg.axis()
+        .scale(xScale),
+
+      yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left");
+
+      vis.append("svg:g")
+        .attr("class","axis")
+        .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+        .call(xAxis);
+
+      vis.append("svg:g")
+        .attr("class","y axis")
+        .call(yAxis)
+        .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+
+      var lineGen = d3.svg.line()
+        .x(function(d) {
+          return xScale(d.year);
+        })
+        .y(function(d) {
+          return yScale(d.sale);
+        })
+        .interpolate("basis");
+
+      vis.append('svg:path')
+        .attr("class", "line")
+        .attr('d', lineGen(data))
+        .attr('stroke',color)
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+
+        function updateData(data) {
+          // Scale the range of the data again
+          xScale.domain([d3.min(data,function(d){
+                  return d.year;
+                }), d3.max(data, function(d) {
+                  return d.year;
+                })]);
+          yScale.domain([d3.min(data, function(d) {
+                    return d.sale;
+                  }), d3.max(data, function(d) {
+                    return d.sale;
+                  })]);
+
+
+          // Make the changes
+            vis.select('.line')
+              .attr('d', lineGen(data))
+              .attr('stroke',color)
+              .attr('stroke-width', 2)
+              .attr('fill', 'none');
+
+            vis.append("svg:g")
+              .attr("class","axis")
+              .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+              .call(xAxis);
+
+            vis.select(".y.axis") // change the y axis
+              .call(yAxis);
+        }
+
+
+    </script>
+  </body>
+</html>

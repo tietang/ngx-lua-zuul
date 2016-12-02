@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Stock Example - d3-tsline</title>
+    <link href='../../css/d3.tsline.css' media='screen' rel='stylesheet' type='text/css'>
+  </head>
+  <style>
+    /*<![CDATA[*/
+      #container {
+        font: 10px sans-serif;
+        margin: 0px auto 22px;
+        clear: both;
+        width: 960px;
+      }
+    /*]]>*/
+  </style>
+  <body>
+    <div id='container'>
+      <div id='chart'></div>
+      <div id='smallerchart'></div>
+    </div>
+    <script src='../../js/d3.js' type='text/javascript'></script>
+    <script src='../../js/d3.csv.js' type='text/javascript'></script>
+    <script src='../../js/d3.time.js' type='text/javascript'></script>
+    <script src='../../js/d3.tsline.js' type='text/javascript'></script>
+    <script src='aapl.js' type='text/javascript'></script>
+    <script>
+      //<![CDATA[
+        function setupChart(id, options){
+          // make chart object
+          var chart = new d3_tsline("#"+ id, options);
+        
+          // override parse_date function to handle our data's date format
+          chart.parse_date = d3.time.format("%Y-%m-%d").parse;
+          chart.parse_val = function(v) {
+              return parseInt(v)
+          }
+          // add some metadata about the series
+          chart.series = {
+              "aapl" : {
+                  "name"   : "AAPL",
+                  "active" : true
+              }
+          };
+          chart.ref_series="aapl";
+          chart.view_span = 120;
+          // fetch data and draw the chart
+          var data = get_aapl();
+          chart.setSeriesData("aapl",data);
+          chart.render();
+        }
+        
+        // setupChart('chart');
+        setupChart('smallerchart', { width: 500, height: 150, tension: 0.5, interpolation: 'monotone', showSummary: false});
+      //]]>
+    </script>
+  </body>
+</html>
