@@ -1,7 +1,10 @@
 server:
   port: 8761
 
+
+
 eureka:
+  environment: nginx_demo
   instance:
 #    hostname: localhost
     preferIpAddress: true

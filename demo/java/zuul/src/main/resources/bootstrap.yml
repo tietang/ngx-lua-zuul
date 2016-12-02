@@ -15,3 +15,36 @@ spring:
   application:
     name: zuul
 
+#api:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
+
+#server.undertow.io-threads: 16
+#server.undertow.buffer-size: 4096  # Size of each buffer in bytes.
+#server.undertow.buffers-per-region: 20 # Number of buffer per region.
+#server.undertow.direct-buffers: true # Allocate buffers outside the Java heap.
+server.undertow.worker-threads: 256 # Number of worker threads.
+
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 3000
+hystrix.command.api.execution.isolation.thread.timeoutInMilliseconds: 3200
+ribbon:
+#  # Max number of next servers to retry (excluding the first server)
+#  MaxAutoRetries: 1
+#  # Whether all operations can be retried for this client
+#  MaxAutoRetriesNextServer: 1
+#  # Interval to refresh the server list from the source
+#  OkToRetryOnAllOperations: true
+#  # Interval to refresh the server list from the source
+#  ServerListRefreshInterval: 2000
+#  # Connect timeout used by Apache HttpClient
+  ConnectTimeout: 3000
+#  # Read timeout used by Apache HttpClient
+  ReadTimeout: 3000
+
+
+
+zuul.host.maxTotalConnections: 200
+zuul.host.maxPerRouteConnections: 10
+zuul.semaphore.max-semaphores: 128
+zuul.eureka.api.semaphore.maxSemaphores: 110

@@ -26,7 +26,7 @@ import java.util.Random;
 public class Application2 {
 
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         SpringApplication.run(Application2.class, args);
     }
 

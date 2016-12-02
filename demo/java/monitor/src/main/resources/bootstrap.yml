@@ -16,8 +16,9 @@ spring:
     name: monitor
 
 turbine:
-  aggregator:
-    clusterConfig: API
-  appConfig: api
+#  aggregator:
+#    clusterConfig: API
+  appConfig: api,zuul
   clusterNameExpression: "'default'"
   combineHostPort: true
+

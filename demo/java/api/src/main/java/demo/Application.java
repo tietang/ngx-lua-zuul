@@ -23,7 +23,9 @@ import java.util.Random;
 @SpringBootApplication
 @EnableDiscoveryClient
 @Controller
-public class Application  {
+public class Application {
+
+    static long Test1Sleep = 0;
 
     @ResponseBody
     @RequestMapping("/")
@@ -44,6 +46,34 @@ public class Application  {
         StatsFilter.time.set(0);
         return "count: " + StatsFilter.count.get() + ", time:" + StatsFilter.time.get() + " ns";
     }
+
+    @ResponseBody
+    @RequestMapping("/set/{sleep}")
+    public String statsReset(@PathVariable long sleep) {
+        Test1Sleep = sleep;
+        return "ok";
+    }
+
+    @RequestMapping({"/test1/{index}", "/test1"})
+    @ResponseBody
+    public Map<String, Object> testAction(@PathVariable int index) throws Exception {
+
+        Map<String, Object> attrs = new HashMap<>();
+
+        if (Test1Sleep > 0) {
+            Thread.sleep(Test1Sleep);
+        }
+        if (index < 0) {
+            index = 0;
+        }
+        if (index >= base.length) {
+            index = base.length - 1;
+        }
+        attrs.put("content", strs[index]);
+
+        return attrs;
+    }
+
 
     @RequestMapping({"/test/{sleep}/{index}", "/test"})
     @ResponseBody
