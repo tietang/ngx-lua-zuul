@@ -182,12 +182,12 @@ function _M:balance()
     -- according to some balancing policies instead of using
     -- hard-coded values like below
 
-    ngx.log(ngx.ERR, "^^^^^^^^^： ", ngx.ctx.b_host, ngx.ctx.b_port)
+--    ngx.log(ngx.ERR, "^^^^^^^^^： ", ngx.ctx.b_host, ngx.ctx.b_port)
 
     local ok, err = balancer.set_current_peer(ngx.ctx.b_host, ngx.ctx.b_port)
-    ok, err = balancer.set_more_tries(2)
-    state_name, status_code = balancer.get_last_failure()
-    ok, err = balancer.set_timeouts(connect_timeout, send_timeout, read_timeout)
+--    ok, err = balancer.set_more_tries(2)
+--    state_name, status_code = balancer.get_last_failure()
+--    ok, err = balancer.set_timeouts(connect_timeout, send_timeout, read_timeout)
 
 
     if not ok then
