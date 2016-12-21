@@ -168,7 +168,7 @@ function _M:access1()
     -- direct
     -- ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
     -- by upstream & balancer
-    ngx.var.bk_host = upstream_name .. targetPath
+    ngx.var.bk_host = self.upstream_name .. targetPath
     ngx.ctx.b_host = host.ip
     ngx.ctx.b_port = host.port
 end
