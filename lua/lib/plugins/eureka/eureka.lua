@@ -6,7 +6,13 @@ local http = require "resty.http"
 
 
 function _M:setDiscoveryServers(...)
-    self.discoveryServers = arg
+--    ngx.log(ngx.ERR,unpack(arg))
+--    self.discoveryServers = arg
+    local arg = { ... }
+
+    ngx.log(ngx.ERR, "arg", arg[1])
+
+    self.discoveryServers =  arg
 end
 
 function _M:setTimeout(timeout)
@@ -15,15 +21,12 @@ end
 
 
 
-
-
 function _M:queryAllApps()
     --- 从Eureka server获取注册的apps
     -- 参考https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
 
-    -- ngx.log(ngx.ERR,dump(self.discoveryServers))
-
-    for i, url in ipairs(self.discoveryServers) do
+--     ngx.log(ngx.ERR,dump(self.discoveryServers))
+    for i, url in pairs(self.discoveryServers) do
         local baseUrl = url
         if endswith(url, "/") then
             baseUrl = string.sub(url, 1, string.len(url) - 1)

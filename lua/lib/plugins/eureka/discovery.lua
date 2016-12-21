@@ -27,7 +27,7 @@ local KEY_ROUTERS = "__ROUTERS"
 local function readRoute(routeStr)
 
 
-     ngx.log(ngx.ERR, "route", routeStr)
+    ngx.log(ngx.ERR, "route", routeStr)
     local lines = string.split(routeStr, "\n")
 
     for i, line in ipairs(lines) do
@@ -54,7 +54,6 @@ local function readRoutes()
     for k, v in pairs(globalConfig.routes) do
         local route = require(v)
         readRoute(route)
-
     end
 end
 
@@ -67,9 +66,10 @@ end
 
 function _M:init(...)
     self.router = router or {}
-    local arg = {...}
-    ngx.log(ngx.ERR, "arg", arg[1] )
+    local arg = { ... }
+    ngx.log(ngx.ERR, "arg", arg[1])
 
+--    eureka:setDiscoveryServers(arg)
     eureka:setDiscoveryServers(unpack(arg))
 
     readRoutes()
@@ -112,18 +112,18 @@ function _M:schedule()
         --     ) then
         -- if  id % c==0 then -->=NGINX 1.9.1+
         if true then -->=NGINX 1.9.1+
-        -- getApps()
-        local content, hosts, apps = _M:getAllApps()
-        self:dealApps()
+            -- getApps()
+            local content, hosts, apps = _M:getAllApps()
+            self:dealApps()
 
 
 
-        shared:set(KEY_LAST_EXECUTED_TIME, now)
-        shared:set(KEY_LAST_EXECUTED_PID, currentWorkerPid)
-        shared:set(keyPidTime, now)
-        --
+            shared:set(KEY_LAST_EXECUTED_TIME, now)
+            shared:set(KEY_LAST_EXECUTED_PID, currentWorkerPid)
+            shared:set(keyPidTime, now)
+            --
 
-        -- ngx.log(ngx.ERR, "getAllApps", json.encode(hosts))
+            -- ngx.log(ngx.ERR, "getAllApps", json.encode(hosts))
         end
 
         local ok, err = ngx.timer.at(interval, getAndSet, shared)

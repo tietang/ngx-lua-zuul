@@ -36,7 +36,8 @@
             fill: steelblue;
         }
     </style>
-    <script src="http://d3js.org/d3.v4.min.js"></script>
+    <!--<script src="http://d3js.org/d3.v4.min.js"></script>-->
+    <script src="http://d3js.org/d3.v4.js"></script>
     <script src="/public/js/jquery-3.1.0.min.js"></script>
 
 </head>
@@ -52,11 +53,11 @@
     }
 
     var limit = 100 * 1,
-            duration = 1000,
-            now = new Date(Date.now() - duration)
+        duration = 1000,
+        now = new Date(Date.now() - duration)
 
     var width = 600,
-            height = 300
+        height = 300
 
     var group = {
         value: 0,
@@ -67,29 +68,29 @@
     }
 
     var x = d3.scaleTime()
-            .domain([now - (limit - 2), now - duration])
-            .range([0, width])
+        .domain([now - (limit - 2), now - duration])
+        .range([0, width])
 
     var y = d3.scaleLinear()
-            .domain([0, 100])
-            .range([height, 0])
+        .domain([0, 100])
+        .range([height, 0])
 
     var area = d3.area()
-//
-            .x(function (d, i) {
-                return x(now - (limit - 1 - i) * duration)
-            })
-            .y0(height)
-            .y1(function (d) {
-                return y(d);
-            })
-            .curve(d3.curveBasis);
+    //
+        .x(function (d, i) {
+            return x(now - (limit - 1 - i) * duration)
+        })
+        .y0(height)
+        .y1(function (d) {
+            return y(d);
+        })
+        .curve(d3.curveBasis);
 
 
     var svg = d3.select('.graph').append('svg')
-            .attr('class', 'chart')
-            .attr('width', width)
-            .attr('height', height + 50)
+        .attr('class', 'chart')
+        .attr('width', width)
+        .attr('height', height + 50)
 
     //        var axis = svg.append('g')
     //            .attr('class', 'x axis')
@@ -100,28 +101,25 @@
 
 
     group.path = paths.append("path")
-            .datum(group.data)
-            .attr("class", "area")
-            .attr("d", area);
+        .datum(group.data)
+        .attr("class", "area")
+        .attr("d", area);
 
     function tick() {
         var url = "/_admin/qps.json";
         $.get(url, function (rdata) {
+            var allData=rdata["AllRequest"];
+            var ms = allData.date;
+            var close = allData.close;
 
-
-
-            var ms = rdata.date;
-            var close = rdata.close;
-
-            $("#text").html(close*100+" q/s");
+            $("#text").html(close + " qps");
 
             now = new Date()
             now.setTime(ms)
 
 
             // Add new values
-            group.data.push(close*10);
-//                    group.data.push(Math.random() * 100);
+            group.data.push(close );
             group.path.attr('d', area);
 
             // Shift domain
@@ -135,10 +133,10 @@
 
             // Slide paths left
             paths.attr('transform', null)
-                    .transition()
-                    .duration(500)
-//                    .ease('linear')
-                    .attr('transform', 'translate(' + x(now - (limit - 1) * duration) + ')')
+                .transition()
+                .duration(500)
+                //                    .ease('linear')
+                .attr('transform', 'translate(' + x(now - (limit - 1) * duration) + ')')
 
 
             // .each('end', tick)

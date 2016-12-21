@@ -18,6 +18,8 @@
         <module>api</module>
         <module>zuul</module>
         <module>monitor</module>
+        <module>authserver</module>
+        <module>sso</module>
     </modules>
     <build>
         <plugins>

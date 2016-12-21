@@ -60,6 +60,12 @@ function _M:content()
     end
 end
 
+function _M:balance()
+    for k, v in pairs(self.middlewares) do
+        if v.balance then v:balance() end
+    end
+end
+
 function _M:headerFilter()
     for k, v in pairs(self.middlewares) do
         if v.headerFilter then v:headerFilter() end

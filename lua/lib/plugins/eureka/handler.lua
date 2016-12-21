@@ -15,8 +15,11 @@ rateLimiter = require "plugins.eureka.LeakyBucket"
 
 local _M = {
     name = "eureka",
+    upstream_name="_eureka_route",
     version = "1.0"
 }
+
+
 
 
 local function newRobin(appName)
@@ -83,7 +86,6 @@ local function limit(limitLevel, givenlimitLevel, key)
 end
 
 function _M:init()
-
 end
 
 function _M:initWorker()
@@ -95,8 +97,11 @@ function _M:initWorker()
     discovery:schedule()
 end
 
+function _M:rewrite()
+    self:access1()
+end
 
-function _M:access()
+function _M:access1()
 
     local limitLevel = "global"
     if globalConfig and globalConfig.limiter and globalConfig.limiter.limitLevel then
@@ -111,13 +116,13 @@ function _M:access()
     --end
 
 
---    if limit(limitLevel, "global", nil) then return end
---    if limit(limitLevel, "api", ngx.var.uri) then return end
+    --    if limit(limitLevel, "global", nil) then return end
+    --    if limit(limitLevel, "api", ngx.var.uri) then return end
 
     local targetAppName, targetPath = getTarget()
 
     if targetAppName == nil then
---         ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
+        --         ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
         ngx.say("targetAppName is nil for uri:  " .. ngx.var.request_uri)
         return
     end
@@ -125,17 +130,11 @@ function _M:access()
     if limit(limitLevel, "service", targetAppName) then return end
 
     local appName = string.upper(targetAppName)
-
-
---     ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
-
-
---     ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
+    --         ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
+    --         ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
     local robin = newRobin(targetAppName)
 
---     ngx.log(ngx.ERR, "^^^^^^^^^",  json.encode(robin) )
-
-
+--    ngx.log(ngx.ERR, "^^^^^^^^^", json.encode(robin))
 
     if robin == nil then
         ngx.status = ngx.HTTP_NOT_FOUND
@@ -166,10 +165,35 @@ function _M:access()
 
 
 
-    ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
+    -- direct
+    -- ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
+    -- by upstream & balancer
+    ngx.var.bk_host = upstream_name .. targetPath
+    ngx.ctx.b_host = host.ip
+    ngx.ctx.b_port = host.port
 end
 
 
+function _M:balance()
 
+    local balancer = require "ngx.balancer"
+
+    -- well, usually we calculate the peer's host and port
+    -- according to some balancing policies instead of using
+    -- hard-coded values like below
+
+    ngx.log(ngx.ERR, "^^^^^^^^^： ", ngx.ctx.b_host, ngx.ctx.b_port)
+
+    local ok, err = balancer.set_current_peer(ngx.ctx.b_host, ngx.ctx.b_port)
+    ok, err = balancer.set_more_tries(2)
+    state_name, status_code = balancer.get_last_failure()
+    ok, err = balancer.set_timeouts(connect_timeout, send_timeout, read_timeout)
+
+
+    if not ok then
+        ngx.log(ngx.ERR, "failed to set the current peer: ", err)
+        return ngx.exit(500)
+    end
+end
 
 return _M
