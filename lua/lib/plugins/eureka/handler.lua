@@ -20,8 +20,6 @@ local _M = {
 }
 
 
-
-
 local function newRobin(appName)
 
     local hosts = discovery.hosts[string.upper(appName)]

@@ -1,6 +1,5 @@
 package demo;
 
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -45,8 +44,11 @@ public class CavesMain {
             int rt = i * 10;
             System.out.print(rt);
             System.out.print(",");
-            //            System.out.print(weight * (0.39 - Math.atan(i*0.1-2)/3.9 ));
-            cu3(weight, size, rt);
+//                        System.out.print(weight * (0.39 - Math.atan(i*0.1-2)/3.9 ));
+            cu(weight, rt);
+            System.out.print(",");
+            cu2(weight, rt);
+//            cu3(weight, size, rt);
             System.out.println();
         }
 
@@ -54,7 +56,7 @@ public class CavesMain {
     }
 
     private static void cu3(int weight, int size, long rt) {
-        Long key=map.ceilingKey(rt);
+        Long key = map.ceilingKey(rt);
 
         Long value = map.get(key);
         if (value == null) value = 1l;
