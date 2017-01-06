@@ -59,10 +59,10 @@ public class GoldenMeanTable {
         System.out.println(ceilingGet(30));
     }
 
-    private static Long ceilingGet(long key) {
+    public static Long ceilingGet(long key) {
         for (long[] kv : GoldenMeanTable) {
             long k = kv[0];
-            long v = kv[1];
+            long v = kv[2];
             if (key <= k) {
                 return v;
             }

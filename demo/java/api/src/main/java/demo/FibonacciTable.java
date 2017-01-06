@@ -43,7 +43,7 @@ public class FibonacciTable {
     private static Long ceilingGet(long key) {
         for (long[] kv : FibonacciTable) {
             long k = kv[0];
-            long v = kv[1];
+            long v = kv[2];
             if (key <= k) {
                 return v;
             }

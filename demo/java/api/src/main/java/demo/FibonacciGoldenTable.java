@@ -61,7 +61,18 @@ public class FibonacciGoldenTable {
     public static Long ceilingGet(long key) {
         for (long[] kv : FibonacciGoldenTable) {
             long k = kv[0];
-            long v = kv[1];
+            long v = kv[2];
+            if (key <= k) {
+                return v;
+            }
+        }
+        return 1l;
+    }
+
+    public static Long get(long key) {
+        for (long[] kv : FibonacciGoldenTable) {
+            long k = kv[0];
+            long v = kv[2];
             if (key <= k) {
                 return v;
             }
