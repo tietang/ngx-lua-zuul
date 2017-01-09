@@ -32,22 +32,26 @@ public class FibonacciTable {
 
     public static void main(String[] args) {
 
-        System.out.println(ceilingGet(-1));
-        System.out.println(ceilingGet(0));
-        System.out.println(ceilingGet(1));
-        System.out.println(ceilingGet(2));
-        System.out.println(ceilingGet(3));
-        System.out.println(ceilingGet(30));
+        System.out.println(getCeiling(-1));
+        System.out.println(getCeiling(0));
+        System.out.println(getCeiling(1));
+        System.out.println(getCeiling(2));
+        System.out.println(getCeiling(3));
+        System.out.println(getCeiling(30));
+        for (int i = 0; i < 100; i++) {
+            long v = getCeiling(i * 10 + 1);
+            System.out.println(v);
+        }
     }
 
-    private static Long ceilingGet(long key) {
-        for (long[] kv : FibonacciTable) {
-            long k = kv[0];
-            long v = kv[2];
-            if (key <= k) {
-                return v;
-            }
-        }
-        return 1l;
+
+    public static long getCeiling(long key) {
+        long value = FibonacciHelper.ceilingGet(FibonacciTable, key, true, false);
+        return value;
+    }
+
+    public static Long getCeilingByTenMillisecond(long key) {
+        long value = FibonacciHelper.ceilingGet(FibonacciTable, key, true, true);
+        return value;
     }
 }

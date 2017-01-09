@@ -23,12 +23,10 @@ public class GoldenMeanTable {
             long weight = Math.round(w);
 
             GoldenMeanTable[i] = new long[]{ms, hms, weight};
-            System.out.printf("%d,%d,%d            \n ", ms, hms, weight);
+            //            System.out.printf("%d,%d,%d            \n ", ms, hms, weight);
             j = goldenSelect(j);
 
         }
-
-
 
 
     }
@@ -51,22 +49,21 @@ public class GoldenMeanTable {
     public static void main(String[] args) {
 
 
-        System.out.println(ceilingGet(-1));
-        System.out.println(ceilingGet(0));
-        System.out.println(ceilingGet(1));
-        System.out.println(ceilingGet(2));
-        System.out.println(ceilingGet(3));
-        System.out.println(ceilingGet(30));
+        System.out.println(getCeiling(-1));
+        System.out.println(getCeiling(0));
+        System.out.println(getCeiling(1));
+        System.out.println(getCeiling(2));
+        System.out.println(getCeiling(3));
+        System.out.println(getCeiling(30));
     }
 
-    public static Long ceilingGet(long key) {
-        for (long[] kv : GoldenMeanTable) {
-            long k = kv[0];
-            long v = kv[2];
-            if (key <= k) {
-                return v;
-            }
-        }
-        return 1l;
+    public static long getCeiling(long key) {
+        long value = FibonacciHelper.ceilingGet(GoldenMeanTable, key, true, false);
+        return value;
+    }
+
+    public static Long getCeilingByTenMillisecond(long key) {
+        long value = FibonacciHelper.ceilingGet(GoldenMeanTable, key, true, true);
+        return value;
     }
 }

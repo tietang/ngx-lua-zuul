@@ -18,16 +18,13 @@ public class FibonacciGoldenTable {
         FibonacciGoldenTable = new long[31][];
         FibonacciGoldenTable[0] = new long[]{0l, 0l, 1000l};
         for (int i = 1; i <= 30; i++) {
-
-            //
             long fms = m + n;
             double fw = weight(fms * 10);
             long fweight = Math.round(fw);
             FibonacciGoldenTable[i] = new long[]{fms, fms * 10, fweight};
-            System.out.printf("%d,%d,%d \n", fms, fms * 10, fweight);
+            //            System.out.printf("%d,%d,%d \n", fms, fms * 10, fweight);
             m = n;
             n = fms;
-
         }
 
     }
@@ -50,34 +47,22 @@ public class FibonacciGoldenTable {
     public static void main(String[] args) {
 
 
-        System.out.println(ceilingGet(-1));
-        System.out.println(ceilingGet(0));
-        System.out.println(ceilingGet(1));
-        System.out.println(ceilingGet(2));
-        System.out.println(ceilingGet(3));
-        System.out.println(ceilingGet(30));
+        System.out.println(getCeiling(-1));
+        System.out.println(getCeiling(0));
+        System.out.println(getCeiling(1));
+        System.out.println(getCeiling(2));
+        System.out.println(getCeiling(3));
+        System.out.println(getCeiling(30));
     }
 
-    public static Long ceilingGet(long key) {
-        for (long[] kv : FibonacciGoldenTable) {
-            long k = kv[0];
-            long v = kv[2];
-            if (key <= k) {
-                return v;
-            }
-        }
-        return 1l;
+    public static long getCeiling(long key) {
+        long value = FibonacciHelper.ceilingGet(FibonacciGoldenTable, key, true, false);
+        return value;
     }
 
-    public static Long get(long key) {
-        for (long[] kv : FibonacciGoldenTable) {
-            long k = kv[0];
-            long v = kv[2];
-            if (key <= k) {
-                return v;
-            }
-        }
-        return 1l;
+    public static Long getCeilingByTenMillisecond(long key) {
+        long value = FibonacciHelper.ceilingGet(FibonacciGoldenTable, key, true, true);
+        return value;
     }
 
 }

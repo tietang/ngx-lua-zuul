@@ -52,6 +52,19 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.16.8.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -83,6 +96,11 @@
             <groupId>net.bull.javamelody</groupId>
             <artifactId>javamelody-core</artifactId>
             <version>1.62.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.8</version>
         </dependency>
     </dependencies>
 
