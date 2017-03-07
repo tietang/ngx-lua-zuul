@@ -79,10 +79,6 @@ function _M:addRoute(route,groupName)
 end
 
 
-
-
-
-
 function initRoute(group,route)
     if not route or not route.sourcePath then
         return false

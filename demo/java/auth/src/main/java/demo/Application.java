@@ -24,7 +24,6 @@ import java.util.Random;
 @SpringBootApplication
 @EnableDiscoveryClient
 @Controller
-@EnableAuthorizationServer
 public class Application {
 
     static long Test1Sleep = 0;

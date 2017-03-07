@@ -28,9 +28,10 @@ function _M:queryAllApps()
 --     ngx.log(ngx.ERR,dump(self.discoveryServers))
     for i, url in pairs(self.discoveryServers) do
         local baseUrl = url
+        ngx.log(ngx.ERR,baseUrl)
         if endswith(url, "/") then
             baseUrl = string.sub(url, 1, string.len(url) - 1)
-            -- ngx.log(ngx.ERR,baseUrl)
+
         end
 
         local allAppUrl = baseUrl .. "/apps"

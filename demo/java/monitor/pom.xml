@@ -22,8 +22,8 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-netflix-hystrix-stream</artifactId>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-netflix-hystrix-stream</artifactId>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -34,17 +34,21 @@
             <artifactId>spring-cloud-starter-turbine</artifactId>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter-stream-rabbit</artifactId>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-stream-rabbit</artifactId>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-turbine-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+        </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter-turbine-stream</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.netflix.turbine</groupId>-->
-            <!--<artifactId>turbine-core</artifactId>-->
-            <!--<version>2.0.0-DP.2</version>-->
+        <!--<groupId>com.netflix.turbine</groupId>-->
+        <!--<artifactId>turbine-core</artifactId>-->
+        <!--<version>2.0.0-DP.2</version>-->
         <!--</dependency>-->
     </dependencies>
 </project>

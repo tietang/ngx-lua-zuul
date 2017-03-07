@@ -1,5 +1,6 @@
 server:
   port: 7912
+
 banner.image.location: banner.jpg
 eureka:
   instance:
@@ -14,4 +15,9 @@ eureka:
 spring:
   application:
     name: api
+  profiles:
+    active: native
+    include: cas
 
+
+cas.server
