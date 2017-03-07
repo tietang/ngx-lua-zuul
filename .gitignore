@@ -11,6 +11,11 @@ uwsgi_temp/
 !nginx.conf
 conf/
 !nginx/conf/nginx.conf
+luajit/
+lualib/
+pod/
+site/
+
 
 lua_lib/
  

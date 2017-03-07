@@ -1,0 +1,4420 @@
+dist nginx
+  modules accept_failed beginners_guide chunked_encoding_from_backend configure configuring_https_servers contributing_changes control converting_rewrite_rules daemon_master_process_off debugging_log events example faq freebsd_tuning hash howto_build_on_win32 install license_copyright load_balancing nginx nginx_dtrace_pid_provider ngx_core_module ngx_http_access_module ngx_http_addition_module ngx_http_auth_basic_module ngx_http_auth_jwt_module ngx_http_auth_request_module ngx_http_autoindex_module ngx_http_browser_module ngx_http_charset_module ngx_http_core_module ngx_http_dav_module ngx_http_empty_gif_module ngx_http_f4f_module ngx_http_fastcgi_module ngx_http_flv_module ngx_http_geo_module ngx_http_geoip_module ngx_http_gunzip_module ngx_http_gzip_module ngx_http_gzip_static_module ngx_http_headers_module ngx_http_hls_module ngx_http_image_filter_module ngx_http_index_module ngx_http_limit_conn_module ngx_http_limit_req_module ngx_http_log_module ngx_http_map_module ngx_http_memcached_module ngx_http_mp4_module ngx_http_perl_module ngx_http_proxy_module ngx_http_random_index_module ngx_http_realip_module ngx_http_referer_module ngx_http_rewrite_module ngx_http_scgi_module ngx_http_secure_link_module ngx_http_session_log_module ngx_http_slice_module ngx_http_spdy_module ngx_http_split_clients_module ngx_http_ssi_module ngx_http_ssl_module ngx_http_status_module ngx_http_stub_status_module ngx_http_sub_module ngx_http_upstream_conf_module ngx_http_upstream_module ngx_http_userid_module ngx_http_uwsgi_module ngx_http_v2_module ngx_http_xslt_module ngx_mail_auth_http_module ngx_mail_core_module ngx_mail_imap_module ngx_mail_pop3_module ngx_mail_proxy_module ngx_mail_smtp_module ngx_mail_ssl_module ngx_stream_access_module ngx_stream_core_module ngx_stream_geo_module ngx_stream_geoip_module ngx_stream_limit_conn_module ngx_stream_log_module ngx_stream_map_module ngx_stream_proxy_module ngx_stream_realip_module ngx_stream_return_module ngx_stream_split_clients_module ngx_stream_ssl_module ngx_stream_ssl_preread_module ngx_stream_upstream_module request_processing server_names stream_processing switches syntax sys_errlist syslog variables_in_config websocket welcome_nginx_facebook windows
+
+module accept_failed
+  section 18 652 name
+
+module beginners_guide
+  section 18 1416 name
+  section 1416 3769 starting, stopping, and reloading configuration
+  section 3769 4787 configuration file’s structure
+  section 4787 8623 serving static content
+  section 8623 12072 setting up a simple proxy server
+  section 12072 13450 setting up fastcgi proxying
+
+module chunked_encoding_from_backend
+  section 18 872 name
+
+module configure
+  section 18 6374 name
+
+module configuring_https_servers
+  section 18 1734 name
+  section 1734 3242 https server optimization
+  section 3242 6776 ssl certificate chains
+  section 6776 7608 a single http/https server
+  section 7608 12121 name-based https servers
+  section 8903 10236 an ssl certificate with several names
+  section 10236 12121 server name indication
+  section 12121 13435 compatibility
+
+module contributing_changes
+  section 18 78 name
+  section 78 314 getting sources
+  section 314 2526 formatting changes
+  section 2526 3123 before submitting
+  section 3123 3393 submitting changes
+  section 3393 3529 license
+
+module control
+  section 18 899 name
+  section 899 3111 changing configuration
+  section 3111 3735 rotating log-files
+  section 3735 7797 upgrading executable on the fly
+
+module converting_rewrite_rules
+  section 18 86 name
+  section 86 1951 a redirect to a main site
+  section 1951 2913 converting mongrel rules
+
+module daemon_master_process_off
+  section 18 929 name
+
+module debugging_log
+  section 18 1494 name
+  section 1494 1787 debugging log for selected clients
+  section 1787 2386 logging to a cyclic memory buffer
+
+module events
+  section 18 1777 name
+
+module example
+  section 18 4367 name
+
+module faq
+  section 18 325 name
+
+module freebsd_tuning
+  section 18 83 name
+  section 83 302 syncache and syncookies
+  section 302 1826 listen queues
+  section 1826 1877 sockets and files
+  section 1877 3863 socket buffers
+  section 3863 7821 mbufs, mbuf clusters, etc.
+  section 7821 7961 proxying
+  section 7961 8042 finalizing connection
+  section 8042 8099 i386 specific tuning
+  section 8099 8189 minor optimizations
+
+module hash
+  section 18 1414 name
+
+module howto_build_on_win32
+  section 18 108 name
+  section 108 755 prerequisites
+  section 755 2134 build steps
+  section 2134 2199 see also
+
+module install
+  section 18 146 name
+  section 146 254 installation on linux
+  section 254 661 installation on freebsd
+  section 661 931 building from sources
+
+module license_copyright
+  section 18 729 name
+
+module load_balancing
+  section 18 85 name
+  section 85 529 introduction
+  section 529 1038 load balancing methods
+  section 1038 2254 default load balancing configuration
+  section 2254 3035 least connected load balancing
+  section 3035 4178 session persistence
+  section 4178 5402 weighted load balancing
+  section 5402 6402 health checks
+  section 6402 7533 further reading
+
+module nginx
+  section 18 62 name
+  section 62 776 introduction
+  section 776 1153 how-to
+  section 1153 1234 development
+  section 1234 6015 modules reference
+
+module nginx_dtrace_pid_provider
+  section 18 5038 name
+  section 5038 5304 see also
+
+module ngx_core_module
+  section 17 71 name
+  section 71 297 example configuration
+  section 297 14391 directives
+  section 316 930 accept_mutex
+  section 930 1262 accept_mutex_delay
+  section 1262 1457 daemon
+  section 1457 2371 debug_connection
+  section 2371 2766 debug_points
+  section 2766 4333 error_log
+  section 4333 5631 env
+  section 5631 5813 events
+  section 5813 6148 include
+  section 6148 6377 load_module
+  section 6377 6822 lock_file
+  section 6822 7050 master_process
+  section 7050 7501 multi_accept
+  section 7501 8160 pcre_jit
+  section 8160 8336 pid
+  section 8336 8479 ssl_engine
+  section 8479 9244 thread_pool
+  section 9244 9919 timer_resolution
+  section 9919 10180 use
+  section 10180 10457 user
+  section 10457 10870 worker_aio_requests
+  section 10870 11451 worker_connections
+  section 11451 12615 worker_cpu_affinity
+  section 12615 12969 worker_priority
+  section 12969 13550 worker_processes
+  section 13550 13813 worker_rlimit_core
+  section 13813 14085 worker_rlimit_nofile
+  section 14085 14391 working_directory
+
+module ngx_http_access_module
+  aliases ngx_access
+  section 17 484 name
+  section 484 1060 example configuration
+  section 1060 1847 directives
+  section 1079 1464 allow
+  section 1464 1847 deny
+
+module ngx_http_addition_module
+  aliases ngx_addition
+  section 17 325 name
+  section 325 471 example configuration
+  section 471 1583 directives
+  section 490 839 add_before_body
+  section 839 1185 add_after_body
+  section 1185 1583 addition_types
+
+module ngx_http_auth_basic_module
+  aliases ngx_auth_basic
+  section 17 568 name
+  section 568 723 example configuration
+  section 723 2736 directives
+  section 742 1288 auth_basic
+  section 1288 2736 auth_basic_user_file
+
+module ngx_http_auth_jwt_module
+  aliases ngx_auth_jwt
+  section 17 886 name
+  section 886 1036 example configuration
+  section 1036 2176 directives
+  section 1055 1853 auth_jwt
+  section 1853 2176 auth_jwt_key_file
+  section 2176 3045 embedded variables
+  section 2371 2411 $jwt_claim_aud
+  section 2411 2450 $jwt_claim_email
+  section 2450 2497 $jwt_claim_exp
+  section 2497 2538 $jwt_claim_iat
+  section 2538 2576 $jwt_claim_iss
+  section 2576 2614 $jwt_claim_jti
+  section 2614 2656 $jwt_claim_nbf
+  section 2656 2816 $jwt_claim_sub
+  section 2816 2858 $jwt_header_alg
+  section 2858 2903 $jwt_header_cty
+  section 2903 2956 $jwt_header_enc
+  section 2956 2995 $jwt_header_kid
+  section 2995 3045 $jwt_header_typ
+
+module ngx_http_auth_request_module
+  aliases ngx_auth_request
+  section 17 1139 name
+  section 1139 1446 example configuration
+  section 1446 2121 directives
+  section 1465 1759 auth_request
+  section 1759 2121 auth_request_set
+
+module ngx_http_autoindex_module
+  aliases ngx_autoindex
+  section 17 413 name
+  section 413 502 example configuration
+  section 502 2023 directives
+  section 521 742 autoindex
+  section 742 1091 autoindex_exact_size
+  section 1091 1714 autoindex_format
+  section 1714 2023 autoindex_localtime
+
+module ngx_http_browser_module
+  aliases ngx_browser
+  section 17 618 name
+  section 243 378 $modern_browser
+  section 378 516 $ancient_browser
+  section 516 618 $msie
+  section 618 1322 example configuration
+  section 1322 3117 directives
+  section 1341 1731 ancient_browser
+  section 1731 1966 ancient_browser_value
+  section 1966 2885 modern_browser
+  section 2885 3117 modern_browser_value
+
+module ngx_http_charset_module
+  aliases ngx_charset
+  section 17 511 name
+  section 511 653 example configuration
+  section 653 4932 directives
+  section 672 1997 charset
+  section 1997 3165 charset_map
+  section 3165 3831 charset_types
+  section 3831 4593 override_charset
+  section 4593 4932 source_charset
+
+module ngx_http_core_module
+  aliases ngx_core
+  section 17 85 name
+  section 85 61964 directives
+  section 104 2526 aio
+  section 2526 2950 aio_write
+  section 2950 3955 alias
+  section 3955 4335 chunked_transfer_encoding
+  section 4335 4854 client_body_buffer_size
+  section 4854 5579 client_body_in_file_only
+  section 5579 5995 client_body_in_single_buffer
+  section 5995 6627 client_body_temp_path
+  section 6627 7109 client_body_timeout
+  section 7109 7644 client_header_buffer_size
+  section 7644 7986 client_header_timeout
+  section 7986 8548 client_max_body_size
+  section 8548 9036 connection_pool_size
+  section 9036 9350 default_type
+  section 9350 9968 directio
+  section 9968 10344 directio_alignment
+  section 10344 12529 disable_symlinks
+  section 10729 10839 off
+  section 10839 10939 on
+  section 10939 11119 if_not_owner
+  section 11119 12529 from=part
+  section 12529 14490 error_page
+  section 14490 14795 etag
+  section 14795 14951 http
+  section 14951 15624 if_modified_since
+  section 15347 15434 off
+  section 15434 15469 exact
+  section 15469 15624 before
+  section 15624 16220 ignore_invalid_headers
+  section 16220 17451 internal
+  section 17451 18288 keepalive_disable
+  section 18288 18675 keepalive_requests
+  section 18675 19350 keepalive_timeout
+  section 19350 20106 large_client_header_buffers
+  section 20106 20881 limit_except
+  section 20881 21897 limit_rate
+  section 21897 22377 limit_rate_after
+  section 22377 23243 lingering_close
+  section 23243 23657 lingering_time
+  section 23657 24221 lingering_timeout
+  section 24221 32889 listen
+  section 32889 37033 location
+  section 37033 37296 log_not_found
+  section 37296 37549 log_subrequest
+  section 37549 38001 max_ranges
+  section 38001 39053 merge_slashes
+  section 39053 39368 msie_padding
+  section 39368 39622 msie_refresh
+  section 39622 40879 open_file_cache
+  section 40879 41147 open_file_cache_errors
+  section 41147 41539 open_file_cache_min_uses
+  section 41539 41796 open_file_cache_valid
+  section 41796 42137 output_buffers
+  section 42137 42504 port_in_redirect
+  section 42504 42852 postpone_output
+  section 42852 43420 read_ahead
+  section 43420 43736 recursive_error_pages
+  section 43736 44025 request_pool_size
+  section 44025 44706 reset_timedout_connection
+  section 44706 46122 resolver
+  section 46122 46377 resolver_timeout
+  section 46377 47088 root
+  section 47088 47779 satisfy
+  section 47779 48265 send_lowat
+  section 48265 48685 send_timeout
+  section 48685 49699 sendfile
+  section 49699 50063 sendfile_max_chunk
+  section 50063 50575 server
+  section 50575 53309 server_name
+  section 53309 53904 server_name_in_redirect
+  section 53904 54284 server_names_hash_bucket_size
+  section 54284 54571 server_names_hash_max_size
+  section 54571 55179 server_tokens
+  section 55179 55499 tcp_nodelay
+  section 55499 56050 tcp_nopush
+  section 56050 59099 try_files
+  section 59099 59970 types
+  section 59970 60393 types_hash_bucket_size
+  section 60393 60710 types_hash_max_size
+  section 60710 61347 underscores_in_headers
+  section 61347 61623 variables_hash_bucket_size
+  section 61623 61964 variables_hash_max_size
+  section 61964 68418 embedded variables
+  section 62281 62353 $arg_i<name>
+  section 62353 62405 $args
+  section 62405 62559 $binary_remote_addr
+  section 62559 62758 $body_bytes_sent
+  section 62758 62834 $bytes_sent
+  section 62834 62902 $connection
+  section 62902 63007 $connection_requests
+  section 63007 63078 $content_length
+  section 63078 63145 $content_type
+  section 63145 63202 $cookie_i<name>
+  section 63202 63299 $document_root
+  section 63299 63345 $document_uri
+  section 63345 63519 $host
+  section 63519 63555 $hostname
+  section 63555 63731 $http_i<name>
+  section 63731 63831 $https
+  section 63831 63929 $is_args
+  section 63929 64030 $limit_rate
+  section 64030 64124 $msec
+  section 64124 64169 $nginx_version
+  section 64169 64216 $pid
+  section 64216 64312 $pipe
+  section 64312 64556 $proxy_protocol_addr
+  section 64556 64797 $proxy_protocol_port
+  section 64797 64844 $query_string
+  section 64844 65031 $realpath_root
+  section 65031 65075 $remote_addr
+  section 65075 65116 $remote_port
+  section 65116 65194 $remote_user
+  section 65194 65246 $request
+  section 65246 65534 $request_body
+  section 65534 66190 $request_body_file
+  section 66190 66295 $request_completion
+  section 66295 66431 $request_filename
+  section 66431 66541 $request_id
+  section 66541 66655 $request_length
+  section 66655 66741 $request_method
+  section 66741 66914 $request_time
+  section 66914 66986 $request_uri
+  section 66986 67058 $scheme
+  section 67058 67240 $sent_http_i<name>
+  section 67240 67496 $server_addr
+  section 67496 67569 $server_name
+  section 67569 67642 $server_port
+  section 67642 67794 $server_protocol
+  section 67794 68054 $status
+  section 68054 68143 $time_iso8601
+  section 68143 68223 $time_local
+  section 68223 68418 $uri
+
+module ngx_http_dav_module
+  aliases ngx_dav
+  section 17 516 name
+  section 516 916 example configuration
+  section 916 3322 directives
+  section 935 1385 dav_access
+  section 1385 2437 dav_methods
+  section 2437 2783 create_full_put_path
+  section 2783 3322 min_delete_depth
+
+module ngx_http_empty_gif_module
+  aliases ngx_empty_gif
+  section 17 185 name
+  section 185 278 example configuration
+  section 278 408 directives
+  section 297 408 empty_gif
+
+module ngx_http_f4f_module
+  aliases ngx_f4f
+  section 17 699 name
+  section 699 797 example configuration
+  section 797 1170 directives
+  section 816 923 f4f
+  section 923 1170 f4f_buffer_size
+
+module ngx_http_fastcgi_module
+  aliases ngx_fastcgi
+  section 17 188 name
+  section 188 628 example configuration
+  section 628 37359 directives
+  section 647 1701 fastcgi_bind
+  section 1701 2198 fastcgi_buffer_size
+  section 2198 3462 fastcgi_buffering
+  section 3462 3895 fastcgi_buffers
+  section 3895 4570 fastcgi_busy_buffers_size
+  section 4570 4980 fastcgi_cache
+  section 4980 5559 fastcgi_cache_bypass
+  section 5559 5813 fastcgi_cache_key
+  section 5813 6454 fastcgi_cache_lock
+  section 6454 6869 fastcgi_cache_lock_age
+  section 6869 7326 fastcgi_cache_lock_timeout
+  section 7326 7731 fastcgi_cache_max_range_offset
+  section 7731 8276 fastcgi_cache_methods
+  section 8276 8536 fastcgi_cache_min_uses
+  section 8536 13048 fastcgi_cache_path
+  section 13048 14425 fastcgi_cache_purge
+  section 14425 14808 fastcgi_cache_revalidate
+  section 14808 15924 fastcgi_cache_use_stale
+  section 15924 17814 fastcgi_cache_valid
+  section 17814 18432 fastcgi_catch_stderr
+  section 18432 18761 fastcgi_connect_timeout
+  section 18761 19150 fastcgi_force_ranges
+  section 19150 19642 fastcgi_hide_header
+  section 19642 19990 fastcgi_ignore_client_abort
+  section 19990 21109 fastcgi_ignore_headers
+  section 21109 21813 fastcgi_index
+  section 21813 22228 fastcgi_intercept_errors
+  section 22228 22776 fastcgi_keep_conn
+  section 22776 23409 fastcgi_limit_rate
+  section 23409 24202 fastcgi_max_temp_file_size
+  section 24202 26578 fastcgi_next_upstream
+  section 24695 24839 error
+  section 24839 24990 timeout
+  section 24990 25067 invalid_header
+  section 25067 25138 http_500
+  section 25138 25209 http_503
+  section 25209 25280 http_403
+  section 25280 25351 http_404
+  section 25351 25666 non_idempotent
+  section 25666 26578 off
+  section 26578 26935 fastcgi_next_upstream_timeout
+  section 26935 27295 fastcgi_next_upstream_tries
+  section 27295 27845 fastcgi_no_cache
+  section 27845 29360 fastcgi_param
+  section 29360 29922 fastcgi_pass
+  section 29922 30166 fastcgi_pass_header
+  section 30166 30502 fastcgi_pass_request_body
+  section 30502 30858 fastcgi_pass_request_headers
+  section 30858 31310 fastcgi_read_timeout
+  section 31310 31990 fastcgi_request_buffering
+  section 31990 32502 fastcgi_send_lowat
+  section 32502 32952 fastcgi_send_timeout
+  section 32952 33854 fastcgi_split_path_info
+  section 33854 35524 fastcgi_store
+  section 35524 36014 fastcgi_store_access
+  section 36014 36587 fastcgi_temp_file_write_size
+  section 36587 37359 fastcgi_temp_path
+  section 37359 37827 parameters passed to a fastcgi server
+  section 37827 38987 embedded variables
+  section 38006 38797 $fastcgi_script_name
+  section 38797 38987 $fastcgi_path_info
+
+module ngx_http_flv_module
+  aliases ngx_flv
+  section 17 542 name
+  section 542 629 example configuration
+  section 629 753 directives
+  section 648 753 flv
+
+module ngx_http_geo_module
+  aliases ngx_geo
+  section 17 197 name
+  section 197 428 example configuration
+  section 428 3843 directives
+  section 447 3843 geo
+  section 1419 1482 delete
+  section 1482 1809 default
+  section 1809 1909 include
+  section 1909 2271 proxy
+  section 2271 2717 proxy_recursive
+  section 2717 3843 ranges
+
+module ngx_http_geoip_module
+  aliases ngx_geoip
+  section 17 620 name
+  section 620 903 example configuration
+  section 903 4564 directives
+  section 922 1511 geoip_country
+  section 1173 1273 $geoip_country_code
+  section 1273 1379 $geoip_country_code3
+  section 1379 1511 $geoip_country_name
+  section 1511 3202 geoip_city
+  section 1774 2058 $geoip_area_code
+  section 2058 2164 $geoip_city_country_code
+  section 2164 2275 $geoip_city_country_code3
+  section 2275 2397 $geoip_city_country_name
+  section 2397 2615 $geoip_dma_code
+  section 2615 2655 $geoip_latitude
+  section 2655 2697 $geoip_longitude
+  section 2697 2862 $geoip_region
+  section 2862 3048 $geoip_region_name
+  section 3048 3138 $geoip_city
+  section 3138 3202 $geoip_postal_code
+  section 3202 3603 geoip_org
+  section 3493 3603 $geoip_org
+  section 3603 3964 geoip_proxy
+  section 3964 4564 geoip_proxy_recursive
+
+module ngx_http_gunzip_module
+  aliases ngx_gunzip
+  section 17 516 name
+  section 516 622 example configuration
+  section 622 1515 directives
+  section 641 1131 gunzip
+  section 1131 1515 gunzip_buffers
+
+module ngx_http_gzip_module
+  aliases ngx_gzip
+  section 17 279 name
+  section 279 565 example configuration
+  section 565 5092 directives
+  section 584 820 gzip
+  section 820 1275 gzip_buffers
+  section 1275 1545 gzip_comp_level
+  section 1545 2079 gzip_disable
+  section 2079 2391 gzip_min_length
+  section 2391 2655 gzip_http_version
+  section 2655 4327 gzip_proxied
+  section 3284 3378 off
+  section 3378 3509 expired
+  section 3509 3649 no-cache
+  section 3649 3789 no-store
+  section 3789 3927 private
+  section 3927 4046 no_last_modified
+  section 4046 4147 no_etag
+  section 4147 4245 auth
+  section 4245 4327 any
+  section 4327 4739 gzip_types
+  section 4739 5092 gzip_vary
+  section 5092 5272 embedded variables
+  section 5131 5272 $gzip_ratio
+
+module ngx_http_gzip_static_module
+  aliases ngx_gzip_static
+  section 17 388 name
+  section 388 510 example configuration
+  section 510 1436 directives
+  section 529 1436 gzip_static
+
+module ngx_http_headers_module
+  aliases ngx_headers
+  section 17 252 name
+  section 252 489 example configuration
+  section 489 3015 directives
+  section 508 1180 add_header
+  section 1180 3015 expires
+
+module ngx_http_hls_module
+  aliases ngx_hls
+  section 17 1284 name
+  section 1284 1850 example configuration
+  section 1850 5659 directives
+  section 1869 1972 hls
+  section 1972 2256 hls_buffers
+  section 2256 4598 hls_forward_args
+  section 4598 4861 hls_fragment
+  section 4861 5122 hls_mp4_buffer_size
+  section 5122 5659 hls_mp4_max_buffer_size
+
+module ngx_http_image_filter_module
+  aliases ngx_image_filter
+  section 17 673 name
+  section 673 939 example configuration
+  section 939 5420 directives
+  section 958 3019 image_filter
+  section 1448 1523 off
+  section 1523 1689 test
+  section 1689 1900 size
+  section 1900 2160 rotate
+  section 2160 2560 resize
+  section 2560 3019 crop
+  section 3019 3345 image_filter_buffer
+  section 3345 3698 image_filter_interlace
+  section 3698 4160 image_filter_jpeg_quality
+  section 4160 4498 image_filter_sharpen
+  section 4498 4949 image_filter_transparency
+  section 4949 5420 image_filter_webp_quality
+
+module ngx_http_index_module
+  aliases ngx_index
+  section 17 379 name
+  section 379 488 example configuration
+  section 488 1322 directives
+  section 507 1322 index
+
+module ngx_http_limit_conn_module
+  aliases ngx_limit_conn
+  section 17 446 name
+  section 446 708 example configuration
+  section 708 4408 directives
+  section 727 2031 limit_conn
+  section 2031 2406 limit_conn_log_level
+  section 2406 2692 limit_conn_status
+  section 2692 4026 limit_conn_zone
+  section 4026 4408 limit_zone
+
+module ngx_http_limit_req_module
+  aliases ngx_limit_req
+  section 17 362 name
+  section 362 639 example configuration
+  section 639 4827 directives
+  section 658 2402 limit_req
+  section 2402 2992 limit_req_log_level
+  section 2992 3276 limit_req_status
+  section 3276 4827 limit_req_zone
+
+module ngx_http_log_module
+  aliases ngx_log
+  section 17 384 name
+  section 384 713 example configuration
+  section 713 7472 directives
+  section 732 4055 access_log
+  section 4055 6266 log_format
+  section 4336 4401 $bytes_sent
+  section 4401 4454 $connection
+  section 4454 4558 $connection_requests
+  section 4558 4656 $msec
+  section 4656 4736 $pipe
+  section 4736 4834 $request_length
+  section 4834 5057 $request_time
+  section 5057 5097 $status
+  section 5097 5170 $time_iso8601
+  section 5170 6266 $time_local
+  section 6266 7472 open_log_file_cache
+  section 6714 6864 max
+  section 6864 7012 inactive
+  section 7012 7185 min_uses
+  section 7185 7324 valid
+  section 7324 7472 off
+
+module ngx_http_map_module
+  aliases ngx_map
+  section 17 199 name
+  section 199 576 example configuration
+  section 576 3780 directives
+  section 595 3149 map
+  section 1950 2158 default value
+  section 2158 2494 hostnames
+  section 2494 3149 include file
+  section 3149 3505 map_hash_bucket_size
+  section 3505 3780 map_hash_max_size
+
+module ngx_http_memcached_module
+  aliases ngx_memcached
+  section 17 329 name
+  section 329 657 example configuration
+  section 657 7058 directives
+  section 676 1744 memcached_bind
+  section 1744 2116 memcached_buffer_size
+  section 2116 2451 memcached_connect_timeout
+  section 2451 2846 memcached_force_ranges
+  section 2846 3243 memcached_gzip_flag
+  section 3243 4845 memcached_next_upstream
+  section 3633 3777 error
+  section 3777 3928 timeout
+  section 3928 4007 invalid_response
+  section 4007 4071 not_found
+  section 4071 4845 off
+  section 4845 5206 memcached_next_upstream_timeout
+  section 5206 5570 memcached_next_upstream_tries
+  section 5570 6140 memcached_pass
+  section 6140 6600 memcached_read_timeout
+  section 6600 7058 memcached_send_timeout
+  section 7058 7203 embedded variables
+  section 7097 7203 $memcached_key
+
+module ngx_http_mp4_module
+  aliases ngx_mp4
+  section 17 2915 name
+  section 2915 3138 example configuration
+  section 3138 5229 directives
+  section 3157 3262 mp4
+  section 3262 3507 mp4_buffer_size
+  section 3507 4032 mp4_max_buffer_size
+  section 4032 4811 mp4_limit_rate
+  section 4811 5229 mp4_limit_rate_after
+
+module ngx_http_perl_module
+  aliases ngx_perl
+  section 17 514 name
+  section 514 1950 known issues
+  section 1950 2905 example configuration
+  section 2905 3688 directives
+  section 2924 3121 perl
+  section 3121 3258 perl_modules
+  section 3258 3484 perl_require
+  section 3484 3688 perl_set
+  section 3688 3930 calling perl from ssi
+  section 3930 8789 the $r request object methods
+  section 3980 4036 $r->args
+  section 4036 5093 $r->filename
+  section 5093 5185 $r->allow_ranges
+  section 5185 5275 $r->discard_request_body
+  section 5275 5386 $r->header_in(field)
+  section 5386 5893 $r->header_only
+  section 5893 6114 c<$r->log_error(errno,
+  section 6114 6186 $r->print(text, ...)
+  section 6186 6485 $r->request_body
+  section 6485 6721 $r->request_body_file
+  section 6721 6800 $r->request_method
+  section 6800 6867 $r->remote_addr
+  section 6867 7519 $r->flush
+  section 7519 8474 $r->status(code)
+  section 8474 8565 $r->unescape(text)
+  section 8565 8789 $r->uri
+
+module ngx_http_proxy_module
+  aliases ngx_proxy
+  section 17 180 name
+  section 180 386 example configuration
+  section 386 50789 directives
+  section 405 1451 proxy_bind
+  section 1451 1944 proxy_buffer_size
+  section 1944 3147 proxy_buffering
+  section 3147 3576 proxy_buffers
+  section 3576 4243 proxy_busy_buffers_size
+  section 4243 4649 proxy_cache
+  section 4649 5217 proxy_cache_bypass
+  section 5217 5657 proxy_cache_convert_head
+  section 5657 6082 proxy_cache_key
+  section 6082 6715 proxy_cache_lock
+  section 6715 7126 proxy_cache_lock_age
+  section 7126 7577 proxy_cache_lock_timeout
+  section 7577 7978 proxy_cache_max_range_offset
+  section 7978 8517 proxy_cache_methods
+  section 8517 8773 proxy_cache_min_uses
+  section 8773 13262 proxy_cache_path
+  section 13262 14617 proxy_cache_purge
+  section 14617 14996 proxy_cache_revalidate
+  section 14996 16156 proxy_cache_use_stale
+  section 16156 18028 proxy_cache_valid
+  section 18028 18353 proxy_connect_timeout
+  section 18353 20016 proxy_cookie_domain
+  section 20016 21544 proxy_cookie_path
+  section 21544 21929 proxy_force_ranges
+  section 21929 22326 proxy_headers_hash_bucket_size
+  section 22326 22718 proxy_headers_hash_max_size
+  section 22718 23222 proxy_hide_header
+  section 23222 23668 proxy_http_version
+  section 23668 24012 proxy_ignore_client_abort
+  section 24012 25127 proxy_ignore_headers
+  section 25127 25531 proxy_intercept_errors
+  section 25531 26160 proxy_limit_rate
+  section 26160 26943 proxy_max_temp_file_size
+  section 26943 27268 proxy_method
+  section 27268 29860 proxy_next_upstream
+  section 27809 27953 error
+  section 27953 28104 timeout
+  section 28104 28181 invalid_header
+  section 28181 28252 http_500
+  section 28252 28323 http_502
+  section 28323 28394 http_503
+  section 28394 28465 http_504
+  section 28465 28536 http_403
+  section 28536 28607 http_404
+  section 28607 28922 non_idempotent
+  section 28922 29860 off
+  section 29860 30213 proxy_next_upstream_timeout
+  section 30213 30569 proxy_next_upstream_tries
+  section 30569 31109 proxy_no_cache
+  section 31109 33944 proxy_pass
+  section 33944 34184 proxy_pass_header
+  section 34184 34728 proxy_pass_request_body
+  section 34728 35288 proxy_pass_request_headers
+  section 35288 35736 proxy_read_timeout
+  section 35736 38523 proxy_redirect
+  section 38523 39406 proxy_request_buffering
+  section 39406 39914 proxy_send_lowat
+  section 39914 40360 proxy_send_timeout
+  section 40360 40643 proxy_set_body
+  section 40643 42295 proxy_set_header
+  section 42295 42616 proxy_ssl_certificate
+  section 42616 43128 proxy_ssl_certificate_key
+  section 43128 43577 proxy_ssl_ciphers
+  section 43577 43902 proxy_ssl_crl
+  section 43902 44374 proxy_ssl_name
+  section 44374 44749 proxy_ssl_password_file
+  section 44749 45214 proxy_ssl_server_name
+  section 45214 45606 proxy_ssl_session_reuse
+  section 45606 45989 proxy_ssl_protocols
+  section 45989 46343 proxy_ssl_trusted_certificate
+  section 46343 46647 proxy_ssl_verify
+  section 46647 46953 proxy_ssl_verify_depth
+  section 46953 48986 proxy_store
+  section 48986 49468 proxy_store_access
+  section 49468 50031 proxy_temp_file_write_size
+  section 50031 50789 proxy_temp_path
+  section 50789 51546 embedded variables
+  section 50970 51076 $proxy_host
+  section 51076 51546 $proxy_port
+
+module ngx_http_random_index_module
+  aliases ngx_random_index
+  section 17 515 name
+  section 515 607 example configuration
+  section 607 822 directives
+  section 626 822 random_index
+
+module ngx_http_realip_module
+  aliases ngx_realip
+  section 17 369 name
+  section 369 589 example configuration
+  section 589 2535 directives
+  section 608 1062 set_real_ip_from
+  section 1062 1865 real_ip_header
+  section 1865 2535 real_ip_recursive
+  section 2535 2741 embedded variables
+  section 2574 2652 $realip_remote_addr
+  section 2652 2741 $realip_remote_port
+
+module ngx_http_referer_module
+  aliases ngx_referer
+  section 17 626 name
+  section 626 876 example configuration
+  section 876 3136 directives
+  section 895 1246 referer_hash_bucket_size
+  section 1246 1599 referer_hash_max_size
+  section 1599 3136 valid_referers
+  section 2088 2164 none
+  section 2164 2411 blocked
+  section 2411 2510 server_names
+  section 2510 2729 arbitrary string
+  section 2729 3136 regular expression
+  section 3136 3323 embedded variables
+  section 3175 3323 $invalid_referer
+
+module ngx_http_rewrite_module
+  aliases ngx_rewrite
+  section 17 830 name
+  section 830 8160 directives
+  section 849 1236 break
+  section 1236 3372 if
+  section 3372 4778 return
+  section 4778 7261 rewrite
+  section 5476 5636 last
+  section 5636 5765 break
+  section 5765 5946 redirect
+  section 5946 7261 permanent
+  section 7261 7603 rewrite_log
+  section 7603 7866 set
+  section 7866 8160 uninitialized_variable_warn
+  section 8160 9827 internal implementation
+
+module ngx_http_scgi_module
+  aliases ngx_scgi
+  section 17 177 name
+  section 177 309 example configuration
+  section 309 32604 directives
+  section 328 1317 scgi_bind
+  section 1317 1805 scgi_buffer_size
+  section 1805 2991 scgi_buffering
+  section 2991 3415 scgi_buffers
+  section 3415 4075 scgi_busy_buffers_size
+  section 4075 4479 scgi_cache
+  section 4479 5043 scgi_cache_bypass
+  section 5043 5288 scgi_cache_key
+  section 5288 5915 scgi_cache_lock
+  section 5915 6318 scgi_cache_lock_age
+  section 6318 6763 scgi_cache_lock_timeout
+  section 6763 7159 scgi_cache_max_range_offset
+  section 7159 7649 scgi_cache_methods
+  section 7649 7903 scgi_cache_min_uses
+  section 7903 12386 scgi_cache_path
+  section 12386 13742 scgi_cache_purge
+  section 13742 14119 scgi_cache_revalidate
+  section 14119 15212 scgi_cache_use_stale
+  section 15212 17075 scgi_cache_valid
+  section 17075 17396 scgi_connect_timeout
+  section 17396 17776 scgi_force_ranges
+  section 17776 18254 scgi_hide_header
+  section 18254 18594 scgi_ignore_client_abort
+  section 18594 19704 scgi_ignore_headers
+  section 19704 20113 scgi_intercept_errors
+  section 20113 20731 scgi_limit_rate
+  section 20731 21506 scgi_max_temp_file_size
+  section 21506 23876 scgi_next_upstream
+  section 21993 22137 error
+  section 22137 22288 timeout
+  section 22288 22365 invalid_header
+  section 22365 22436 http_500
+  section 22436 22507 http_503
+  section 22507 22578 http_403
+  section 22578 22649 http_404
+  section 22649 22964 non_idempotent
+  section 22964 23876 off
+  section 23876 24227 scgi_next_upstream_timeout
+  section 24227 24581 scgi_next_upstream_tries
+  section 24581 25116 scgi_no_cache
+  section 25116 26028 scgi_param
+  section 26028 26573 scgi_pass
+  section 26573 26809 scgi_pass_header
+  section 26809 27133 scgi_pass_request_body
+  section 27133 27477 scgi_pass_request_headers
+  section 27477 27917 scgi_read_timeout
+  section 27917 28748 scgi_request_buffering
+  section 28748 29186 scgi_send_timeout
+  section 29186 30823 scgi_store
+  section 30823 31301 scgi_store_access
+  section 31301 31856 scgi_temp_file_write_size
+  section 31856 32604 scgi_temp_path
+
+module ngx_http_secure_link_module
+  aliases ngx_secure_link
+  section 17 1102 name
+  section 1102 5063 directives
+  section 1121 2468 secure_link
+  section 2468 3845 secure_link_md5
+  section 3845 5063 secure_link_secret
+  section 5063 5376 embedded variables
+  section 5102 5218 $secure_link
+  section 5218 5376 $secure_link_expires
+
+module ngx_http_session_log_module
+  aliases ngx_session_log
+  section 17 346 name
+  section 346 790 example configuration
+  section 790 2791 directives
+  section 809 1207 session_log_format
+  section 1207 2453 session_log_zone
+  section 2453 2791 session_log
+  section 2791 3057 embedded variables
+  section 2906 2958 $session_log_id
+  section 2958 3057 $session_log_binary_id
+
+module ngx_http_slice_module
+  aliases ngx_slice
+  section 17 427 name
+  section 427 883 example configuration
+  section 883 1643 directives
+  section 902 1643 slice
+  section 1643 1939 embedded variables
+  section 1761 1939 $slice_range
+
+module ngx_http_spdy_module
+  aliases ngx_spdy
+  section 17 718 name
+  section 718 1190 known issues
+  section 1190 1651 example configuration
+  section 1651 2535 directives
+  section 1670 2199 spdy_chunk_size
+  section 2199 2535 spdy_headers_comp
+  section 2535 2870 embedded variables
+  section 2652 2748 $spdy
+  section 2748 2870 $spdy_request_priority
+
+module ngx_http_split_clients_module
+  aliases ngx_split_clients
+  section 17 239 name
+  section 239 590 example configuration
+  section 590 1350 directives
+  section 609 1350 split_clients
+
+module ngx_http_ssi_module
+  aliases ngx_ssi
+  section 17 288 name
+  section 288 383 example configuration
+  section 383 2489 directives
+  section 402 654 ssi
+  section 654 1236 ssi_last_modified
+  section 1236 1556 ssi_min_file_chunk
+  section 1556 1895 ssi_silent_errors
+  section 1895 2253 ssi_types
+  section 2253 2489 ssi_value_length
+  section 2489 7531 ssi commands
+  section 2683 2865 block
+  section 2865 2992 name
+  section 2992 3079 config
+  section 3079 3275 errmsg
+  section 3275 3536 timefmt
+  section 3536 3639 echo
+  section 3639 3678 var
+  section 3678 3811 encoding
+  section 3811 4225 default
+  section 4225 4543 if
+  section 4543 5384 expr
+  section 5384 5513 include
+  section 5513 5624 file
+  section 5624 5960 virtual
+  section 5960 6385 stub
+  section 6385 6621 wait
+  section 6621 7257 set
+  section 7257 7354 set
+  section 7354 7393 var
+  section 7393 7531 value
+  section 7531 7910 embedded variables
+  section 7637 7776 $date_local
+  section 7776 7910 $date_gmt
+
+module ngx_http_ssl_module
+  aliases ngx_ssl
+  section 17 375 name
+  section 375 1418 example configuration
+  section 1418 14618 directives
+  section 1437 1752 ssl
+  section 1752 2220 ssl_buffer_size
+  section 2220 3964 ssl_certificate
+  section 3964 4372 ssl_certificate_key
+  section 4372 4917 ssl_ciphers
+  section 4917 5346 ssl_client_certificate
+  section 5346 5609 ssl_crl
+  section 5609 5830 ssl_dhparam
+  section 5830 6524 ssl_ecdh_curve
+  section 6524 7327 ssl_password_file
+  section 7327 7614 ssl_prefer_server_ciphers
+  section 7614 8218 ssl_protocols
+  section 8218 9621 ssl_session_cache
+  section 8584 8720 off
+  section 8720 8901 none
+  section 8901 9136 builtin
+  section 9136 9621 shared
+  section 9621 10405 ssl_session_ticket_key
+  section 10405 10720 ssl_session_tickets
+  section 10720 10945 ssl_session_timeout
+  section 10945 11719 ssl_stapling
+  section 11719 12141 ssl_stapling_file
+  section 12141 12622 ssl_stapling_responder
+  section 12622 13116 ssl_stapling_verify
+  section 13116 13589 ssl_trusted_certificate
+  section 13589 14409 ssl_verify_client
+  section 14409 14618 ssl_verify_depth
+  section 14618 15190 error processing
+  section 15190 17503 embedded variables
+  section 15300 15398 $ssl_cipher
+  section 15398 15653 $ssl_client_cert
+  section 15653 15791 $ssl_client_fingerprint
+  section 15791 15913 $ssl_client_raw_cert
+  section 15913 16035 $ssl_client_serial
+  section 16035 16236 $ssl_client_s_dn
+  section 16236 16453 $ssl_client_s_dn_legacy
+  section 16453 16653 $ssl_client_i_dn
+  section 16653 16869 $ssl_client_i_dn_legacy
+  section 16869 17046 $ssl_client_verify
+  section 17046 17131 $ssl_protocol
+  section 17131 17274 $ssl_server_name
+  section 17274 17371 $ssl_session_id
+  section 17371 17503 $ssl_session_reused
+
+module ngx_http_status_module
+  aliases ngx_status
+  section 17 268 name
+  section 268 2572 example configuration
+  section 2572 3632 directives
+  section 2591 2785 status
+  section 2785 3337 status_format
+  section 3337 3632 status_zone
+  section 3632 14016 data
+  section 3703 3787 version
+  section 3787 3835 nginx_version
+  section 3835 3915 address
+  section 3915 3996 generation
+  section 3996 4098 load_timestamp
+  section 4098 4166 timestamp
+  section 4166 4244 pid
+  section 4244 4277 processes
+  section 4277 4388 respawned
+  section 4388 4423 connections
+  section 4423 4497 accepted
+  section 4497 4569 dropped
+  section 4569 4641 active
+  section 4641 4721 idle
+  section 4721 4748 ssl
+  section 4748 4822 handshakes
+  section 4822 4899 handshakes_failed
+  section 4899 4999 session_reuses
+  section 4999 5031 requests
+  section 5031 5090 total
+  section 5090 5165 current
+  section 5165 5227 server_zones
+  section 5227 5320 processing
+  section 5320 5404 requests
+  section 5404 5437 responses
+  section 5437 5643 total
+  section 5643 5736 discarded
+  section 5736 5810 received
+  section 5810 5886 sent
+  section 5886 6049 upstreams
+  section 6049 6149 peers
+  section 6149 6190 id
+  section 6190 6267 server
+  section 6267 6377 backup
+  section 6377 6450 weight
+  section 6450 6595 state
+  section 6595 6660 active
+  section 6660 6740 max_conns
+  section 6740 6827 requests
+  section 6827 6860 responses
+  section 6860 7076 total
+  section 7076 7144 sent
+  section 7144 7222 received
+  section 7222 7318 fails
+  section 7318 7527 unavail
+  section 7527 7564 health_checks
+  section 7564 7663 checks
+  section 7663 7721 fails
+  section 7721 7818 unhealthy
+  section 7818 7971 last_passed
+  section 7971 8077 downtime
+  section 8077 8205 downstart
+  section 8205 8333 selected
+  section 8333 8548 header_time
+  section 8548 8775 response_time
+  section 8775 8869 keepalive
+  section 8869 8991 zombies
+  section 8991 9099 queue
+  section 9099 9165 size
+  section 9165 9264 max_size
+  section 9264 9379 overflows
+  section 9379 9480 caches
+  section 9480 9532 size
+  section 9532 9632 max_size
+  section 9632 9851 cold
+  section 9851 10001 responses
+  section 10001 10147 bytes
+  section 10147 10306 responses
+  section 10306 10384 bytes
+  section 10384 10470 responses_written
+  section 10470 10572 bytes_written
+  section 10572 10602 stream
+  section 10602 10664 server_zones
+  section 10664 10760 processing
+  section 10760 10843 connections
+  section 10843 10875 sessions
+  section 10875 11089 total
+  section 11089 11185 discarded
+  section 11185 11259 received
+  section 11259 11335 sent
+  section 11335 11502 upstreams
+  section 11502 11603 peers
+  section 11603 11644 id
+  section 11644 11723 server
+  section 11723 11835 backup
+  section 11835 11910 weight
+  section 11910 12036 state
+  section 12036 12094 active
+  section 12094 12187 connections
+  section 12187 12359 connect_time
+  section 12359 12534 first_byte_time
+  section 12534 12706 response_time
+  section 12706 12774 sent
+  section 12774 12852 received
+  section 12852 12948 fails
+  section 12948 13162 unavail
+  section 13162 13199 health_checks
+  section 13199 13300 checks
+  section 13300 13358 fails
+  section 13358 13455 unhealthy
+  section 13455 13610 last_passed
+  section 13610 13716 downtime
+  section 13716 13844 downstart
+  section 13844 14016 selected
+  section 14016 15493 compatibility
+
+module ngx_http_stub_status_module
+  aliases ngx_stub_status
+  section 17 331 name
+  section 331 679 example configuration
+  section 679 995 directives
+  section 698 995 stub_status
+  section 995 1852 data
+  section 1066 1183 active connections
+  section 1183 1256 accepts
+  section 1256 1469 handled
+  section 1469 1531 requests
+  section 1531 1632 reading
+  section 1632 1746 writing
+  section 1746 1852 waiting
+  section 1852 2276 embedded variables
+  section 1985 2062 $connections_active
+  section 2062 2129 $connections_reading
+  section 2129 2196 $connections_writing
+  section 2196 2276 $connections_waiting
+
+module ngx_http_sub_module
+  aliases ngx_sub
+  section 17 337 name
+  section 337 595 example configuration
+  section 595 2278 directives
+  section 614 1178 sub_filter
+  section 1178 1659 sub_filter_last_modified
+  section 1659 1914 sub_filter_once
+  section 1914 2278 sub_filter_types
+
+module ngx_http_upstream_conf_module
+  aliases ngx_upstream_conf
+  section 17 480 name
+  section 480 772 example configuration
+  section 772 6710 directives
+  section 791 6710 upstream_conf
+  section 4190 6710 drain=
+
+module ngx_http_upstream_module
+  aliases ngx_upstream
+  section 17 362 name
+  section 362 1553 example configuration
+  section 1553 27982 directives
+  section 1572 2652 upstream
+  section 2652 7844 server
+  section 7844 8547 zone
+  section 8547 9450 state
+  section 9450 10571 hash
+  section 10571 11772 ip_hash
+  section 11772 14200 keepalive
+  section 14200 15502 ntlm
+  section 15502 15938 least_conn
+  section 15938 16683 least_time
+  section 16683 19610 health_check
+  section 19610 21940 match
+  section 19838 19878 status 200;
+  section 19878 19924 status ! 500;
+  section 19924 19975 status 200 204;
+  section 19975 20037 status ! 301 302;
+  section 20037 20106 status 200-399;
+  section 20106 20181 status ! 400-599;
+  section 20181 20274 status 301-303 307;
+  section 20274 20389 header content-type = text/html;
+  section 20389 20516 header content-type != text/html;
+  section 20516 20637 header connection ~ close;
+  section 20637 20763 header connection !~ close;
+  section 20763 20814 header host;
+  section 20814 20908 header ! x-accel-redirect;
+  section 20908 21011 body ~ welcome to nginx!;
+  section 21011 21940 body !~ welcome to nginx!;
+  section 21940 22681 queue
+  section 22681 27562 sticky
+  section 23315 24113 cookie
+  section 24113 24410 expires=time
+  section 24410 24548 domain=domain
+  section 24548 24628 httponly
+  section 24628 24705 secure
+  section 24705 24879 path=path
+  section 24879 26096 route
+  section 26096 27562 learn
+  section 27562 27982 sticky_cookie_insert
+  section 27982 31207 embedded variables
+  section 28103 28708 $upstream_addr
+  section 28708 28922 $upstream_bytes_received
+  section 28922 29167 $upstream_cache_status
+  section 29167 29505 $upstream_connect_time
+  section 29505 29732 $upstream_cookie_i<name>
+  section 29732 30022 $upstream_header_time
+  section 30022 30440 $upstream_http_i<name>
+  section 30440 30700 $upstream_response_length
+  section 30700 30976 $upstream_response_time
+  section 30976 31207 $upstream_status
+
+module ngx_http_userid_module
+  aliases ngx_userid
+  section 17 390 name
+  section 390 637 example configuration
+  section 637 4188 directives
+  section 656 1341 userid
+  section 944 1041 on
+  section 1041 1138 v1
+  section 1138 1236 log
+  section 1236 1341 off
+  section 1341 1640 userid_domain
+  section 1640 2083 userid_expires
+  section 2083 2906 userid_mark
+  section 2906 3091 userid_name
+  section 3091 3459 userid_p3p
+  section 3459 3669 userid_path
+  section 3669 4188 userid_service
+  section 4188 4723 embedded variables
+  section 4307 4380 $uid_got
+  section 4380 4641 $uid_reset
+  section 4641 4723 $uid_set
+
+module ngx_http_uwsgi_module
+  aliases ngx_uwsgi
+  section 17 180 name
+  section 180 315 example configuration
+  section 315 38451 directives
+  section 334 1328 uwsgi_bind
+  section 1328 1819 uwsgi_buffer_size
+  section 1819 3016 uwsgi_buffering
+  section 3016 3443 uwsgi_buffers
+  section 3443 4108 uwsgi_busy_buffers_size
+  section 4108 4514 uwsgi_cache
+  section 4514 5083 uwsgi_cache_bypass
+  section 5083 5331 uwsgi_cache_key
+  section 5331 5962 uwsgi_cache_lock
+  section 5962 6369 uwsgi_cache_lock_age
+  section 6369 6818 uwsgi_cache_lock_timeout
+  section 6818 7217 uwsgi_cache_max_range_offset
+  section 7217 7710 uwsgi_cache_methods
+  section 7710 7966 uwsgi_cache_min_uses
+  section 7966 12453 uwsgi_cache_path
+  section 12453 13816 uwsgi_cache_purge
+  section 13816 14195 uwsgi_cache_revalidate
+  section 14195 15295 uwsgi_cache_use_stale
+  section 15295 17167 uwsgi_cache_valid
+  section 17167 17490 uwsgi_connect_timeout
+  section 17490 17873 uwsgi_force_ranges
+  section 17873 18355 uwsgi_hide_header
+  section 18355 18697 uwsgi_ignore_client_abort
+  section 18697 19810 uwsgi_ignore_headers
+  section 19810 20221 uwsgi_intercept_errors
+  section 20221 20845 uwsgi_limit_rate
+  section 20845 21626 uwsgi_max_temp_file_size
+  section 21626 21946 uwsgi_modifier1
+  section 21946 22266 uwsgi_modifier2
+  section 22266 24638 uwsgi_next_upstream
+  section 22755 22899 error
+  section 22899 23050 timeout
+  section 23050 23127 invalid_header
+  section 23127 23198 http_500
+  section 23198 23269 http_503
+  section 23269 23340 http_403
+  section 23340 23411 http_404
+  section 23411 23726 non_idempotent
+  section 23726 24638 off
+  section 24638 24991 uwsgi_next_upstream_timeout
+  section 24991 25347 uwsgi_next_upstream_tries
+  section 25347 25887 uwsgi_no_cache
+  section 25887 26807 uwsgi_param
+  section 26807 27660 uwsgi_pass
+  section 27660 27898 uwsgi_pass_header
+  section 27898 28226 uwsgi_pass_request_body
+  section 28226 28574 uwsgi_pass_request_headers
+  section 28574 29018 uwsgi_read_timeout
+  section 29018 29852 uwsgi_request_buffering
+  section 29852 30294 uwsgi_send_timeout
+  section 30294 30615 uwsgi_ssl_certificate
+  section 30615 31127 uwsgi_ssl_certificate_key
+  section 31127 31576 uwsgi_ssl_ciphers
+  section 31576 31901 uwsgi_ssl_crl
+  section 31901 32376 uwsgi_ssl_name
+  section 32376 32751 uwsgi_ssl_password_file
+  section 32751 33134 uwsgi_ssl_protocols
+  section 33134 33599 uwsgi_ssl_server_name
+  section 33599 34040 uwsgi_ssl_session_reuse
+  section 34040 34394 uwsgi_ssl_trusted_certificate
+  section 34394 34698 uwsgi_ssl_verify
+  section 34698 35004 uwsgi_ssl_verify_depth
+  section 35004 36652 uwsgi_store
+  section 36652 37134 uwsgi_store_access
+  section 37134 37695 uwsgi_temp_file_write_size
+  section 37695 38451 uwsgi_temp_path
+
+module ngx_http_v2_module
+  aliases ngx_v2
+  section 17 402 name
+  section 402 705 known issues
+  section 705 1517 example configuration
+  section 1517 4400 directives
+  section 1536 1939 http2_chunk_size
+  section 1939 2274 http2_body_preread_size
+  section 2274 2493 http2_idle_timeout
+  section 2493 2741 http2_max_concurrent_streams
+  section 2741 3219 http2_max_field_size
+  section 3219 3554 http2_max_header_size
+  section 3554 3952 http2_max_requests
+  section 3952 4153 http2_recv_buffer_size
+  section 4153 4400 http2_recv_timeout
+  section 4400 4700 embedded variables
+  section 4515 4700 $http2
+
+module ngx_http_xslt_module
+  aliases ngx_xslt
+  section 17 455 name
+  section 455 672 example configuration
+  section 672 4661 directives
+  section 691 1268 xml_entities
+  section 1268 1863 xslt_last_modified
+  section 1863 2509 xslt_param
+  section 2509 3101 xslt_string_param
+  section 3101 4211 xslt_stylesheet
+  section 4211 4661 xslt_types
+
+module ngx_mail_auth_http_module
+  section 17 95 name
+  section 95 1290 directives
+  section 114 307 auth_http
+  section 307 684 auth_http_header
+  section 684 1074 auth_http_pass_client_cert
+  section 1074 1290 auth_http_timeout
+  section 1290 5162 protocol
+
+module ngx_mail_core_module
+  section 17 206 name
+  section 206 1216 example configuration
+  section 1216 7961 directives
+  section 1235 4813 listen
+  section 4813 4969 mail
+  section 4969 5702 protocol
+  section 5702 6888 resolver
+  section 6888 7116 resolver_timeout
+  section 7116 7222 server
+  section 7222 7763 server_name
+  section 7763 7961 timeout
+
+module ngx_mail_imap_module
+  section 17 85 name
+  section 85 1896 directives
+  section 104 663 imap_auth
+  section 330 423 login
+  section 423 494 plain
+  section 494 663 cram-md5
+  section 663 1587 imap_capabilities
+  section 1587 1896 imap_client_buffer
+
+module ngx_mail_pop3_module
+  section 17 85 name
+  section 85 1855 directives
+  section 104 882 pop3_auth
+  section 330 573 plain
+  section 573 713 apop
+  section 713 882 cram-md5
+  section 882 1855 pop3_capabilities
+
+module ngx_mail_proxy_module
+  section 17 87 name
+  section 87 3026 directives
+  section 106 407 proxy_buffer
+  section 407 1363 proxy_pass_error_message
+  section 1363 1689 proxy_timeout
+  section 1689 3026 xclient
+
+module ngx_mail_smtp_module
+  section 17 85 name
+  section 85 1487 directives
+  section 104 765 smtp_auth
+  section 379 472 login
+  section 472 543 plain
+  section 543 696 cram-md5
+  section 696 765 none
+  section 765 1487 smtp_capabilities
+
+module ngx_mail_ssl_module
+  section 17 428 name
+  section 428 1372 example configuration
+  section 1372 11683 directives
+  section 1391 1580 ssl
+  section 1580 2678 ssl_certificate
+  section 2678 3078 ssl_certificate_key
+  section 3078 3623 ssl_ciphers
+  section 3623 4048 ssl_client_certificate
+  section 4048 4312 ssl_crl
+  section 4312 4533 ssl_dhparam
+  section 4533 5227 ssl_ecdh_curve
+  section 5227 6032 ssl_password_file
+  section 6032 6322 ssl_prefer_server_ciphers
+  section 6322 6925 ssl_protocols
+  section 6925 8320 ssl_session_cache
+  section 7291 7427 off
+  section 7427 7608 none
+  section 7608 7843 builtin
+  section 7843 8320 shared
+  section 8320 9104 ssl_session_ticket_key
+  section 9104 9419 ssl_session_tickets
+  section 9419 9644 ssl_session_timeout
+  section 9644 10068 ssl_trusted_certificate
+  section 10068 11003 ssl_verify_client
+  section 11003 11258 ssl_verify_depth
+  section 11258 11683 starttls
+  section 11429 11538 on
+  section 11538 11610 off
+  section 11610 11683 only
+
+module ngx_stream_access_module
+  section 17 206 name
+  section 206 673 example configuration
+  section 673 1336 directives
+  section 692 1015 allow
+  section 1015 1336 deny
+
+module ngx_stream_core_module
+  section 17 283 name
+  section 283 1283 example configuration
+  section 1283 9200 directives
+  section 1302 5671 listen
+  section 5671 5939 preread_buffer_size
+  section 5939 6204 preread_timeout
+  section 6204 6570 proxy_protocol_timeout
+  section 6570 7577 resolver
+  section 7577 7957 resolver_timeout
+  section 7957 8065 server
+  section 8065 8227 stream
+  section 8227 8550 tcp_nodelay
+  section 8550 8874 variables_hash_bucket_size
+  section 8874 9200 variables_hash_max_size
+  section 9200 11769 embedded variables
+  section 9309 9463 $binary_remote_addr
+  section 9463 9543 $bytes_received
+  section 9543 9604 $bytes_sent
+  section 9604 9657 $connection
+  section 9657 9693 $hostname
+  section 9693 9772 $msec
+  section 9772 9817 $nginx_version
+  section 9817 9864 $pid
+  section 9864 9962 $protocol
+  section 9962 10206 $proxy_protocol_addr
+  section 10206 10447 $proxy_protocol_port
+  section 10447 10491 $remote_addr
+  section 10491 10532 $remote_port
+  section 10532 10791 $server_addr
+  section 10791 10867 $server_port
+  section 10867 10966 $session_time
+  section 10966 11619 $status
+  section 11619 11692 $time_iso8601
+  section 11692 11769 $time_local
+
+module ngx_stream_geo_module
+  section 17 212 name
+  section 212 443 example configuration
+  section 443 2859 directives
+  section 462 2859 geo
+  section 1341 1395 delete
+  section 1395 1722 default
+  section 1722 1822 include
+  section 1822 2859 ranges
+
+module ngx_stream_geoip_module
+  section 17 612 name
+  section 612 1006 example configuration
+  section 1006 3667 directives
+  section 1025 1616 geoip_country
+  section 1278 1378 $geoip_country_code
+  section 1378 1484 $geoip_country_code3
+  section 1484 1616 $geoip_country_name
+  section 1616 3309 geoip_city
+  section 1881 2165 $geoip_area_code
+  section 2165 2271 $geoip_city_country_code
+  section 2271 2382 $geoip_city_country_code3
+  section 2382 2504 $geoip_city_country_name
+  section 2504 2722 $geoip_dma_code
+  section 2722 2762 $geoip_latitude
+  section 2762 2804 $geoip_longitude
+  section 2804 2969 $geoip_region
+  section 2969 3155 $geoip_region_name
+  section 3155 3245 $geoip_city
+  section 3245 3309 $geoip_postal_code
+  section 3309 3667 geoip_org
+  section 3557 3667 $geoip_org
+
+module ngx_stream_limit_conn_module
+  section 17 297 name
+  section 297 575 example configuration
+  section 575 2576 directives
+  section 594 1321 limit_conn
+  section 1321 1626 limit_conn_log_level
+  section 1626 2576 limit_conn_zone
+
+module ngx_stream_log_module
+  section 17 191 name
+  section 191 461 example configuration
+  section 461 4570 directives
+  section 480 2930 access_log
+  section 2930 3388 log_format
+  section 3388 4570 open_log_file_cache
+  section 3812 3962 max
+  section 3962 4110 inactive
+  section 4110 4283 min_uses
+  section 4283 4422 valid
+  section 4422 4570 off
+
+module ngx_stream_map_module
+  section 17 214 name
+  section 214 431 example configuration
+  section 431 3513 directives
+  section 450 2878 map
+  section 1679 1887 default value
+  section 1887 2223 hostnames
+  section 2223 2878 include file
+  section 2878 3236 map_hash_bucket_size
+  section 3236 3513 map_hash_max_size
+
+module ngx_stream_proxy_module
+  section 17 229 name
+  section 229 739 example configuration
+  section 739 10128 directives
+  section 758 1736 proxy_bind
+  section 1736 2091 proxy_buffer_size
+  section 2091 2321 proxy_connect_timeout
+  section 2321 2839 proxy_download_rate
+  section 2839 3238 proxy_next_upstream
+  section 3238 3514 proxy_next_upstream_timeout
+  section 3514 3804 proxy_next_upstream_tries
+  section 3804 4600 proxy_pass
+  section 4600 4928 proxy_protocol
+  section 4928 5385 proxy_responses
+  section 5385 5603 proxy_ssl
+  section 5603 5849 proxy_ssl_certificate
+  section 5849 6102 proxy_ssl_certificate_key
+  section 6102 6479 proxy_ssl_ciphers
+  section 6479 6729 proxy_ssl_crl
+  section 6729 7197 proxy_ssl_name
+  section 7197 7503 proxy_ssl_password_file
+  section 7503 7893 proxy_ssl_server_name
+  section 7893 8261 proxy_ssl_session_reuse
+  section 8261 8572 proxy_ssl_protocols
+  section 8572 8851 proxy_ssl_trusted_certificate
+  section 8851 9080 proxy_ssl_verify
+  section 9080 9311 proxy_ssl_verify_depth
+  section 9311 9639 proxy_timeout
+  section 9639 10128 proxy_upload_rate
+
+module ngx_stream_realip_module
+  section 17 501 name
+  section 501 694 example configuration
+  section 694 1063 directives
+  section 713 1063 set_real_ip_from
+  section 1063 1252 embedded variables
+  section 1102 1172 $realip_remote_addr
+  section 1172 1252 $realip_remote_port
+
+module ngx_stream_return_module
+  section 17 235 name
+  section 235 350 example configuration
+  section 350 564 directives
+  section 369 564 return
+
+module ngx_stream_split_clients_module
+  section 17 254 name
+  section 254 643 example configuration
+  section 643 1405 directives
+  section 662 1405 split_clients
+
+module ngx_stream_ssl_module
+  section 17 362 name
+  section 362 1310 example configuration
+  section 1310 8313 directives
+  section 1329 2431 ssl_certificate
+  section 2431 2825 ssl_certificate_key
+  section 2825 3261 ssl_ciphers
+  section 3261 3439 ssl_dhparam
+  section 3439 4045 ssl_ecdh_curve
+  section 4045 4259 ssl_handshake_timeout
+  section 4259 5009 ssl_password_file
+  section 5009 5301 ssl_prefer_server_ciphers
+  section 5301 5676 ssl_protocols
+  section 5676 7073 ssl_session_cache
+  section 6044 6180 off
+  section 6180 6361 none
+  section 6361 6596 builtin
+  section 6596 7073 shared
+  section 7073 7814 ssl_session_ticket_key
+  section 7814 8086 ssl_session_tickets
+  section 8086 8313 ssl_session_timeout
+  section 8313 8959 embedded variables
+  section 8421 8519 $ssl_cipher
+  section 8519 8604 $ssl_protocol
+  section 8604 8739 $ssl_server_name
+  section 8739 8836 $ssl_session_id
+  section 8836 8959 $ssl_session_reused
+
+module ngx_stream_ssl_preread_module
+  section 17 546 name
+  section 546 1030 example configuration
+  section 1030 1303 directives
+  section 1049 1303 ssl_preread
+  section 1303 1442 embedded variables
+  section 1342 1442 $ssl_preread_server_name
+
+module ngx_stream_upstream_module
+  section 17 264 name
+  section 264 1465 example configuration
+  section 1465 15477 directives
+  section 1484 2578 upstream
+  section 2578 7305 server
+  section 7305 7962 zone
+  section 7962 8865 state
+  section 8865 9993 hash
+  section 9993 10349 least_conn
+  section 10349 11168 least_time
+  section 11168 13372 health_check
+  section 13372 13681 health_check_timeout
+  section 13681 15477 match
+  section 15477 17010 embedded variables
+  section 15600 15903 $upstream_addr
+  section 15903 16096 $upstream_bytes_sent
+  section 16096 16299 $upstream_bytes_received
+  section 16299 16544 $upstream_connect_time
+  section 16544 16792 $upstream_first_byte_time
+  section 16792 17010 $upstream_session_time
+
+module request_processing
+  section 18 85 name
+  section 85 1590 name-based virtual servers
+  section 1590 2289 how to prevent processing requests with undefined server names
+  section 2289 4031 mixed name-based and ip-based virtual servers
+  section 4031 7803 a simple php site configuration
+
+module server_names
+  section 18 1308 name
+  section 1308 1980 wildcard names
+  section 1980 3759 regular expressions names
+  section 3759 6442 miscellaneous names
+  section 6442 9510 optimization
+  section 9510 10398 compatibility
+
+module stream_processing
+  section 18 1508 name
+
+module switches
+  section 18 1616 name
+
+module syntax
+  section 18 963 name
+
+module sys_errlist
+  section 18 535 name
+
+module syslog
+  section 18 2131 name
+  section 223 598 server=address
+  section 598 1079 facility=string
+  section 1079 1505 severity=string
+  section 1505 1598 tag=string
+  section 1598 2131 nohostname
+
+module variables_in_config
+  section 18 717 name
+
+module websocket
+  section 18 2478 name
+
+module welcome_nginx_facebook
+  section 18 5785 name
+
+module windows
+  section 18 2249 name
+  section 2249 2726 known issues
+  section 2726 2975 possible future enhancements
+
+dist lua-5.1.5
+  modules lua-5.1.5
+
+module lua-5.1.5
+  section 23 286 lua 5.1 reference manual
+  section 286 1903 introduction
+  section 1903 56832 the language
+  section 2494 6469 lexical conventions
+  section 6469 9733 values and types
+  section 9733 10230 coercion
+  section 10230 12425 variables
+  section 12425 12633 statements
+  section 12633 13583 chunks
+  section 13583 14004 blocks
+  section 14004 15965 assignment
+  section 15965 17558 control structures
+  section 17558 20237 for statement
+  section 18436 18557 all three control expressions are evaluated only once, before
+  section 18557 18686 var, limit, and step are invisible variables.
+  section 18686 18767 if the third expression (the step) is absent, then a step of 1
+  section 18767 18820 you can use break to exit a for loop.
+  section 18820 19691 the loop variable v is local to the loop; you cannot use its
+  section 19691 19848 explist is evaluated only once. its results are an
+  section 19848 19964 f, s, and var are invisible variables. the
+  section 19964 20017 you can use break to exit a for loop.
+  section 20017 20237 the loop variables var_i are local to the loop; you
+  section 20237 20483 function calls as statements
+  section 20483 21089 local declarations
+  section 21089 23896 expressions
+  section 23896 24538 arithmetic operators
+  section 24538 25966 relational operators
+  section 25966 27045 logical operators
+  section 27045 27340 concatenation
+  section 27340 28092 the length operator
+  section 28092 28550 precedence
+  section 28550 30169 table constructors
+  section 30169 32583 function calls
+  section 32583 35921 function definitions
+  section 35921 37411 visibility rules
+  section 37411 37907 error handling
+  section 37907 47900 metatables
+  section 40693 41665 add: the + operation.
+  section 41665 41745 sub: the - operation. behavior similar to the add
+  section 41745 41825 mul: the * operation. behavior similar to the add
+  section 41825 41905 div: the / operation. behavior similar to the add
+  section 41905 42056 mod: the % operation. behavior similar to the add
+  section 42056 42232 pow: the ^ (exponentiation) operation. behavior similar
+  section 42232 42774 unm: the unary - operation.
+  section 42774 43251 concat: the .. (concatenation) operation.
+  section 43251 43839 len: the # operation.
+  section 43839 44868 eq: the == operation. the function getcomphandler
+  section 44868 45413 lt: the < operation.
+  section 45413 46234 le: the <= operation.
+  section 46234 46845 index: the indexing access table[key].
+  section 46845 47538 newindex: the indexing assignment table[key] = value.
+  section 47538 47900 call: called when lua calls a value.
+  section 47900 49651 environments
+  section 49651 51359 garbage collection
+  section 51359 52450 garbage-collection metamethods
+  section 52450 53498 weak tables
+  section 53498 56832 coroutines
+  section 56832 112126 the application program interface
+  section 57605 58842 the stack
+  section 58842 59733 stack size
+  section 59733 60529 pseudo-indices
+  section 60529 61219 c closures
+  section 61219 61886 registry
+  section 61886 62587 error handling in c
+  section 62587 63590 functions and types
+  section 63590 65260 lua_alloc
+  section 65260 65737 lua_atpanic
+  section 65737 67685 lua_call
+  section 67685 69206 lua_cfunction
+  section 69206 69540 lua_checkstack
+  section 69540 70072 lua_close
+  section 70072 70478 lua_concat
+  section 70478 70950 lua_cpcall
+  section 70950 71350 lua_createtable
+  section 71350 71926 lua_dump
+  section 71926 72261 lua_equal
+  section 72261 72529 lua_error
+  section 72529 73848 lua_gc
+  section 72740 72796 lua_gcstop: stops the garbage collector.
+  section 72796 72858 lua_gcrestart: restarts the garbage collector.
+  section 72858 72930 lua_gccollect: performs a full garbage-collection cycle.
+  section 72930 73022 lua_gccount: returns the current amount of memory (in
+  section 73022 73146 lua_gccountb: returns the remainder of dividing the
+  section 73146 73482 lua_gcstep: performs an incremental step of garbage
+  section 73482 73650 lua_gcsetpause: sets data as the new value for the
+  section 73650 73848 lua_gcsetstepmul: sets data as the new value for the
+  section 73848 74093 lua_getallocf
+  section 74093 74257 lua_getfenv
+  section 74257 74542 lua_getfield
+  section 74542 74792 lua_getglobal
+  section 74792 75098 lua_getmetatable
+  section 75098 75501 lua_gettable
+  section 75501 75746 lua_gettop
+  section 75746 76032 lua_insert
+  section 76032 76268 lua_integer
+  section 76268 76446 lua_isboolean
+  section 76446 76627 lua_iscfunction
+  section 76627 76822 lua_isfunction
+  section 76822 77015 lua_islightuserdata
+  section 77015 77178 lua_isnil
+  section 77178 77394 lua_isnone
+  section 77394 77660 lua_isnoneornil
+  section 77660 77867 lua_isnumber
+  section 77867 78092 lua_isstring
+  section 78092 78260 lua_istable
+  section 78260 78431 lua_isthread
+  section 78431 78631 lua_isuserdata
+  section 78631 79000 lua_lessthan
+  section 79000 80005 lua_load
+  section 79371 79397 0: no errors;
+  section 79397 79464 lua_errsyntax: syntax error during pre-compilation;
+  section 79464 80005 lua_errmem: memory allocation error.
+  section 80005 80418 lua_newstate
+  section 80418 80601 lua_newtable
+  section 80601 81082 lua_newthread
+  section 81082 81818 lua_newuserdata
+  section 81818 82799 lua_next
+  section 82799 83062 lua_number
+  section 83062 83427 lua_objlen
+  section 83427 84989 lua_pcall
+  section 84747 84791 lua_errrun: a runtime error.
+  section 84791 84906 lua_errmem: memory allocation error. for such errors, lua
+  section 84906 84989 lua_errerr: error while running the error handler
+  section 84989 85099 lua_pop
+  section 85099 85245 lua_pushboolean
+  section 85245 86015 lua_pushcclosure
+  section 86015 86571 lua_pushcfunction
+  section 86571 87448 lua_pushfstring
+  section 86849 87023 you do not have to allocate space for the result: the result is
+  section 87023 87448 the conversion specifiers are quite restricted. there are no
+  section 87448 87595 lua_pushinteger
+  section 87595 88030 lua_pushlightuserdata
+  section 88030 88290 lua_pushliteral
+  section 88290 88655 lua_pushlstring
+  section 88655 88766 lua_pushnil
+  section 88766 88910 lua_pushnumber
+  section 88910 89303 lua_pushstring
+  section 89303 89496 lua_pushthread
+  section 89496 89657 lua_pushvalue
+  section 89657 89957 lua_pushvfstring
+  section 89957 90267 lua_rawequal
+  section 90267 90431 lua_rawget
+  section 90431 90676 lua_rawgeti
+  section 90676 90844 lua_rawset
+  section 90844 91180 lua_rawseti
+  section 91180 91852 lua_reader
+  section 91852 92187 lua_register
+  section 92187 92473 lua_remove
+  section 92473 92705 lua_replace
+  section 92705 93675 lua_resume
+  section 93675 93856 lua_setallocf
+  section 93856 94172 lua_setfenv
+  section 94172 94547 lua_setfield
+  section 94547 94819 lua_setglobal
+  section 94819 95021 lua_setmetatable
+  section 95021 95437 lua_settable
+  section 95437 95740 lua_settop
+  section 95740 96151 lua_state
+  section 96151 96415 lua_status
+  section 96415 96870 lua_toboolean
+  section 96870 97099 lua_tocfunction
+  section 97099 97497 lua_tointeger
+  section 97497 98417 lua_tolstring
+  section 98417 98739 lua_tonumber
+  section 98739 99205 lua_topointer
+  section 99205 99362 lua_tostring
+  section 99362 99624 lua_tothread
+  section 99624 99891 lua_touserdata
+  section 99891 100368 lua_type
+  section 100368 100573 lua_typename
+  section 100573 101145 lua_writer
+  section 101145 101407 lua_xmove
+  section 101407 101915 lua_yield
+  section 101915 102220 the debug interface
+  section 102220 104690 lua_debug
+  section 103037 103234 source: if the function was defined in a string, then
+  section 103234 103326 short_src: a printable version of source, to be used
+  section 103326 103415 linedefined: the line number where the definition of the
+  section 103415 103506 lastlinedefined: the line number where the definition of
+  section 103506 103783 what: the string lua if the function is a lua
+  section 103783 103935 currentline: the current line where the given function is
+  section 103935 104336 name: a reasonable name for the given function. because
+  section 104336 104621 namewhat: explains the name field. the value of
+  section 104621 104690 nups: the number of upvalues of the function.
+  section 104690 104805 lua_gethook
+  section 104805 104922 lua_gethookcount
+  section 104922 105036 lua_gethookmask
+  section 105036 106761 lua_getinfo
+  section 106022 106086 n: fills in the field name and namewhat;
+  section 106086 106200 s: fills in the fields source, short_src,
+  section 106200 106255 l: fills in the field currentline;
+  section 106255 106303 u: fills in the field nups;
+  section 106303 106394 f: pushes onto the stack the function that is running
+  section 106394 106761 l: pushes onto the stack a table whose indices are the
+  section 106761 107592 lua_getlocal
+  section 107592 108126 lua_getstack
+  section 108126 108899 lua_getupvalue
+  section 108899 109844 lua_hook
+  section 109844 111180 lua_sethook
+  section 110343 110518 the call hook: is called when the interpreter calls a
+  section 110518 110724 the return hook: is called when the interpreter returns from
+  section 110724 110961 the line hook: is called when the interpreter is about to
+  section 110961 111180 the count hook: is called after the interpreter executes
+  section 111180 111671 lua_setlocal
+  section 111671 112126 lua_setupvalue
+  section 112126 129890 the auxiliary library
+  section 113017 113140 functions and types
+  section 113140 113293 lual_addchar
+  section 113293 113536 lual_addlstring
+  section 113536 113758 lual_addsize
+  section 113758 113992 lual_addstring
+  section 113992 114327 lual_addvalue
+  section 114327 114694 lual_argcheck
+  section 114694 115058 lual_argerror
+  section 115058 116199 lual_buffer
+  section 115257 115324 first you declare a variable b of type lual_buffer.
+  section 115324 115393 then you initialize it with a call lual_buffinit(l, &b).
+  section 115393 115486 then you add string pieces to the buffer calling any of the
+  section 115486 116199 you finish by calling lual_pushresult(&b). this call leaves
+  section 116199 116429 lual_buffinit
+  section 116429 116919 lual_callmeta
+  section 116919 117105 lual_checkany
+  section 117105 117294 lual_checkint
+  section 117294 117506 lual_checkinteger
+  section 117506 117698 lual_checklong
+  section 117698 118073 lual_checklstring
+  section 118073 118257 lual_checknumber
+  section 118257 119034 lual_checkoption
+  section 119034 119304 lual_checkstack
+  section 119304 119605 lual_checkstring
+  section 119605 119816 lual_checktype
+  section 119816 120038 lual_checkudata
+  section 120038 120335 lual_dofile
+  section 120335 120630 lual_dostring
+  section 120630 121107 lual_error
+  section 121107 121426 lual_getmetafield
+  section 121426 121643 lual_getmetatable
+  section 121643 121995 lual_gsub
+  section 121995 122454 lual_loadbuffer
+  section 122454 123002 lual_loadfile
+  section 123002 123350 lual_loadstring
+  section 123350 123737 lual_newmetatable
+  section 123737 124136 lual_newstate
+  section 124136 124271 lual_openlibs
+  section 124271 124531 lual_optint
+  section 124531 124882 lual_optinteger
+  section 124882 125146 lual_optlong
+  section 125146 125590 lual_optlstring
+  section 125590 125852 lual_optnumber
+  section 125852 126174 lual_optstring
+  section 126174 126528 lual_prepbuffer
+  section 126528 126696 lual_pushresult
+  section 126696 127415 lual_ref
+  section 127415 127764 lual_reg
+  section 127764 128541 lual_register
+  section 128541 128701 lual_typename
+  section 128701 129086 lual_typerror
+  section 129086 129459 lual_unref
+  section 129459 129890 lual_where
+  section 129890 189003 standard libraries
+  section 130511 130577 basic library, which includes the coroutine sub-library;
+  section 130577 130603 package library;
+  section 130603 130633 string manipulation;
+  section 130633 130662 table manipulation;
+  section 130662 130712 mathematical functions (sin, log, etc.);
+  section 130712 130739 input and output;
+  section 130739 130777 operating system facilities;
+  section 130777 131655 debug facilities.
+  section 131655 131897 basic functions
+  section 131897 132140 assert (v [, message])
+  section 132140 133205 collectgarbage ([opt [, arg]])
+  section 132326 132419 collect: performs a full garbage-collection cycle. this is
+  section 132419 132468 stop: stops the garbage collector.
+  section 132468 132523 restart: restarts the garbage collector.
+  section 132523 132596 count: returns the total memory in use by lua (in kbytes).
+  section 132596 132892 step: performs a garbage-collection step. the step size
+  section 132892 133039 setpause: sets arg as the new value for the pause of
+  section 133039 133205 setstepmul: sets arg as the new value for the i<step
+  section 133205 133557 dofile ([filename])
+  section 133557 134147 error (message [, level])
+  section 134147 134406 _g
+  section 134406 134753 getfenv ([f])
+  section 134753 134995 getmetatable (object)
+  section 134995 135285 ipairs (t)
+  section 135285 135851 load (func [, chunkname])
+  section 135851 136001 loadfile ([filename])
+  section 136001 136244 loadstring (string [, chunkname])
+  section 136244 137218 next (table [, index])
+  section 137218 137520 pairs (t)
+  section 137520 138025 pcall (f, arg1, ...)
+  section 138025 138362 print (...)
+  section 138362 138485 rawequal (v1, v2)
+  section 138485 138646 rawget (table, index)
+  section 138646 138902 rawset (table, index, value)
+  section 138902 139156 select (index, ...)
+  section 139156 139551 setfenv (f, table)
+  section 139551 139883 setmetatable (table, metatable)
+  section 139883 140545 tonumber (e [, base])
+  section 140545 140901 tostring (e)
+  section 140901 141165 type (v)
+  section 141165 141519 unpack (list [, i [, j]])
+  section 141519 141695 _version
+  section 141695 142322 xpcall (f, err)
+  section 142322 142539 coroutine manipulation
+  section 142539 142704 coroutine.create (f)
+  section 142704 143418 coroutine.resume (co [, val1, ...])
+  section 143418 143525 coroutine.running ()
+  section 143525 143992 coroutine.status (co)
+  section 143992 144358 coroutine.wrap (f)
+  section 144358 144609 coroutine.yield (...)
+  section 144609 144865 modules
+  section 144865 145998 module (name [, ...])
+  section 145998 147473 require (modname)
+  section 147473 147747 package.cpath
+  section 147747 147979 package.loaded
+  section 147979 150554 package.loaders
+  section 150554 151433 package.loadlib (libname, funcname)
+  section 151433 151792 package.path
+  section 151792 151885 package.preload
+  section 151885 152127 package.seeall (module)
+  section 152127 152908 string manipulation
+  section 152908 153205 string.byte (s [, i [, j]])
+  section 153205 153522 string.char (...)
+  section 153522 153763 string.dump (function)
+  section 153763 154542 string.find (s, pattern [, init [, plain]])
+  section 154542 155699 string.format (formatstring, ...)
+  section 155699 156475 string.gmatch (s, pattern)
+  section 156475 158565 string.gsub (s, pattern, repl [, n])
+  section 158565 158734 string.len (s)
+  section 158734 158983 string.lower (s)
+  section 158983 159390 string.match (s, pattern [, init])
+  section 159390 159499 string.rep (s, n)
+  section 159499 159582 string.reverse (s)
+  section 159582 159980 string.sub (s, i [, j])
+  section 159980 160227 string.upper (s)
+  section 160227 160252 patterns
+  section 160252 162558 character class:
+  section 160420 160543 x: (where x is not one of the magic characters
+  section 160543 160596 .: (a dot) represents all characters.
+  section 160596 160639 %a: represents all letters.
+  section 160639 160693 %c: represents all control characters.
+  section 160693 160735 %d: represents all digits.
+  section 160735 160788 %l: represents all lowercase letters.
+  section 160788 160846 %p: represents all punctuation characters.
+  section 160846 160898 %s: represents all space characters.
+  section 160898 160951 %u: represents all uppercase letters.
+  section 160951 161010 %w: represents all alphanumeric characters.
+  section 161010 161064 %x: represents all hexadecimal digits.
+  section 161064 161131 %z: represents the character with representation 0.
+  section 161131 161407 %x: (where x is any non-alphanumeric character)
+  section 161407 162091 [set]: represents the class which is the union of all
+  section 162091 162558 [^set]: represents the complement of set, where
+  section 162558 163965 pattern item:
+  section 162613 162697 a single character class, which matches any single character in
+  section 162697 162887 a single character class followed by *, which matches 0 or
+  section 162887 163077 a single character class followed by +, which matches 1 or
+  section 163077 163291 a single character class followed by -, which also matches
+  section 163291 163406 a single character class followed by ?, which matches 0 or
+  section 163406 163531 %n, for n between 1 and 9; such item matches a
+  section 163531 163965 c<%bi<xy>>, where x and y are two distinct characters;
+  section 163965 164298 pattern:
+  section 164298 165115 captures:
+  section 165115 165468 table manipulation
+  section 165468 165846 table.concat (table [, sep [, i [, j]]])
+  section 165846 166180 table.insert (table, [pos,] value)
+  section 166180 166407 table.maxn (table)
+  section 166407 166759 table.remove (table [, pos])
+  section 166759 167351 table.sort (table [, comp])
+  section 167351 167507 mathematical functions
+  section 167507 167569 math.abs (x)
+  section 167569 167641 math.acos (x)
+  section 167641 167711 math.asin (x)
+  section 167711 167784 math.atan (x)
+  section 167784 167994 math.atan2 (y, x)
+  section 167994 168080 math.ceil (x)
+  section 168080 168161 math.cos (x)
+  section 168161 168227 math.cosh (x)
+  section 168227 168307 math.deg (x)
+  section 168307 168358 math.exp (x)
+  section 168358 168445 math.floor (x)
+  section 168445 168568 math.fmod (x, y)
+  section 168568 168747 math.frexp (x)
+  section 168747 168852 math.huge
+  section 168852 168927 math.ldexp (m, e)
+  section 168927 168992 math.log (x)
+  section 168992 169059 math.log10 (x)
+  section 169059 169161 math.max (x, ...)
+  section 169161 169263 math.min (x, ...)
+  section 169263 169370 math.modf (x)
+  section 169370 169411 math.pi
+  section 169411 169519 math.pow (x, y)
+  section 169519 169599 math.rad (x)
+  section 169599 170152 math.random ([m [, n]])
+  section 170152 170290 math.randomseed (x)
+  section 170290 170369 math.sin (x)
+  section 170369 170433 math.sinh (x)
+  section 170433 170559 math.sqrt (x)
+  section 170559 170641 math.tan (x)
+  section 170641 170707 math.tanh (x)
+  section 170707 171705 input and output facilities
+  section 171705 171818 io.close ([file])
+  section 171818 171901 io.flush ()
+  section 171901 172302 io.input ([file])
+  section 172302 172925 io.lines ([filename])
+  section 172925 173712 io.open (filename [, mode])
+  section 173177 173219 r: read mode (the default);
+  section 173219 173248 w: write mode;
+  section 173248 173278 a: append mode;
+  section 173278 173341 r+: update mode, all previous data is preserved;
+  section 173341 173401 w+: update mode, all previous data is erased;
+  section 173401 173712 a+: append update mode, previous data is preserved,
+  section 173712 173811 io.output ([file])
+  section 173811 174136 io.popen (prog [, mode])
+  section 174136 174221 io.read (...)
+  section 174221 174377 io.tmpfile ()
+  section 174377 174607 io.type (obj)
+  section 174607 174695 io.write (...)
+  section 174695 174879 file:close ()
+  section 174879 174941 file:flush ()
+  section 174941 175254 file:lines ()
+  section 175254 176225 file:read (...)
+  section 175670 175771 *n: reads a number; this is the only format that returns a
+  section 175771 175890 *a: reads the whole file, starting at the current
+  section 175890 176017 *l: reads the next line (skipping the end of line),
+  section 176017 176225 number: reads a string with up to this number of
+  section 176225 177151 file:seek ([whence] [, offset])
+  section 176444 176507 set: base is position 0 (beginning of the file);
+  section 176507 176552 cur: base is current position;
+  section 176552 177151 end: base is end of file;
+  section 177151 177798 file:setvbuf (mode [, size])
+  section 177276 177364 no: no buffering; the result of any output operation
+  section 177364 177521 full: full buffering; output operation is performed only
+  section 177521 177798 line: line buffering; output is buffered until a newline
+  section 177798 178027 file:write (...)
+  section 178027 178120 operating system facilities
+  section 178120 178228 os.clock ()
+  section 178228 179329 os.date ([format [, time]])
+  section 179329 179505 os.difftime (t2, t1)
+  section 179505 179810 os.execute ([command])
+  section 179810 179978 os.exit ([code])
+  section 179978 180119 os.getenv (varname)
+  section 180119 180324 os.remove (filename)
+  section 180324 180503 os.rename (oldname, newname)
+  section 180503 181233 os.setlocale (locale [, category])
+  section 181233 181915 os.time ([table])
+  section 181915 182532 os.tmpname ()
+  section 182532 183378 the debug library
+  section 183378 183885 debug.debug ()
+  section 183885 183956 debug.getfenv (o)
+  section 183956 184180 debug.gethook ([thread])
+  section 184180 185360 debug.getinfo ([thread,] function [, what])
+  section 185360 186008 debug.getlocal ([thread,] level, local)
+  section 186008 186137 debug.getmetatable (object)
+  section 186137 186216 debug.getregistry ()
+  section 186216 186432 debug.getupvalue (func, up)
+  section 186432 186561 debug.setfenv (object, table)
+  section 186561 187838 debug.sethook ([thread,] hook, mask [, count])
+  section 186819 186891 c: the hook is called every time lua calls a function;
+  section 186891 186970 r: the hook is called every time lua returns from a
+  section 186970 187838 l: the hook is called every time lua enters a new line
+  section 187838 188288 debug.setlocal ([thread,] level, local, value)
+  section 188288 188424 debug.setmetatable (object, table)
+  section 188424 188690 debug.setupvalue (func, up, value)
+  section 188690 189003 debug.traceback ([thread,] [message [, level]])
+  section 189003 192563 lua stand-alone
+  section 189460 189512 -e stat: executes string stat;
+  section 189512 189557 -l mod: requires mod;
+  section 189557 189625 -i: enters interactive mode after running script;
+  section 189625 189672 -v: prints version information;
+  section 189672 189715 --: stops handling options;
+  section 189715 192563 -: executes stdin as a file and stops handling
+  section 192563 195704 incompatibilities with the previous version
+  section 192913 193505 changes in the language
+  section 192958 193153 the vararg system changed from the pseudo-argument arg with
+  section 193153 193284 there was a subtle change in the scope of the implicit
+  section 193284 193505 the long string/long comment syntax ([[string]]) does not
+  section 193505 194851 changes in the libraries
+  section 193551 193678 function string.gfind was renamed string.gmatch. (see
+  section 193678 193878 when string.gsub is called with a function as its third
+  section 193878 194100 function table.setn was deprecated. function table.getn
+  section 194100 194226 function loadlib was renamed package.loadlib. (see
+  section 194226 194343 function math.mod was renamed math.fmod. (see
+  section 194343 194476 functions table.foreach and table.foreachi are
+  section 194476 194709 there were substantial changes in function require due to
+  section 194709 194851 function collectgarbage has different arguments. function
+  section 194851 195704 changes in the api
+  section 194891 195055 the luaopen_* functions (to open libraries) cannot be called
+  section 195055 195304 function lua_open was replaced by lua_newstate to allow
+  section 195304 195477 functions lual_getn and lual_setn (from the auxiliary
+  section 195477 195545 function lual_openlib was replaced by lual_register.
+  section 195545 195704 function lual_checkudata now throws an error when the given
+  section 195704 197381 the complete syntax of lua
+
+dist luajit-2.1
+  modules contact ext_c_api ext_ffi ext_ffi_api ext_ffi_semantics ext_ffi_tutorial ext_jit ext_profiler extensions faq install luajit-2.1 running status
+
+module contact
+  section 14 1051 contact
+  section 37 60 luajit
+  section 60 90 download e<rchevron>
+  section 90 112 installation
+  section 112 136 running
+  section 136 163 extensions
+  section 163 191 ffi library
+  section 191 213 ffi tutorial
+  section 213 232 ffi.* api
+  section 232 262 ffi semantics
+  section 262 285 jit.* library
+  section 285 304 lua/c api
+  section 304 329 profiler
+  section 329 352 status
+  section 352 376 changes
+  section 376 389 faq
+  section 389 422 performance e<rchevron>
+  section 422 448 wiki e<rchevron>
+  section 448 640 mailing list e<rchevron>
+  section 640 1051 copyright
+
+module ext_c_api
+  section 14 4445 lua/c api extensions
+  section 50 73 luajit
+  section 73 103 download e<rchevron>
+  section 103 125 installation
+  section 125 149 running
+  section 149 176 extensions
+  section 176 204 ffi library
+  section 204 226 ffi tutorial
+  section 226 245 ffi.* api
+  section 245 275 ffi semantics
+  section 275 298 jit.* library
+  section 298 317 lua/c api
+  section 317 342 profiler
+  section 342 365 status
+  section 365 389 changes
+  section 389 402 faq
+  section 402 435 performance e<rchevron>
+  section 435 461 wiki e<rchevron>
+  section 461 753 mailing list e<rchevron>
+  section 753 1395 luajit_setmode(l, idx, mode) e<mdash> control vm
+  section 1395 1534 luajit_setmode(l, 0, luajit_mode_engine|flag)
+  section 1534 2105 luajit_setmode(l, idx, luajit_mode_func|flag)
+  section 2105 2349 luajit_setmode(l, trace,
+  section 2349 4445 luajit_setmode(l, idx, luajit_mode_wrapcfunc|flag)
+
+module ext_ffi
+  section 14 7946 ffi library
+  section 41 64 luajit
+  section 64 94 download e<rchevron>
+  section 94 116 installation
+  section 116 140 running
+  section 140 167 extensions
+  section 167 195 ffi library
+  section 195 217 ffi tutorial
+  section 217 236 ffi.* api
+  section 236 266 ffi semantics
+  section 266 289 jit.* library
+  section 289 308 lua/c api
+  section 308 333 profiler
+  section 333 356 status
+  section 356 380 changes
+  section 380 393 faq
+  section 393 426 performance e<rchevron>
+  section 426 452 wiki e<rchevron>
+  section 452 1446 mailing list e<rchevron>
+  section 1446 3287 motivating example: calling external c functions
+  section 3287 7946 motivating example: using c data structures
+
+module ext_ffi_api
+  section 14 16456 ffi.* api functions
+  section 52 75 luajit
+  section 75 105 download e<rchevron>
+  section 105 127 installation
+  section 127 151 running
+  section 151 178 extensions
+  section 178 206 ffi library
+  section 206 228 ffi tutorial
+  section 228 247 ffi.* api
+  section 247 277 ffi semantics
+  section 277 300 jit.* library
+  section 300 319 lua/c api
+  section 319 344 profiler
+  section 344 367 status
+  section 367 391 changes
+  section 391 404 faq
+  section 404 437 performance e<rchevron>
+  section 437 463 wiki e<rchevron>
+  section 463 660 mailing list e<rchevron>
+  section 660 1704 glossary
+  section 684 758 cdecl e<mdash> an abstract c type declaration (a lua
+  section 758 915 ctype e<mdash> a c type object. this is a special kind of
+  section 915 1007 cdata e<mdash> a c data object. it holds a value of the
+  section 1007 1175 ct e<mdash> a c type specification which can be used for
+  section 1175 1345 cb e<mdash> a callback object. this is a c data object
+  section 1345 1538 vla e<mdash> a variable-length array is declared with a ?
+  section 1538 1704 vls e<mdash> a variable-length struct is a struct c type
+  section 1704 1914 declaring and accessing external symbols
+  section 1914 3024 ffi.cdef(def)
+  section 3024 3911 ffi.c
+  section 3911 4747 clib = ffi.load(name [,global])
+  section 4747 4909 creating cdata objects
+  section 4909 6154 cdata = ffi.new(ct [,nelem] [,init...])
+  section 6154 6354 ctype = ffi.typeof(ct)
+  section 6354 6675 cdata = ffi.cast(ct, init)
+  section 6675 7717 ctype = ffi.metatype(ct, metatable)
+  section 7717 8618 cdata = ffi.gc(cdata, finalizer)
+  section 8618 8759 c type information
+  section 8759 8981 size = ffi.sizeof(ct [,nelem])
+  section 8981 9076 align = ffi.alignof(ct)
+  section 9076 9312 ofs [,bpos,bsize] = ffi.offsetof(ct, field)
+  section 9312 9860 status = ffi.istype(ct, obj)
+  section 9860 9886 utility functions
+  section 9886 10850 err = ffi.errno([newerr])
+  section 10850 11866 str = ffi.string(ptr [,len])
+  section 11866 12507 ffi.copy(dst, src, len)
+  section 12507 12847 ffi.fill(dst, len [,c])
+  section 12847 12883 target-specific information
+  section 12883 13452 status = ffi.abi(param)
+  section 13452 13528 ffi.os
+  section 13528 13618 ffi.arch
+  section 13618 13700 methods for callbacks
+  section 13700 13976 cb:free()
+  section 13976 14288 cb:set(func)
+  section 14288 14421 extended standard library functions
+  section 14421 14644 n = tonumber(cdata)
+  section 14644 15076 s = tostring(cdata)
+  section 15076 15226 iter, obj, start = pairs(cdata)
+  section 15226 16456 extensions to the lua parser
+
+module ext_ffi_semantics
+  section 14 41315 ffi semantics
+  section 43 66 luajit
+  section 66 96 download e<rchevron>
+  section 96 118 installation
+  section 118 142 running
+  section 142 169 extensions
+  section 169 197 ffi library
+  section 197 219 ffi tutorial
+  section 219 238 ffi.* api
+  section 238 268 ffi semantics
+  section 268 291 jit.* library
+  section 291 310 lua/c api
+  section 310 335 profiler
+  section 335 358 status
+  section 358 382 changes
+  section 382 395 faq
+  section 395 428 performance e<rchevron>
+  section 428 454 wiki e<rchevron>
+  section 454 1241 mailing list e<rchevron>
+  section 1241 5144 c language support
+  section 1989 2051 the \e escape in character and string literals.
+  section 2051 2134 the c99/c++ boolean type, declared with the keywords bool or
+  section 2134 2214 complex numbers, declared with the keywords complex or
+  section 2214 2306 two complex number types: complex (aka complex double)
+  section 2306 2388 vector types, declared with the gcc mode or vector_size
+  section 2388 2476 unnamed (transparent) struct/union fields inside a
+  section 2476 2566 incomplete enum declarations, handled like incomplete
+  section 2566 2741 unnamed enum fields inside a struct/union. this is
+  section 2741 2826 scoped static const declarations inside a struct/union
+  section 2826 2983 zero-length arrays ([0]), empty struct/union,
+  section 2983 3025 c++ reference types (int &x).
+  section 3025 3090 alternate gcc keywords with __, e.g. __const__.
+  section 3090 3247 gcc __attribute__ with the following attributes: aligned,
+  section 3247 3326 the gcc __extension__ keyword and the gcc __alignof__
+  section 3326 3412 gcc __asm__(symname) symbol name redirection for function
+  section 3412 3509 msvc keywords for fixed-length types: __int8, __int16,
+  section 3509 3648 msvc __cdecl, __fastcall, __stdcall, __thiscall,
+  section 3648 3839 all other gcc/msvc-specific attributes are ignored.
+  section 3839 3918 vararg handling: va_list, __builtin_va_list,
+  section 3918 3992 from <stddef.h>: ptrdiff_t, size_t,
+  section 3992 4154 from <stdint.h>: int8_t, int16_t, int32_t,
+  section 4154 4512 from <unistd.h> (posix): ssize_t.
+  section 4512 4608 a declaration must always have a type specifier; it doesnt
+  section 4608 4852 old-style empty function declarations (k&r) are not allowed.
+  section 4852 4995 the long double c type is parsed correctly, but theres no
+  section 4995 5069 wide character strings and character literals are not
+  section 5069 5144 see below for features that are currently not implemented.
+  section 5144 5176 c type conversion rules
+  section 5176 6270 conversions from c types to lua objects
+  section 6270 7745 conversions from lua objects to c types
+  section 7745 9302 conversions between c types
+  section 9302 10621 conversions for vararg c function arguments
+  section 10621 12327 initializers
+  section 10865 10942 if no initializers are given, the object is filled with zero
+  section 10942 11066 scalar types (numbers and pointers) accept a single
+  section 11066 11224 valarrays (complex numbers and vectors) are treated like
+  section 11224 11408 aggregate types (arrays and structs) accept either a single
+  section 11408 11696 the elements of an array are initialized, starting at index
+  section 11696 11883 byte arrays may also be initialized with a lua string. this
+  section 11883 12018 the fields of a struct are initialized in the order of their
+  section 12018 12106 only the first field of a union can be initialized with a
+  section 12106 12275 elements or fields which are aggregates themselves are
+  section 12275 12327 excess initializers cause an error.
+  section 12327 15572 table initializers
+  section 12459 12593 if the table index [0] is non-nil, then the table is
+  section 12593 12803 array elements, starting at index zero, are initialized
+  section 12803 12979 if exactly one array element was initialized, its repeated for
+  section 12979 13215 the above logic only applies to arrays with a known fixed size.
+  section 13215 13467 a struct/union can be initialized in the order of the
+  section 13467 13701 otherwise, if neither index [0] nor [1] is present, a
+  section 13701 13812 uninitialized fields of a struct are filled with zero bytes,
+  section 13812 13968 initialization of a union stops after one field has been
+  section 13968 14146 elements or fields which are aggregates themselves are
+  section 14146 15572 excess initializers for an array cause an error. excess
+  section 15572 16172 operations on cdata objects
+  section 16172 19054 indexing a cdata object
+  section 16211 16717 indexing a pointer/array: a cdata pointer/array can be
+  section 16717 17334 dereferencing a struct/union field: a cdata
+  section 17334 17891 indexing a complex number: a complex number can be indexed
+  section 17891 19054 indexing a vector: a vector is treated like an array for
+  section 19054 20023 calling a cdata object
+  section 19092 19472 constructor: a ctype object can be called and used as a
+  section 19472 20023 c function call: a cdata function or cdata function pointer
+  section 20023 22342 arithmetic on cdata objects
+  section 20066 20426 pointer arithmetic: a cdata pointer/array and a cdata number
+  section 20426 20667 pointer difference: two compatible cdata pointers/arrays can
+  section 20667 21708 64 bit integer arithmetic: the standard arithmetic operators
+  section 21708 22342 64 bit bitwise operations: the rules for 64 bit arithmetic
+  section 22342 23381 comparisons of cdata objects
+  section 22386 22632 pointer comparison: two compatible cdata pointers/arrays can
+  section 22632 23139 64 bit integer comparison: two cdata numbers, or a cdata
+  section 23139 23381 comparisons for equality/inequality never raise an error.
+  section 23381 25164 cdata objects as table keys
+  section 24309 24637 if you can get by with the precision of lua numbers (52 bits),
+  section 24637 24877 otherwise use either tostring() on 64 bit integers or
+  section 24877 25164 create your own specialized hash table implementation using the
+  section 25164 26879 parameterized types
+  section 26879 28796 garbage collection of cdata objects
+  section 28796 30710 callbacks
+  section 30710 32568 callback resource handling
+  section 32568 34035 callback performance
+  section 34035 36550 c library namespaces
+  section 34997 35100 external functions: a cdata object with the type of the
+  section 35100 35228 external variables: the symbol address is dereferenced and the
+  section 35228 35407 constant values (static const or enum constants): the
+  section 35407 35542 external variables: the value to be written is converted to the
+  section 35542 36550 writing to constant variables or to any other symbol type
+  section 36550 38419 no hand-holding!
+  section 38419 41315 current status
+  section 38633 38704 c declarations are not passed through a c pre-processor, yet.
+  section 38704 38915 the c parser is able to evaluate most constant expressions
+  section 38915 39074 static const declarations only work for integer types up to
+  section 39074 39163 packed struct bitfields that cross container boundaries are
+  section 39163 39345 native vector types may be defined with the gcc mode or
+  section 39345 39424 the volatile type qualifier is currently ignored by compiled
+  section 39424 39966 ffi.cdef silently ignores most re-declarations. note: avoid
+  section 39966 40014 bitfield accesses and initializations.
+  section 40014 40042 vector operations.
+  section 40042 40071 table initializers.
+  section 40071 40131 initialization of nested struct/union types.
+  section 40131 40240 non-default initialization of vla/vls or large c types (>
+  section 40240 40294 conversions from lightuserdata to void *.
+  section 40294 40370 pointer differences for element sizes that are not a power of
+  section 40370 40445 calls to c functions with aggregates passed or returned by
+  section 40445 40512 calls to ctype metamethods which are not plain functions.
+  section 40512 40599 ctype __newindex tables and non-string lookups in ctype
+  section 40599 40639 tostring() for cdata types.
+  section 40639 40748 calls to ffi.cdef(), ffi.load() and ffi.metatype().
+  section 40748 40792 arithmetic for complex numbers.
+  section 40792 40849 passing structs by value to vararg c functions.
+  section 40849 41315 c++ exception interoperability does not extend to c functions
+
+module ext_ffi_tutorial
+  section 14 18772 ffi tutorial
+  section 42 65 luajit
+  section 65 95 download e<rchevron>
+  section 95 117 installation
+  section 117 141 running
+  section 141 168 extensions
+  section 168 196 ffi library
+  section 196 218 ffi tutorial
+  section 218 237 ffi.* api
+  section 237 267 ffi semantics
+  section 267 290 jit.* library
+  section 290 309 lua/c api
+  section 309 334 profiler
+  section 334 357 status
+  section 357 381 changes
+  section 381 394 faq
+  section 394 427 performance e<rchevron>
+  section 427 453 wiki e<rchevron>
+  section 453 793 mailing list e<rchevron>
+  section 793 1452 loading the ffi library
+  section 1452 4875 accessing standard system functions
+  section 4875 10338 accessing the zlib compression library
+  section 10338 13536 defining metamethods for a c type
+  section 13536 14742 translating c idioms
+  section 14742 18772 to cache or not to cache
+
+module ext_jit
+  section 14 4311 jit.* library
+  section 46 69 luajit
+  section 69 99 download e<rchevron>
+  section 99 121 installation
+  section 121 145 running
+  section 145 172 extensions
+  section 172 200 ffi library
+  section 200 222 ffi tutorial
+  section 222 241 ffi.* api
+  section 241 271 ffi semantics
+  section 271 294 jit.* library
+  section 294 313 lua/c api
+  section 313 338 profiler
+  section 338 361 status
+  section 361 385 changes
+  section 385 398 faq
+  section 398 431 performance e<rchevron>
+  section 431 457 wiki e<rchevron>
+  section 457 733 mailing list e<rchevron>
+  section 733 901 jit.on()
+  section 901 967 jit.flush()
+  section 967 1979 jit.on(func|true [,true|false])
+  section 1979 2193 jit.flush(tr)
+  section 2193 2455 status, ... = jit.status()
+  section 2455 2515 jit.version
+  section 2515 2653 jit.version_num
+  section 2653 2755 jit.os
+  section 2755 2872 jit.arch
+  section 2872 3357 jit.opt.* e<mdash> jit compiler optimization control
+  section 3357 4311 jit.util.* e<mdash> jit compiler introspection
+
+module ext_profiler
+  section 14 10462 profiler
+  section 38 61 luajit
+  section 61 91 download e<rchevron>
+  section 91 113 installation
+  section 113 137 running
+  section 137 164 extensions
+  section 164 192 ffi library
+  section 192 214 ffi tutorial
+  section 214 233 ffi.* api
+  section 233 263 ffi semantics
+  section 263 286 jit.* library
+  section 286 305 lua/c api
+  section 305 330 profiler
+  section 330 353 status
+  section 353 377 changes
+  section 377 390 faq
+  section 390 423 performance e<rchevron>
+  section 423 449 wiki e<rchevron>
+  section 449 720 mailing list e<rchevron>
+  section 720 805 the bundled high-level profiler, invoked by the -jp command
+  section 805 859 a low-level lua api to control the profiler.
+  section 859 918 a low-level c api to control the profiler.
+  section 918 1882 high-level profiler
+  section 1882 4845 -jp=[options[,output]]
+  section 2208 2307 f e<mdash> stack dump: function name, otherwise module:line.
+  section 2307 2371 f e<mdash> stack dump: ditto, but dump module:name.
+  section 2371 2419 l e<mdash> stack dump: module:line.
+  section 2419 2511 <number> e<mdash> stack dump depth (callee e<larr>
+  section 2511 2600 -<number> e<mdash> inverse stack dump depth (caller
+  section 2600 2706 s e<mdash> split stack dump after first stack level. implies
+  section 2706 2762 p e<mdash> show full path for module names.
+  section 2762 2801 v e<mdash> show vm states.
+  section 2801 2836 z e<mdash> show zones.
+  section 2836 2910 r e<mdash> show raw sample counts. default: show
+  section 2910 2975 a e<mdash> annotate excerpts from source code files.
+  section 2975 3035 a e<mdash> annotate complete source code files.
+  section 3035 3107 g e<mdash> produce raw output suitable for graphical tools.
+  section 3107 3198 m<number> e<mdash> minimum sample percentage to be
+  section 3198 4845 i<number> e<mdash> sampling interval in
+  section 4845 5598 jit.zone e<mdash> zones
+  section 5203 5267 zone(name) pushes a named zone to the zone stack.
+  section 5267 5350 zone() pops the current zone from the zone stack and returns
+  section 5350 5414 zone:get() returns the current zone name or nil.
+  section 5414 5598 zone:flush() flushes the zone stack.
+  section 5598 6256 low-level lua api
+  section 6256 7420 profile.start(mode, cb) e<mdash> start profiler
+  section 6408 6482 f e<mdash> profile with precision down to the function
+  section 6482 6552 l e<mdash> profile with precision down to the line level.
+  section 6552 7420 i<number> e<mdash> sampling interval in milliseconds
+  section 7420 7504 profile.stop() e<mdash> stop profiler
+  section 7504 8686 dump = profile.dumpstack([thread,] fmt, depth) e<mdash> dump
+  section 7767 7869 p e<mdash> preserve the full path for module names.
+  section 7869 7964 f e<mdash> dump the function name if it can be derived.
+  section 7964 8016 f e<mdash> ditto, but dump module:name.
+  section 8016 8057 l e<mdash> dump module:line.
+  section 8057 8136 z e<mdash> zap the following characters for the last dumped
+  section 8136 8686 all other characters are added verbatim to the output string.
+  section 8686 8852 low-level c api
+  section 8852 9514 luajit_profile_start(l, mode, cb, data) e<mdash> start
+  section 9514 9606 luajit_profile_stop(l) e<mdash> stop profiler
+  section 9606 10462 p = luajit_profile_dumpstack(l, fmt, depth, len) e<mdash>
+
+module extensions
+  section 14 12208 extensions
+  section 40 63 luajit
+  section 63 93 download e<rchevron>
+  section 93 115 installation
+  section 115 139 running
+  section 139 166 extensions
+  section 166 194 ffi library
+  section 194 216 ffi tutorial
+  section 216 235 ffi.* api
+  section 235 265 ffi semantics
+  section 265 288 jit.* library
+  section 288 307 lua/c api
+  section 307 332 profiler
+  section 332 355 status
+  section 355 379 changes
+  section 379 392 faq
+  section 392 425 performance e<rchevron>
+  section 425 451 wiki e<rchevron>
+  section 451 1137 mailing list e<rchevron>
+  section 1137 1219 extensions modules
+  section 1219 1983 bit.* e<mdash> bitwise operations
+  section 1983 2127 ffi.* e<mdash> ffi library
+  section 2127 2253 jit.* e<mdash> jit compiler control
+  section 2253 2330 c api extensions
+  section 2330 2383 profiler
+  section 2383 2427 enhanced standard library functions
+  section 2427 2643 xpcall(f, err [,args...]) passes arguments
+  section 2643 2898 loadfile() etc. handle utf-8 source code
+  section 2898 3178 tostring() etc. canonicalize nan and e<plusmn>inf
+  section 3178 3691 tonumber() etc. use builtin string to number conversion
+  section 3691 4609 string.dump(f [,strip]) generates portable bytecode
+  section 4609 4961 table.new(narray, nhash) allocates a pre-sized table
+  section 4961 5621 table.clear(tab) clears a table
+  section 5621 6260 enhanced prng for math.random()
+  section 6260 6575 io.* functions handle 64 bit file offsets
+  section 6575 6853 debug.* functions identify metamethods
+  section 6853 7134 fully resumable vm
+  section 7134 9639 extensions from lua 5.2
+  section 7320 7356 goto and ::labels::.
+  section 7356 7418 hex escapes \x3f and \* escape in strings.
+  section 7418 7480 load(string|reader [, chunkname [,mode [,env]]]).
+  section 7480 7532 loadstring() is an alias for load().
+  section 7532 7579 loadfile(filename [,mode [,env]]).
+  section 7579 7612 math.log(x [,base]).
+  section 7612 7649 string.rep(s, n [,sep]).
+  section 7649 7748 string.format(): %q reversible. %s checks
+  section 7748 7794 string matching pattern %g added.
+  section 7794 7821 io.read(*l).
+  section 7821 7894 io.lines() and file:lines() process io.read() options.
+  section 7894 7943 os.exit(status|true|false [,close]).
+  section 7943 8003 package.searchpath(name, path [, sep [, rep]]).
+  section 8003 8043 package.loadlib(name, *).
+  section 8043 8125 debug.getinfo() returns nparams and isvararg for
+  section 8125 8189 debug.getlocal() accepts function instead of level.
+  section 8189 8279 debug.getlocal() and debug.setlocal() accept negative
+  section 8279 8356 debug.getupvalue() and debug.setupvalue() handle c
+  section 8356 8414 debug.upvalueid() and debug.upvaluejoin().
+  section 8414 8450 command line option -e.
+  section 8450 8609 command line checks __tostring for errors.
+  section 8609 8678 goto is a keyword and not a valid variable name anymore.
+  section 8678 8758 break can be placed anywhere. empty statements (;;) are
+  section 8758 8813 __lt, __le are invoked for mixed types.
+  section 8813 8873 __len for tables. rawlen() library function.
+  section 8873 8947 pairs() and ipairs() check for __pairs and
+  section 8947 9000 coroutine.running() returns two results.
+  section 9000 9070 table.pack() and table.unpack() (same as unpack()).
+  section 9070 9152 io.write() and file:write() return file handle instead of
+  section 9152 9226 os.execute() and pipe:close() return detailed exit
+  section 9226 9275 debug.setmetatable() returns object.
+  section 9275 9337 debug.getuservalue() and debug.setuservalue().
+  section 9337 9639 remove math.mod(), string.gfind().
+  section 9639 9817 extensions from lua 5.3
+  section 9725 9817 unicode escape \u{xx...} embeds the utf-8 encoding in
+  section 9817 12208 c++ exception interoperability
+  section 10382 10473 c++ exceptions can be caught on the lua side with pcall(),
+  section 10473 10603 c++ exceptions will be converted to the generic lua error
+  section 10603 10760 its safe to throw c++ exceptions across non-protected lua
+  section 10760 10903 lua errors can be caught on the c++ side with catch(...).
+  section 10903 11041 throwing lua errors across c++ frames is safe. c++ destructors
+  section 11041 11132 c++ exceptions can be caught on the lua side with pcall(),
+  section 11132 11262 c++ exceptions will be converted to the generic lua error
+  section 11262 11414 c++ exceptions will be caught by non-protected lua frames and
+  section 11414 11471 lua errors cannot be caught on the c++ side.
+  section 11471 11597 throwing lua errors across c++ frames will not call c++
+  section 11597 11666 its not safe to throw c++ exceptions across lua frames.
+  section 11666 11727 c++ exceptions cannot be caught on the lua side.
+  section 11727 11784 lua errors cannot be caught on the c++ side.
+  section 11784 12208 throwing lua errors across c++ frames will not call c++
+
+module faq
+  section 14 5165 frequently asked questions (faq)
+  section 62 85 luajit
+  section 85 115 download e<rchevron>
+  section 115 137 installation
+  section 137 161 running
+  section 161 188 extensions
+  section 188 216 ffi library
+  section 216 238 ffi tutorial
+  section 238 257 ffi.* api
+  section 257 287 ffi semantics
+  section 287 310 jit.* library
+  section 310 329 lua/c api
+  section 329 354 profiler
+  section 354 377 status
+  section 377 401 changes
+  section 401 414 faq
+  section 414 447 performance e<rchevron>
+  section 447 473 wiki e<rchevron>
+  section 473 521 mailing list e<rchevron>
+  section 521 583 q: where can i learn more about luajit and lua?
+  section 583 665 the e<rchevron> luajit mailing list focuses on topics related
+  section 665 744 the e<rchevron> luajit wiki gathers community resources about
+  section 744 907 news about lua itself can be found at the e<rchevron> lua
+  section 907 1046 the e<rchevron> main lua.org site has complete e<rchevron>
+  section 1046 1157 the community-managed e<rchevron> lua wiki has information
+  section 1157 1788 q: where can i learn more about the compiler technology used by
+  section 1788 2158 q: why do i get this error: attempt to index global arg (a nil
+  section 2158 2214 q: why do i get this error: bad fpu precision?
+  section 2214 2274 q: i get weird behavior after initializing direct3d.
+  section 2274 2974 q: some fpu operations crash after i load a delphi dll.
+  section 2974 3498 q: sometimes ctrl-c fails to stop my lua program. why?
+  section 3498 4054 q: why doesnt my favorite power-patch for lua apply against
+  section 4054 4526 q: lua runs everywhere. why doesnt luajit support my cpu?
+  section 4526 5165 q: when will feature x be added? when will the next version be
+
+module install
+  section 14 19764 installation
+  section 42 65 luajit
+  section 65 95 download e<rchevron>
+  section 95 117 installation
+  section 117 141 running
+  section 141 168 extensions
+  section 168 196 ffi library
+  section 196 218 ffi tutorial
+  section 218 237 ffi.* api
+  section 237 267 ffi semantics
+  section 267 290 jit.* library
+  section 290 309 lua/c api
+  section 309 334 profiler
+  section 334 357 status
+  section 357 381 changes
+  section 381 394 faq
+  section 394 427 performance e<rchevron>
+  section 427 453 wiki e<rchevron>
+  section 453 1372 mailing list e<rchevron>
+  section 1372 1980 configuring luajit
+  section 1580 1641 src/luaconf.h sets some configuration variables.
+  section 1641 1714 makefile has settings for installing luajit (posix only).
+  section 1714 1806 src/makefile has settings for compiling luajit under
+  section 1806 1980 src/msvcbuild.bat has settings for compiling luajit with
+  section 1980 2026 posix systems (linux, osx, *bsd etc.)
+  section 2026 2555 prerequisites
+  section 2555 3249 building luajit
+  section 3249 3765 installing luajit
+  section 3765 3789 windows systems
+  section 3789 4410 prerequisites
+  section 4410 4633 building with msvc
+  section 4633 4968 building with the windows sdk
+  section 4968 5292 building with mingw or cygwin
+  section 5292 5742 installing luajit
+  section 5742 12279 cross-compiling luajit
+  section 5821 5904 host: this is your development system, usually based on a x64
+  section 5904 5992 target: this is the target system you want luajit to run on,
+  section 5992 6085 toolchain: this comprises a c compiler, linker, assembler and a
+  section 6085 6196 host (or system) toolchain: this is the toolchain used to build
+  section 6196 6453 cross-compile toolchain: this is the toolchain used to build
+  section 6453 6527 yes, you need a toolchain for both your host and your
+  section 6527 6604 both host and target architectures must have the same pointer
+  section 6604 6833 e.g. if you want to cross-compile to a 32 bit target on a 64
+  section 6833 7040 64 bit targets always require compilation on a 64 bit host.
+  section 7040 7189 e.g. if youre compiling on a windows or osx host for embedded
+  section 7189 7318 for a minimal target os, you may need to disable the built-in
+  section 7318 8141 dont forget to specify the same target_sys for the install
+  section 8141 8262 the best way to get consistent results is to specify the
+  section 8262 8387 for a pre-built, generic toolchain add -mcpu=... or
+  section 8387 8545 for arm its important to have the correct -mfloat-abi=...
+  section 8545 12279 for mips its important to select a supported abi (o32 on
+  section 12279 13966 cross-compiling for consoles
+  section 13966 16552 embedding luajit
+  section 14190 14602 its strongly suggested to build luajit separately using the
+  section 14602 14775 if you want to load c modules compiled for plain lua with
+  section 14775 15068 on posix systems you can either link to the shared library or
+  section 15068 15331 since windows symbols are bound to a specific dll name, you
+  section 15331 15790 if youre building a 64 bit application on osx which links
+  section 15790 15886 heres a e<rchevron> simple example for embedding lua or luajit
+  section 15886 16061 make sure you use lual_newstate. avoid using
+  section 16061 16177 make sure you use lual_openlibs and not the old lua 5.0
+  section 16177 16394 to change or extend the list of standard libraries to load,
+  section 16394 16552 the bit.* module for bitwise operations is already built-in.
+  section 16552 19764 hints for distribution maintainers
+  section 17451 17634 prefix overrides the installation path and should usually be
+  section 17634 17765 destdir is an absolute path which allows you to install to a
+  section 17765 17885 multilib sets the architecture-specific library path
+  section 17885 19764 have a look at the top-level makefile and src/makefile
+
+module luajit-2.1
+  section 14 2769 luajit
+  section 36 59 luajit
+  section 59 89 download e<rchevron>
+  section 89 111 installation
+  section 111 135 running
+  section 135 162 extensions
+  section 162 190 ffi library
+  section 190 212 ffi tutorial
+  section 212 231 ffi.* api
+  section 231 261 ffi semantics
+  section 261 284 jit.* library
+  section 284 303 lua/c api
+  section 303 328 profiler
+  section 328 351 status
+  section 351 375 changes
+  section 375 388 faq
+  section 388 421 performance e<rchevron>
+  section 421 447 wiki e<rchevron>
+  section 447 821 mailing list e<rchevron>
+  section 821 1065 compatibility
+  section 1065 2344 overview
+  section 2344 2769 more ...
+
+module running
+  section 14 8059 running luajit
+  section 44 67 luajit
+  section 67 97 download e<rchevron>
+  section 97 119 installation
+  section 119 143 running
+  section 143 170 extensions
+  section 170 198 ffi library
+  section 198 220 ffi tutorial
+  section 220 239 ffi.* api
+  section 239 269 ffi semantics
+  section 269 292 jit.* library
+  section 292 311 lua/c api
+  section 311 336 profiler
+  section 336 359 status
+  section 359 383 changes
+  section 383 396 faq
+  section 396 429 performance e<rchevron>
+  section 429 455 wiki e<rchevron>
+  section 455 735 mailing list e<rchevron>
+  section 735 1083 command line options
+  section 1083 3561 -b[options] input output
+  section 1211 1255 -l e<mdash> only list bytecode.
+  section 1255 1319 -s e<mdash> strip debug info (this is the default).
+  section 1319 1360 -g e<mdash> keep debug info.
+  section 1360 1444 -n name e<mdash> set module name (default: auto-detect from
+  section 1444 1535 -t type e<mdash> set output file type (default: auto-detect
+  section 1535 1622 -a arch e<mdash> override architecture for object files
+  section 1622 1697 -o os e<mdash> override os for object files (default:
+  section 1697 1754 -e chunk e<mdash> use chunk string as input.
+  section 1754 1940 - (a single minus sign) e<mdash> use stdin as input and/or
+  section 1940 2002 c e<mdash> c source file, exported bytecode data.
+  section 2002 2062 h e<mdash> c header file, static bytecode data.
+  section 2062 2164 obj or o e<mdash> object file, exported bytecode data
+  section 2164 2264 raw or any other extension e<mdash> raw bytecode file
+  section 2264 2355 see also string.dump() for information on bytecode portability
+  section 2355 2531 a file in raw bytecode format is auto-detected and can be
+  section 2531 2670 to statically embed the bytecode of a module in your
+  section 2670 2819 on most elf-based systems (e.g. linux) you need to explicitly
+  section 2819 3561 require() tries to load embedded bytecode data from exported
+  section 3561 4916 -j cmd[=arg[,arg...]]
+  section 4024 4087 -jon e<mdash> turns the jit compiler on (default).
+  section 4087 4169 -joff e<mdash> turns the jit compiler off (only use the
+  section 4169 4240 -jflush e<mdash> flushes the whole cache of compiled code.
+  section 4240 4331 -jv e<mdash> shows verbose information about the progress of
+  section 4331 4422 -jdump e<mdash> dumps the code and structures used in
+  section 4422 4916 -jp e<mdash> start the integrated profiler.
+  section 4916 8059 -o[level]
+
+module status
+  section 14 1915 status
+  section 36 59 luajit
+  section 59 89 download e<rchevron>
+  section 89 111 installation
+  section 111 135 running
+  section 135 162 extensions
+  section 162 190 ffi library
+  section 190 212 ffi tutorial
+  section 212 231 ffi.* api
+  section 231 261 ffi semantics
+  section 261 284 jit.* library
+  section 284 303 lua/c api
+  section 303 328 profiler
+  section 328 351 status
+  section 351 375 changes
+  section 375 388 faq
+  section 388 421 performance e<rchevron>
+  section 421 447 wiki e<rchevron>
+  section 447 619 mailing list e<rchevron>
+  section 619 1915 current status
+  section 875 1108 there are some differences in implementation-defined
+  section 1108 1304 the lua debug api is missing a couple of features (return
+  section 1304 1915 currently some out-of-memory errors from on-trace code
+
+dist array-var-nginx-module-0.05
+  aliases ngx_array_var ngx_http_array_var_module
+  modules array-var-nginx-module-0.05
+
+module array-var-nginx-module-0.05
+  aliases ngx_array_var
+  section 18 211 name
+  section 211 261 status
+  section 261 782 synopsis
+  section 782 1319 description
+  section 1319 7697 directives
+  section 1341 2226 array_split
+  section 2226 2974 array_join
+  section 2974 4304 array_map
+  section 4304 7697 array_map_op
+  section 7697 9477 installation
+  section 8893 9477 building as a dynamic module
+  section 9477 10232 compatibility
+  section 10232 10379 source repository
+  section 10379 10529 getting involved
+  section 10529 10628 author
+  section 10628 12080 copyright & license
+  section 12080 12316 see also
+
+dist drizzle-nginx-module-0.1.9
+  aliases ngx_drizzle ngx_http_drizzle_module
+  modules drizzle-nginx-module-0.1.9
+
+module drizzle-nginx-module-0.1.9
+  aliases ngx_drizzle
+  section 19 211 name
+  section 211 334 status
+  section 334 479 version
+  section 479 1718 synopsis
+  section 1718 4365 description
+  section 2580 3336 keepalive connection pool
+  section 3336 4365 last insert id
+  section 4365 12796 directives
+  section 4387 6499 drizzle_server
+  section 6499 7828 drizzle_keepalive
+  section 7828 8521 drizzle_query
+  section 8521 9209 drizzle_pass
+  section 9209 9678 drizzle_connect_timeout
+  section 9678 10169 drizzle_send_query_timeout
+  section 10169 10686 drizzle_recv_cols_timeout
+  section 10686 11205 drizzle_recv_rows_timeout
+  section 11205 11532 drizzle_buffer_size
+  section 11532 11865 drizzle_module_header
+  section 11865 12796 drizzle_status
+  section 12796 15151 variables
+  section 12869 15151 $drizzle_thread_id
+  section 15151 18612 output format
+  section 16372 16940 rds header part
+  section 16940 18177 rds body part
+  section 17140 17565 columns
+  section 17565 18177 rows
+  section 17736 17830 row flag
+  section 17830 18177 fields data
+  section 18177 18612 rds buffer limitations
+  section 18612 18831 status code
+  section 18831 19367 caveats
+  section 19367 20471 trouble shooting
+  section 20471 20938 known issues
+  section 20938 24063 installation
+  section 24063 24984 compatibility
+  section 24984 25271 community
+  section 25005 25141 english mailing list
+  section 25141 25271 chinese mailing list
+  section 25271 25566 report bugs
+  section 25566 25708 source repository
+  section 25708 26371 test suite
+  section 26371 27681 todo
+  section 27681 27847 changes
+  section 27847 28135 authors
+  section 28135 29811 copyright & license
+  section 29811 30568 see also
+
+dist echo-nginx-module-0.60
+  aliases ngx_echo ngx_http_echo_module
+  modules echo-nginx-module-0.60
+
+module echo-nginx-module-0.60
+  aliases ngx_echo
+  section 18 233 name
+  section 233 283 status
+  section 283 420 version
+  section 420 4570 synopsis
+  section 4570 6750 description
+  section 6750 32897 content handler directives
+  section 8258 10720 echo
+  section 10720 12090 echo_duplicate
+  section 12090 14050 echo_flush
+  section 14050 14901 echo_sleep
+  section 14901 15454 echo_blocking_sleep
+  section 15454 16684 echo_reset_timer
+  section 16684 18571 echo_read_request_body
+  section 18571 21803 echo_location_async
+  section 21803 24085 echo_location
+  section 24085 26852 echo_subrequest_async
+  section 26852 27548 echo_subrequest
+  section 27548 29537 echo_foreach_split
+  section 29537 29842 echo_end
+  section 29842 30647 echo_request_body
+  section 30647 32144 echo_exec
+  section 32144 32897 echo_status
+  section 32897 35601 filter directives
+  section 33147 34541 echo_before_body
+  section 34541 35601 echo_after_body
+  section 35601 40063 variables
+  section 35622 35739 $echo_it
+  section 35739 36224 $echo_timer_elapsed
+  section 36224 36480 $echo_request_body
+  section 36480 37107 $echo_request_method
+  section 37107 37445 $echo_client_request_method
+  section 37445 38330 $echo_client_request_headers
+  section 38330 38621 $echo_cacheable_request_uri
+  section 38621 39181 $echo_request_uri
+  section 39181 39802 $echo_incr
+  section 39802 40063 $echo_response_status
+  section 40063 41685 installation
+  section 41685 43107 compatibility
+  section 43107 43847 modules that use this module for testing
+  section 43847 44134 community
+  section 43868 44004 english mailing list
+  section 44004 44134 chinese mailing list
+  section 44134 44603 report bugs
+  section 44603 44740 source repository
+  section 44740 44902 changes
+  section 44902 45979 test suite
+  section 45979 48292 todo
+  section 48292 48448 getting involved
+  section 48448 48666 author
+  section 48666 50130 copyright & license
+  section 50130 50576 see also
+
+dist encrypted-session-nginx-module-0.06
+  aliases ngx_encrypted_session ngx_http_encrypted_session_module
+  modules encrypted-session-nginx-module-0.06
+
+module encrypted-session-nginx-module-0.06
+  aliases ngx_encrypted_session
+  section 18 201 name
+  section 201 251 status
+  section 251 1208 synopsis
+  section 1208 2214 description
+  section 2214 4909 directives
+  section 2236 2533 encrypted_session_key
+  section 2533 2870 encrypted_session_iv
+  section 2870 3996 encrypted_session_expires
+  section 3996 4637 set_encrypt_session
+  section 4637 4909 set_decrypt_session
+  section 4909 6801 installation
+  section 6209 6801 building as a dynamic module
+  section 6801 7620 compatibility
+  section 7620 8090 report bugs
+  section 8090 8252 source repository
+  section 8252 8402 getting involved
+  section 8402 8484 author
+  section 8484 9937 copyright & license
+  section 9937 10112 see also
+
+dist form-input-nginx-module-0.12
+  aliases ngx_form_input ngx_http_form_input_module
+  modules form-input-nginx-module-0.12
+
+module form-input-nginx-module-0.12
+  aliases ngx_form_input
+  section 18 208 name
+  section 208 461 description
+  section 461 1810 installation
+  section 1225 1810 building as a dynamic module
+  section 1810 2741 usage
+  section 2741 3175 limitations
+  section 3175 3602 compatibility
+  section 3602 5128 copyright & license
+
+dist headers-more-nginx-module-0.32
+  aliases ngx_headers_more ngx_http_headers_more_filter_module
+  modules headers-more-nginx-module-0.32
+
+module headers-more-nginx-module-0.32
+  aliases ngx_headers_more
+  section 18 209 name
+  section 209 375 version
+  section 375 1401 synopsis
+  section 1401 3015 description
+  section 3015 8009 directives
+  section 3037 5566 more_set_headers
+  section 5566 6411 more_clear_headers
+  section 6411 7445 more_set_input_headers
+  section 7445 8009 more_clear_input_headers
+  section 8009 8919 limitations
+  section 8919 10161 installation
+  section 10161 11318 compatibility
+  section 11318 11605 community
+  section 11339 11475 english mailing list
+  section 11475 11605 chinese mailing list
+  section 11605 11872 bugs and patches
+  section 11872 12025 source repository
+  section 12025 12187 changes
+  section 12187 13468 test suite
+  section 13468 13551 todo
+  section 13551 13707 getting involved
+  section 13707 14017 authors
+  section 14017 15716 copyright & license
+  section 15716 16504 see also
+
+dist iconv-nginx-module-0.14
+  aliases ngx_iconv ngx_http_iconv_module
+  modules iconv-nginx-module-0.14
+
+module iconv-nginx-module-0.14
+  aliases ngx_iconv
+  section 19 53 name
+  section 53 261 description
+  section 261 1160 usage
+  section 276 474 set_iconv
+  section 474 604 iconv_buffer_size
+  section 604 1160 iconv_filter
+  section 1160 1623 compatibility
+  section 1623 2719 installation
+  section 2139 2719 building as a dynamic module
+  section 2719 4410 copyright & license
+  section 4410 4561 changelog
+  section 4561 4654 see also
+
+dist lua-5.1.5
+
+dist lua-cjson-2.1.0.4
+  aliases cjson
+  modules lua-cjson-2.1.0.4
+
+module lua-cjson-2.1.0.4
+  aliases cjson
+  section 18 72 name
+  section 72 687 description
+  section 687 2493 additions
+  section 706 1122 encode_empty_table_as_object
+  section 1122 1639 empty_array
+  section 1639 2301 empty_array_mt
+  section 2301 2493 encode_number_precision
+
+dist luajit-2.1-20161104
+
+dist lua-rds-parser-0.06
+  aliases rds.parser
+
+dist lua-redis-parser-0.12
+  aliases redis.parser
+  modules lua-redis-parser-0.12
+
+module lua-redis-parser-0.12
+  aliases redis.parser
+  section 18 111 name
+  section 111 259 version
+  section 259 742 description
+  section 742 4783 functions
+  section 999 2140 parse_reply
+  section 2140 3026 parse_replies
+  section 3026 3642 typename
+  section 3642 4783 build_query
+  section 4783 5241 constants
+  section 4804 4863 bad_reply
+  section 4863 4930 integer_reply
+  section 4930 4993 error_reply
+  section 4993 5058 status_reply
+  section 5058 5119 bulk_reply
+  section 5119 5192 multi_bulk_reply
+  section 5192 5241 null
+  section 5241 5443 background
+  section 5443 5890 report bugs
+  section 5890 6020 source repository
+  section 6020 6971 installation
+  section 6044 6347 build requirements
+  section 6347 6428 linux/bsd/solaris
+  section 6428 6971 mac os x
+  section 6971 7079 author
+  section 7079 8556 copyright & license
+  section 8556 8899 see also
+
+dist lua-resty-core-0.1.9
+  aliases resty.core
+  modules lua-resty-core-0.1.9 ngx.balancer ngx.ocsp ngx.re ngx.semaphore ngx.ssl ngx.ssl.session
+
+module lua-resty-core-0.1.9
+  aliases resty.core
+  section 18 95 name
+  section 95 175 status
+  section 175 623 synopsis
+  section 623 1531 description
+  section 1531 1872 prerequisites
+  section 1872 7440 api implemented
+  section 1899 2184 resty.core.hash
+  section 2184 2419 resty.core.base64
+  section 2419 2643 resty.core.uri
+  section 2643 3013 resty.core.regex
+  section 3013 3134 resty.core.exit
+  section 3134 4201 resty.core.shdict
+  section 4201 4336 resty.core.var
+  section 4336 4454 resty.core.ctx
+  section 4454 5233 resty.core.request
+  section 5233 5375 resty.core.response
+  section 5375 5686 resty.core.misc
+  section 5686 5881 resty.core.time
+  section 5881 6286 resty.core.worker
+  section 6286 6571 ngx.semaphore
+  section 6571 6758 ngx.balancer
+  section 6758 7010 ngx.ssl
+  section 7010 7243 ngx.ssl.session
+  section 7243 7440 ngx.re
+  section 7440 7667 caveat
+  section 7667 7923 todo
+  section 7923 8022 author
+  section 8022 9477 copyright and license
+  section 9477 9649 see also
+
+module ngx.balancer
+  section 18 103 name
+  section 103 174 status
+  section 174 1510 synopsis
+  section 1510 1975 description
+  section 1975 6105 methods
+  section 2128 2863 set_current_peer
+  section 2863 3899 set_more_tries
+  section 3899 5064 get_last_failure
+  section 5064 6105 set_timeouts
+  section 6105 6392 community
+  section 6126 6262 english mailing list
+  section 6262 6392 chinese mailing list
+  section 6392 6643 bugs and patches
+  section 6643 6730 author
+  section 6730 8180 copyright and license
+  section 8180 8526 see also
+
+module ngx.ocsp
+  section 18 110 name
+  section 110 181 status
+  section 181 3759 synopsis
+  section 3759 4256 description
+  section 4256 7437 methods
+  section 4273 5091 get_ocsp_responder_from_der_chain
+  section 5091 6081 create_ocsp_request
+  section 6081 6753 validate_ocsp_response
+  section 6753 7437 set_ocsp_status_resp
+  section 7437 7724 community
+  section 7458 7594 english mailing list
+  section 7594 7724 chinese mailing list
+  section 7724 7975 bugs and patches
+  section 7975 8062 author
+  section 8062 9512 copyright and license
+  section 9512 9913 see also
+
+module ngx.re
+  section 18 91 name
+  section 91 162 status
+  section 162 328 synopsis
+  section 328 449 description
+  section 449 3003 methods
+  section 602 3003 split
+  section 3003 3290 community
+  section 3024 3160 english mailing list
+  section 3160 3290 chinese mailing list
+  section 3290 3541 bugs and patches
+  section 3541 3632 author
+  section 3632 5082 copyright and license
+  section 5082 5315 see also
+
+module ngx.semaphore
+  section 18 95 name
+  section 95 166 status
+  section 166 2851 synopsis
+  section 184 1361 synchronizing threads in the same context
+  section 1361 2851 synchronizing threads in different contexts
+  section 2851 4107 description
+  section 4107 8135 methods
+  section 4126 4903 new
+  section 4903 5728 post
+  section 5728 6991 wait
+  section 6991 8135 count
+  section 8135 8422 community
+  section 8156 8292 english mailing list
+  section 8292 8422 chinese mailing list
+  section 8422 8673 bugs and patches
+  section 8673 8715 author
+  section 8715 10165 copyright and license
+  section 10165 10399 see also
+
+module ngx.ssl
+  section 18 99 name
+  section 99 170 status
+  section 170 2252 synopsis
+  section 2252 3050 description
+  section 3050 10459 methods
+  section 3067 3362 clear_certs
+  section 3362 4204 cert_pem_to_der
+  section 4204 4769 set_der_cert
+  section 4769 5325 priv_key_pem_to_der
+  section 5325 5888 set_der_priv_key
+  section 5888 6699 server_name
+  section 6699 8256 raw_server_addr
+  section 8256 8691 get_tls1_version
+  section 8691 9261 parse_pem_cert
+  section 9261 9695 parse_pem_priv_key
+  section 9695 10075 set_cert
+  section 10075 10459 set_priv_key
+  section 10459 10746 community
+  section 10480 10616 english mailing list
+  section 10616 10746 chinese mailing list
+  section 10746 10997 bugs and patches
+  section 10997 11084 author
+  section 11084 12534 copyright and license
+  section 12534 12937 see also
+
+module ngx.ssl.session
+  section 18 139 name
+  section 139 210 status
+  section 210 4133 synopsis
+  section 4133 4798 description
+  section 4798 7222 methods
+  section 4815 5436 get_session_id
+  section 5436 6456 get_serialized_session
+  section 6456 7222 set_serialized_session
+  section 7222 7509 community
+  section 7243 7379 english mailing list
+  section 7379 7509 chinese mailing list
+  section 7509 7760 bugs and patches
+  section 7760 7847 author
+  section 7847 9297 copyright and license
+  section 9297 9795 see also
+
+dist lua-resty-dns-0.18
+  aliases resty.dns
+  modules lua-resty-dns-0.18
+
+module lua-resty-dns-0.18
+  aliases resty.dns
+  section 18 108 name
+  section 108 170 status
+  section 170 995 description
+  section 995 2321 synopsis
+  section 2321 9858 methods
+  section 2340 3789 new
+  section 3789 7284 query
+  section 7284 8038 tcp_query
+  section 8038 8205 set_timeout
+  section 8205 8635 compress_ipv6_addr
+  section 8635 9050 expand_ipv6_addr
+  section 9050 9589 arpa_str
+  section 9589 9858 reverse_query
+  section 9858 11379 constants
+  section 9879 9963 type_a
+  section 9963 10049 type_ns
+  section 10049 10141 type_cname
+  section 10141 10230 type_ptr
+  section 10230 10317 type_mx
+  section 10317 10406 type_txt
+  section 10406 10527 type_aaaa
+  section 10527 10672 type_srv
+  section 10672 10817 type_spf
+  section 10817 10941 class_in
+  section 10941 11082 section_an
+  section 11082 11230 section_ns
+  section 11230 11379 section_ar
+  section 11379 11926 automatic error logging
+  section 11926 12726 limitations
+  section 12726 12876 todo
+  section 12876 12975 author
+  section 12975 14470 copyright and license
+  section 14470 14853 see also
+
+dist lua-resty-limit-traffic-0.01
+  aliases resty.limit.traffic
+  modules lua-resty-limit-traffic-0.01 resty.limit.conn resty.limit.req resty.limit.traffic
+
+module lua-resty-limit-traffic-0.01
+  aliases resty.limit.traffic
+  section 18 129 name
+  section 129 291 status
+  section 291 10228 synopsis
+  section 10228 11476 description
+  section 11476 12090 installation
+  section 12090 12377 community
+  section 12111 12247 english mailing list
+  section 12247 12377 chinese mailing list
+  section 12377 12637 bugs and patches
+  section 12637 12736 author
+  section 12736 14191 copyright and license
+  section 14191 14534 see also
+
+module resty.limit.conn
+  section 18 147 name
+  section 147 4325 synopsis
+  section 4325 4965 description
+  section 4965 11041 methods
+  section 4984 6310 new
+  section 6310 9093 incoming
+  section 9093 9473 is_committed
+  section 9473 10399 leaving
+  section 10399 10528 set_conn
+  section 10528 10661 set_burst
+  section 10661 11041 uncommit
+  section 11041 11773 caveats
+  section 11060 11773 out-of-sync counter prevention
+  section 11773 12464 instance sharing
+  section 12464 13206 limiting granularity
+  section 13206 13312 installation
+  section 13312 13599 community
+  section 13333 13469 english mailing list
+  section 13469 13599 chinese mailing list
+  section 13599 13859 bugs and patches
+  section 13859 13958 author
+  section 13958 15413 copyright and license
+  section 15413 15731 see also
+
+module resty.limit.req
+  section 18 111 name
+  section 111 2724 synopsis
+  section 2724 3372 description
+  section 3372 7184 methods
+  section 3391 4295 new
+  section 4295 6611 incoming
+  section 6611 6734 set_rate
+  section 6734 6861 set_burst
+  section 6861 7184 uncommit
+  section 7184 7875 instance sharing
+  section 7875 8626 limiting granularity
+  section 8626 8732 installation
+  section 8732 9019 community
+  section 8753 8889 english mailing list
+  section 8889 9019 chinese mailing list
+  section 9019 9279 bugs and patches
+  section 9279 9378 author
+  section 9378 10833 copyright and license
+  section 10833 11153 see also
+
+module resty.limit.traffic
+  section 18 120 name
+  section 120 3216 synopsis
+  section 3216 3902 description
+  section 3902 6840 methods
+  section 3921 6840 combine
+  section 6840 7178 instance sharing
+  section 7178 7574 limiting granularity
+  section 7574 7680 installation
+  section 7680 7967 community
+  section 7701 7837 english mailing list
+  section 7837 7967 chinese mailing list
+  section 7967 8227 bugs and patches
+  section 8227 8326 author
+  section 8326 9781 copyright and license
+  section 9781 10093 see also
+
+dist lua-resty-lock-0.04
+  aliases resty.lock
+  modules lua-resty-lock-0.04
+
+module lua-resty-lock-0.04
+  aliases resty.lock
+  section 18 88 name
+  section 88 176 status
+  section 176 1131 synopsis
+  section 1131 1631 description
+  section 1631 5805 methods
+  section 2044 3899 new
+  section 3899 5502 lock
+  section 5502 5805 unlock
+  section 5805 6161 for multiple lua light threads
+  section 6161 10203 for cache locks
+  section 10203 10365 prerequisites
+  section 10365 11329 installation
+  section 11329 11620 todo
+  section 11620 11907 community
+  section 11641 11777 english mailing list
+  section 11777 11907 chinese mailing list
+  section 11907 12157 bugs and patches
+  section 12157 12256 author
+  section 12256 13711 copyright and license
+  section 13711 13866 see also
+
+dist lua-resty-lrucache-0.04
+  aliases resty.lrucache
+  modules lua-resty-lrucache-0.04
+
+module lua-resty-lrucache-0.04
+  aliases resty.lrucache
+  section 18 91 name
+  section 91 191 status
+  section 191 1311 synopsis
+  section 1311 3389 description
+  section 3389 5401 methods
+  section 3878 4594 new
+  section 4594 5013 set
+  section 5013 5299 get
+  section 5299 5401 delete
+  section 5401 5563 prerequisites
+  section 5563 6491 installation
+  section 6491 6678 todo
+  section 6678 6965 community
+  section 6699 6835 english mailing list
+  section 6835 6965 chinese mailing list
+  section 6965 7217 bugs and patches
+  section 7217 7346 author
+  section 7346 8859 copyright and license
+  section 8859 9015 see also
+
+dist lua-resty-memcached-0.14
+  aliases resty.memcached
+  modules lua-resty-memcached-0.14
+
+module lua-resty-memcached-0.14
+  aliases resty.memcached
+  section 18 125 name
+  section 125 187 status
+  section 187 587 description
+  section 587 3026 synopsis
+  section 3026 13817 methods
+  section 3206 3785 new
+  section 3785 4275 connect
+  section 4275 4852 set
+  section 4852 5098 set_timeout
+  section 5098 5822 set_keepalive
+  section 5822 6402 get_reused_times
+  section 6402 6624 close
+  section 6624 7287 add
+  section 7287 7962 replace
+  section 7962 8648 append
+  section 8648 9339 prepend
+  section 9339 10430 get
+  section 10430 10750 gets
+  section 10750 11063 cas
+  section 11063 11316 touch
+  section 11316 11658 flush_all
+  section 11658 11921 delete
+  section 11921 12211 incr
+  section 12211 12501 decr
+  section 12501 12970 stats
+  section 12970 13160 version
+  section 13160 13500 quit
+  section 13500 13817 verbosity
+  section 13817 14317 automatic error logging
+  section 14317 15097 limitations
+  section 15097 15246 todo
+  section 15246 15345 author
+  section 15345 16840 copyright and license
+  section 16840 17235 see also
+
+dist lua-resty-mysql-0.17
+  aliases resty.mysql
+  modules .github.issue_template lua-resty-mysql-0.17
+
+module .github.issue_template
+
+module lua-resty-mysql-0.17
+  aliases resty.mysql
+  section 18 113 name
+  section 113 175 status
+  section 175 738 description
+  section 738 4871 synopsis
+  section 4871 12065 methods
+  section 4890 5046 new
+  section 5046 7107 connect
+  section 7107 7260 set_timeout
+  section 7260 7983 set_keepalive
+  section 7983 8561 get_reused_times
+  section 8561 8777 close
+  section 8777 9118 send_query
+  section 9118 11097 read_result
+  section 11097 11519 query
+  section 11519 11753 server_ver
+  section 11753 12065 set_compact_arrays
+  section 12065 12523 sql literal quoting
+  section 12523 14413 multi-resultset support
+  section 14413 14826 debugging
+  section 14826 15326 automatic error logging
+  section 15326 16108 limitations
+  section 16108 16864 installation
+  section 16864 17151 community
+  section 16885 17021 english mailing list
+  section 17021 17151 chinese mailing list
+  section 17151 17458 bugs and patches
+  section 17458 17790 todo
+  section 17790 17889 author
+  section 17889 19384 copyright and license
+  section 19384 19852 see also
+
+dist lua-resty-redis-0.26
+  aliases resty.redis
+  modules lua-resty-redis-0.26
+
+module lua-resty-redis-0.26
+  aliases resty.redis
+  section 18 117 name
+  section 117 179 status
+  section 179 590 description
+  section 590 3738 synopsis
+  section 3738 13047 methods
+  section 5886 6032 new
+  section 6032 6888 connect
+  section 6888 7042 set_timeout
+  section 7042 7758 set_keepalive
+  section 7758 8337 get_reused_times
+  section 8337 8554 close
+  section 8554 9213 init_pipeline
+  section 9213 9612 commit_pipeline
+  section 9612 9918 cancel_pipeline
+  section 9918 10275 hmset
+  section 10275 10485 array_to_hash
+  section 10485 12137 read_reply
+  section 12137 13047 add_commands
+  section 13047 14095 redis authentication
+  section 14095 15436 redis transactions
+  section 15436 16023 load balancing and failover
+  section 16023 16415 debugging
+  section 16415 16962 automatic error logging
+  section 16962 19323 check list for issues
+  section 19323 20210 limitations
+  section 20210 20962 installation
+  section 20962 20978 todo
+  section 20978 21265 community
+  section 20999 21135 english mailing list
+  section 21135 21265 chinese mailing list
+  section 21265 21514 bugs and patches
+  section 21514 21613 author
+  section 21613 23096 copyright and license
+  section 23096 23474 see also
+
+dist lua-resty-string-0.09
+  aliases resty.string
+  modules lua-resty-string-0.09
+
+module lua-resty-string-0.09
+  aliases resty.string
+  section 18 118 name
+  section 118 268 status
+  section 268 449 description
+  section 449 4960 synopsis
+  section 4960 5042 author
+  section 5042 6537 copyright and license
+  section 6537 6639 see also
+
+dist lua-resty-upload-0.10
+  aliases resty.upload
+  modules lua-resty-upload-0.10
+
+module lua-resty-upload-0.10
+  aliases resty.upload
+  section 18 130 name
+  section 130 192 status
+  section 192 1383 description
+  section 1383 5601 synopsis
+  section 5601 5700 author
+  section 5700 7195 copyright and license
+  section 7195 7645 see also
+
+dist lua-resty-upstream-healthcheck-0.04
+  aliases resty.upstream.healthcheck
+  modules lua-resty-upstream-healthcheck-0.04
+
+module lua-resty-upstream-healthcheck-0.04
+  aliases resty.upstream.healthcheck
+  section 18 108 name
+  section 108 204 status
+  section 204 2575 synopsis
+  section 2575 2706 description
+  section 2706 4289 methods
+  section 2723 3254 spawn_checker
+  section 3254 4289 status_page
+  section 4289 5566 multiple upstreams
+  section 5566 6547 installation
+  section 6547 6563 todo
+  section 6563 6850 community
+  section 6584 6720 english mailing list
+  section 6720 6850 chinese mailing list
+  section 6850 7116 bugs and patches
+  section 7116 7215 author
+  section 7215 8670 copyright and license
+  section 8670 8918 see also
+
+dist lua-resty-websocket-0.06
+  aliases resty.websocket
+  modules lua-resty-websocket-0.06
+
+module lua-resty-websocket-0.06
+  aliases resty.websocket
+  section 18 107 name
+  section 107 169 status
+  section 169 610 description
+  section 610 2723 synopsis
+  section 2723 13669 modules
+  section 2742 7232 resty.websocket.server
+  section 2869 7232 methods
+  section 2889 3931 new
+  section 3931 4063 set_timeout
+  section 4063 4356 send_text
+  section 4356 4655 send_binary
+  section 4655 5065 send_ping
+  section 5065 5400 send_pong
+  section 5400 5846 send_close
+  section 5846 6473 send_frame
+  section 6473 7232 recv_frame
+  section 7232 13070 resty.websocket.client
+  section 8268 13070 methods
+  section 8288 9194 client:new
+  section 9194 10624 client:connect
+  section 10624 10809 client:close
+  section 10809 11541 client:set_keepalive
+  section 11541 11684 client:set_timeout
+  section 11684 11836 client:send_text
+  section 11836 11994 client:send_binary
+  section 11994 12185 client:send_ping
+  section 12185 12376 client:send_pong
+  section 12376 12577 client:send_close
+  section 12577 12915 client:send_frame
+  section 12915 13070 client:recv_frame
+  section 13070 13669 resty.websocket.protocol
+  section 13203 13669 methods
+  section 13223 13377 recv_frame
+  section 13377 13516 build_frame
+  section 13516 13669 send_frame
+  section 13669 14169 automatic error logging
+  section 14169 14963 limitations
+  section 14963 16018 installation
+  section 16018 16034 todo
+  section 16034 16321 community
+  section 16055 16191 english mailing list
+  section 16191 16321 chinese mailing list
+  section 16321 16620 bugs and patches
+  section 16620 16719 author
+  section 16719 18202 copyright and license
+  section 18202 18823 see also
+
+dist memc-nginx-module-0.17
+  aliases ngx_memc ngx_http_memc_module
+  modules memc-nginx-module-0.17
+
+module memc-nginx-module-0.17
+  aliases ngx_memc
+  section 18 262 name
+  section 262 398 version
+  section 398 2555 synopsis
+  section 2555 4878 description
+  section 3790 4499 keep-alive connections to memcached servers
+  section 4499 4878 how it works
+  section 4878 10353 memcached commands supported
+  section 5633 6322 get $memc_key
+  section 6322 7308 set $memc_key $memc_flags $memc_exptime $memc_value
+  section 7308 7403 add $memc_key $memc_flags $memc_exptime $memc_value
+  section 7403 7502 replace $memc_key $memc_flags $memc_exptime $memc_value
+  section 7502 7769 append $memc_key $memc_flags $memc_exptime $memc_value
+  section 7769 7871 prepend $memc_key $memc_flags $memc_exptime $memc_value
+  section 7871 8319 delete $memc_key
+  section 8319 8574 delete $memc_key $memc_exptime
+  section 8574 9161 incr $memc_key $memc_value
+  section 9161 9242 decr $memc_key $memc_value
+  section 9242 9426 flush_all
+  section 9426 9565 flush_all $memc_exptime
+  section 9565 9972 stats
+  section 9972 10353 version
+  section 10353 14295 directives
+  section 10765 11223 memc_pass
+  section 11223 11744 memc_cmds_allowed
+  section 11744 12095 memc_flags_to_last_modified
+  section 12095 12564 memc_connect_timeout
+  section 12564 13038 memc_send_timeout
+  section 13038 13514 memc_read_timeout
+  section 13514 13969 memc_buffer_size
+  section 13969 14295 memc_ignore_client_abort
+  section 14295 16139 installation
+  section 15722 16139 for developers
+  section 16139 17461 compatibility
+  section 17461 17748 community
+  section 17482 17618 english mailing list
+  section 17618 17748 chinese mailing list
+  section 17748 18251 report bugs
+  section 18251 18387 source repository
+  section 18387 18549 changes
+  section 18549 19906 test suite
+  section 19906 20079 todo
+  section 20079 20235 getting involved
+  section 20235 20453 author
+  section 20453 22134 copyright & license
+  section 22134 23406 see also
+
+dist ngx_coolkit-0.2rc3
+  aliases ngx_coolkit_module
+
+dist ngx_devel_kit-0.3.0
+  aliases ngx_devel_kit
+  modules ngx_devel_kit-0.3.0
+
+module ngx_devel_kit-0.3.0
+  section 18 61 name
+  section 61 1006 synopsis
+  section 1006 1124 status
+  section 1124 1474 features
+  section 1474 1976 design
+  section 1490 1668 modular
+  section 1668 1976 auto-generated & easily extensible
+  section 1976 2983 usage for users
+  section 2467 2983 building as a dynamic module
+  section 2983 4246 usage for developers
+  section 3804 4246 warning: using ndk_all
+  section 4246 4918 modules using ndk
+  section 4918 5186 todo
+  section 5186 6733 license
+  section 6733 6987 contributing / feedback
+  section 6987 7044 author
+
+dist ngx_lua-0.10.7
+  aliases ngx_http_lua_module
+  modules .github.issue_template .github.pull_request_template ngx_lua-0.10.7
+
+module .github.issue_template
+
+module .github.pull_request_template
+
+module ngx_lua-0.10.7
+  section 19 200 name
+  section 200 235 status
+  section 235 376 version
+  section 376 4093 synopsis
+  section 4093 7175 description
+  section 7175 8752 typical uses
+  section 8752 9116 nginx compatibility
+  section 9116 13765 installation
+  section 11157 11735 building as a dynamic module
+  section 11735 13072 c macro configurations
+  section 13072 13765 installation on ubuntu 11.10
+  section 13765 14052 community
+  section 13786 13922 english mailing list
+  section 13922 14052 chinese mailing list
+  section 14052 14221 code repository
+  section 14221 14486 bugs and patches
+  section 14486 16408 lua/luajit bytecode support
+  section 16408 16815 system environment variable support
+  section 16815 17907 http 1.0 support
+  section 17907 21028 statically linking pure lua modules
+  section 21028 24021 data sharing within an nginx worker
+  section 24021 34437 known issues
+  section 24045 24471 tcp socket connect operation issues
+  section 24471 25710 lua coroutine yielding/resuming
+  section 25710 28251 lua variable scope
+  section 28251 29385 locations configured by subrequest directives of other modules
+  section 29385 30183 cosockets not available everywhere
+  section 30183 33338 special escaping sequences
+  section 33338 33597 mixing with ssi not supported
+  section 33597 33793 spdy mode not fully supported
+  section 33793 34437 missing data on short circuited requests
+  section 34437 36765 todo
+  section 36765 36927 changes
+  section 36927 39927 test suite
+  section 39927 41511 copyright and license
+  section 41511 43772 see also
+  section 43772 118892 directives
+  section 46397 47006 lua_use_default_type
+  section 47006 48339 lua_malloc_trim
+  section 48339 50218 lua_code_cache
+  section 50218 51251 lua_regex_cache_max_entries
+  section 51251 51942 lua_regex_match_limit
+  section 51942 52616 lua_package_path
+  section 52616 53291 lua_package_cpath
+  section 53291 57274 init_by_lua
+  section 57274 57806 init_by_lua_block
+  section 57806 58395 init_by_lua_file
+  section 58395 59844 init_worker_by_lua
+  section 59844 60405 init_worker_by_lua_block
+  section 60405 60721 init_worker_by_lua_file
+  section 60721 63797 set_by_lua
+  section 63797 64559 set_by_lua_block
+  section 64559 65784 set_by_lua_file
+  section 65784 66566 content_by_lua
+  section 66566 67122 content_by_lua_block
+  section 67122 68681 content_by_lua_file
+  section 68681 72920 rewrite_by_lua
+  section 72920 73469 rewrite_by_lua_block
+  section 73469 74840 rewrite_by_lua_file
+  section 74840 77492 access_by_lua
+  section 77492 78036 access_by_lua_block
+  section 78036 79261 access_by_lua_file
+  section 79261 80394 header_filter_by_lua
+  section 80394 80972 header_filter_by_lua_block
+  section 80972 81669 header_filter_by_lua_file
+  section 81669 85252 body_filter_by_lua
+  section 85252 85830 body_filter_by_lua_block
+  section 85830 86520 body_filter_by_lua_file
+  section 86520 88899 log_by_lua
+  section 88899 89447 log_by_lua_block
+  section 89447 90098 log_by_lua_file
+  section 90098 92433 balancer_by_lua_block
+  section 92433 93079 balancer_by_lua_file
+  section 93079 95035 lua_need_request_body
+  section 95035 98693 ssl_certificate_by_lua_block
+  section 98693 99377 ssl_certificate_by_lua_file
+  section 99377 102629 ssl_session_fetch_by_lua_block
+  section 102629 103457 ssl_session_fetch_by_lua_file
+  section 103457 105098 ssl_session_store_by_lua_block
+  section 105098 105926 ssl_session_store_by_lua_file
+  section 105926 106697 lua_shared_dict
+  section 106697 107332 lua_socket_connect_timeout
+  section 107332 107940 lua_socket_send_timeout
+  section 107940 108175 lua_socket_send_lowat
+  section 108175 108904 lua_socket_read_timeout
+  section 108904 109446 lua_socket_buffer_size
+  section 109446 110295 lua_socket_pool_size
+  section 110295 111035 lua_socket_keepalive_timeout
+  section 111035 111579 lua_socket_log_errors
+  section 111579 112046 lua_ssl_ciphers
+  section 112046 112393 lua_ssl_crl
+  section 112393 112769 lua_ssl_protocols
+  section 112769 113185 lua_ssl_trusted_certificate
+  section 113185 113517 lua_ssl_verify_depth
+  section 113517 114459 lua_http10_buffering
+  section 114459 114934 rewrite_by_lua_no_postpone
+  section 114934 115400 access_by_lua_no_postpone
+  section 115400 115848 lua_transform_underscores_in_response_headers
+  section 115848 117866 lua_check_client_abort
+  section 117866 118330 lua_max_pending_timers
+  section 118330 118892 lua_max_running_timers
+  section 118892 314425 nginx api for lua
+  section 123265 124922 introduction
+  section 124922 126055 ngx.arg
+  section 126055 127976 ngx.var.variable
+  section 127976 128986 core constants
+  section 128986 130094 http method constants
+  section 130094 132604 http status constants
+  section 132604 133189 nginx log level constants
+  section 133189 134318 print
+  section 134318 137985 ngx.ctx
+  section 137985 149364 ngx.location.capture
+  section 149364 151306 ngx.location.capture_multi
+  section 151306 151873 ngx.status
+  section 151873 154659 ngx.header.header
+  section 154659 155301 ngx.resp.get_headers
+  section 155301 155869 ngx.req.is_internal
+  section 155869 156589 ngx.req.start_time
+  section 156589 157014 ngx.req.http_version
+  section 157014 157918 ngx.req.raw_header
+  section 157918 158479 ngx.req.get_method
+  section 158479 159048 ngx.req.set_method
+  section 159048 161528 ngx.req.set_uri
+  section 161528 162417 ngx.req.set_uri_args
+  section 162417 164817 ngx.req.get_uri_args
+  section 164817 167463 ngx.req.get_post_args
+  section 167463 169693 ngx.req.get_headers
+  section 169693 170730 ngx.req.set_header
+  section 170730 171167 ngx.req.clear_header
+  section 171167 172896 ngx.req.read_body
+  section 172896 173454 ngx.req.discard_body
+  section 173454 174930 ngx.req.get_body_data
+  section 174930 175949 ngx.req.get_body_file
+  section 175949 176606 ngx.req.set_body_data
+  section 176606 177720 ngx.req.set_body_file
+  section 177720 179718 ngx.req.init_body
+  section 179718 180901 ngx.req.append_body
+  section 180901 181747 ngx.req.finish_body
+  section 181747 183855 ngx.req.socket
+  section 183855 186183 ngx.exec
+  section 186183 188295 ngx.redirect
+  section 188295 188828 ngx.send_headers
+  section 188828 189137 ngx.headers_sent
+  section 189137 190707 ngx.print
+  section 190707 190897 ngx.say
+  section 190897 192105 ngx.log
+  section 192105 193466 ngx.flush
+  section 193466 195620 ngx.exit
+  section 195620 197487 ngx.eof
+  section 197487 198021 ngx.sleep
+  section 198021 198462 ngx.escape_uri
+  section 198462 198947 ngx.unescape_uri
+  section 198947 200008 ngx.encode_args
+  section 200008 201068 ngx.decode_args
+  section 201068 201714 ngx.encode_base64
+  section 201714 202193 ngx.decode_base64
+  section 202193 202992 ngx.crc32_short
+  section 202992 203792 ngx.crc32_long
+  section 203792 204947 ngx.hmac_sha1
+  section 204947 205603 ngx.md5
+  section 205603 206098 ngx.md5_bin
+  section 206098 206717 ngx.sha1_bin
+  section 206717 207173 ngx.quote_sql_str
+  section 207173 207698 ngx.today
+  section 207698 208299 ngx.time
+  section 208299 209028 ngx.now
+  section 209028 209580 ngx.update_time
+  section 209580 210191 ngx.localtime
+  section 210191 210796 ngx.utctime
+  section 210796 211437 ngx.cookie_time
+  section 211437 212120 ngx.http_time
+  section 212120 212778 ngx.parse_http_time
+  section 212778 213098 ngx.is_subrequest
+  section 213098 219864 ngx.re.match
+  section 219864 222216 ngx.re.find
+  section 222216 224624 ngx.re.gmatch
+  section 224624 227425 ngx.re.sub
+  section 227425 228590 ngx.re.gsub
+  section 228590 230929 ngx.shared.dict
+  section 230929 232206 ngx.shared.dict.get
+  section 232206 232997 ngx.shared.dict.get_stale
+  section 232997 236057 ngx.shared.dict.set
+  section 236057 236813 ngx.shared.dict.safe_set
+  section 236813 237653 ngx.shared.dict.add
+  section 237653 238409 ngx.shared.dict.safe_add
+  section 238409 239253 ngx.shared.dict.replace
+  section 239253 239885 ngx.shared.dict.delete
+  section 239885 241865 ngx.shared.dict.incr
+  section 241865 242981 ngx.shared.dict.lpush
+  section 242981 243608 ngx.shared.dict.rpush
+  section 243608 244364 ngx.shared.dict.lpop
+  section 244364 245119 ngx.shared.dict.rpop
+  section 245119 245896 ngx.shared.dict.llen
+  section 245896 246592 ngx.shared.dict.flush_all
+  section 246592 247511 ngx.shared.dict.flush_expired
+  section 247511 248498 ngx.shared.dict.get_keys
+  section 248498 249283 ngx.socket.udp
+  section 249283 251777 udpsock:setpeername
+  section 251777 252556 udpsock:send
+  section 252556 253919 udpsock:receive
+  section 253919 254579 udpsock:close
+  section 254579 255063 udpsock:settimeout
+  section 255063 255295 ngx.socket.stream
+  section 255295 257684 ngx.socket.tcp
+  section 257684 260930 tcpsock:connect
+  section 260930 263209 tcpsock:sslhandshake
+  section 263209 264656 tcpsock:send
+  section 264656 266973 tcpsock:receive
+  section 266973 271425 tcpsock:receiveuntil
+  section 271425 272314 tcpsock:close
+  section 272314 273099 tcpsock:settimeout
+  section 273099 274080 tcpsock:settimeouts
+  section 274080 274563 tcpsock:setoption
+  section 274563 276976 tcpsock:setkeepalive
+  section 276976 277784 tcpsock:getreusedtimes
+  section 277784 278604 ngx.socket.connect
+  section 278604 280064 ngx.get_phase
+  section 280064 286263 ngx.thread.spawn
+  section 286263 289213 ngx.thread.wait
+  section 289213 289869 ngx.thread.kill
+  section 289869 291661 ngx.on_abort
+  section 291661 298312 ngx.timer.at
+  section 298312 298827 ngx.timer.running_count
+  section 298827 299332 ngx.timer.pending_count
+  section 299332 299992 ngx.config.subsystem
+  section 299992 300471 ngx.config.debug
+  section 300471 301056 ngx.config.prefix
+  section 301056 301596 ngx.config.nginx_version
+  section 301596 302027 ngx.config.nginx_configure
+  section 302027 302550 ngx.config.ngx_lua_version
+  section 302550 303120 ngx.worker.exiting
+  section 303120 303715 ngx.worker.pid
+  section 303715 304268 ngx.worker.count
+  section 304268 304956 ngx.worker.id
+  section 304956 305883 ngx.semaphore
+  section 305883 306522 ngx.balancer
+  section 306522 307082 ngx.ssl
+  section 307082 307830 ngx.ocsp
+  section 307830 310448 ndk.set_var.directive
+  section 310448 311177 coroutine.create
+  section 311177 311925 coroutine.resume
+  section 311925 312626 coroutine.yield
+  section 312626 313263 coroutine.wrap
+  section 313263 313843 coroutine.running
+  section 313843 314425 coroutine.status
+  section 314425 314706 obsolete sections
+  section 314610 314706 special pcre sequences
+
+dist ngx_lua_upstream-0.06
+  aliases ngx_http_lua_upstream_module
+  modules ngx_lua_upstream-0.06
+
+module ngx_lua_upstream-0.06
+  section 18 121 name
+  section 121 171 status
+  section 171 2529 synopsis
+  section 2529 6661 functions
+  section 2550 2802 get_upstreams
+  section 2802 3396 get_servers
+  section 3396 4304 get_primary_peers
+  section 4304 4546 get_backup_peers
+  section 4546 5824 set_peer_down
+  section 5824 6661 current_upstream_name
+  section 6661 6766 todo
+  section 6766 7097 compatibility
+  section 7097 8719 installation
+  section 8719 8818 author
+  section 8818 10273 copyright and license
+  section 10273 10563 see also
+
+dist ngx_postgres-1.0rc7
+  aliases ngx_postgres
+  modules ngx_postgres-1.0rc7 todo
+
+module ngx_postgres-1.0rc7
+  section 18 255 about
+  section 255 699 status
+  section 699 5823 configuration directives
+  section 733 967 postgres_server
+  section 967 1596 postgres_keepalive
+  section 1596 1869 postgres_pass
+  section 1869 2273 postgres_query
+  section 2273 3220 postgres_rewrite
+  section 3220 4143 postgres_output
+  section 4143 4811 postgres_set
+  section 4811 5345 postgres_escape
+  section 5345 5581 postgres_connect_timeout
+  section 5581 5823 postgres_result_timeout
+  section 5823 6191 configuration variables
+  section 5856 5926 $postgres_columns
+  section 5926 5990 $postgres_rows
+  section 5990 6119 $postgres_affected
+  section 6119 6191 $postgres_query
+  section 6191 11113 sample configurations
+  section 6222 6632 sample configuration #1
+  section 6632 7156 sample configuration #2
+  section 7156 7953 sample configuration #3
+  section 7953 9011 sample configuration #4
+  section 9011 10701 sample configuration #5
+  section 10701 11113 sample configuration #6
+  section 11113 11976 testing
+  section 11976 13772 license
+  section 13772 14119 see also
+
+module todo
+
+dist opm-0.0.2
+  modules opm-0.0.2
+
+module opm-0.0.2
+  section 18 65 name
+  section 65 96 status
+  section 96 1895 synopsis
+  section 1895 4589 description
+  section 4589 7334 usage
+  section 7334 10562 author workflow
+  section 10562 19182 file dist.ini
+  section 10980 11197 name
+  section 11197 11492 abstract
+  section 11492 11907 version
+  section 11907 12352 author
+  section 12352 14667 license
+  section 14667 16613 requires
+  section 16613 17017 repo_link
+  section 17017 17208 is_original
+  section 17208 17434 lib_dir
+  section 17434 17741 exclude_files
+  section 17741 18351 main_module
+  section 18351 19182 doc_dir
+  section 19182 22508 file .opmrc
+  section 19799 20282 github_account
+  section 20282 21620 github_token
+  section 21620 22063 upload_server
+  section 22063 22508 download_server
+  section 22508 23703 version number handling
+  section 23703 24907 installation
+  section 23725 24907 for opm
+  section 24907 26359 security considerations
+  section 26359 26628 credit
+  section 26628 27732 todo
+  section 27732 27819 author
+  section 27819 29308 copyright and license
+
+dist rds-csv-nginx-module-0.07
+  aliases ngx_rds_csv ngx_http_rds_csv_filter_module
+  modules rds-csv-nginx-module-0.07
+
+module rds-csv-nginx-module-0.07
+  aliases ngx_rds_csv
+  section 18 141 name
+  section 141 202 status
+  section 202 371 synopsis
+  section 371 906 description
+  section 906 2811 directives
+  section 928 1117 rds_csv
+  section 1117 1493 rds_csv_row_terminator
+  section 1493 1860 rds_csv_field_separator
+  section 1860 2131 rds_csv_field_name_header
+  section 2131 2561 rds_csv_content_type
+  section 2561 2811 rds_csv_buffer_size
+  section 2811 4013 installation
+  section 4013 4418 compatibility
+  section 4418 4505 author
+  section 4505 5978 copyright & license
+  section 5978 6233 see also
+
+dist rds-json-nginx-module-0.14
+  aliases ngx_rds_json ngx_http_rds_json_filter_module
+  modules rds-json-nginx-module-0.14
+
+module rds-json-nginx-module-0.14
+  aliases ngx_rds_json
+  section 18 140 name
+  section 140 367 status
+  section 367 873 synopsis
+  section 873 1123 description
+  section 1123 4494 directives
+  section 1145 1281 rds_json
+  section 1281 1641 rds_json_buffer_size
+  section 1641 2052 rds_json_format
+  section 2052 2886 rds_json_root
+  section 2886 3113 rds_json_success_property
+  section 3113 3552 rds_json_user_property
+  section 3552 3736 rds_json_errcode_key
+  section 3736 3915 rds_json_errstr_key
+  section 3915 4254 rds_json_ret
+  section 4254 4494 rds_json_content_type
+  section 4494 5692 installation
+  section 5692 6388 compatibility
+  section 6388 6490 author
+  section 6490 7951 copyright & license
+  section 7951 8204 see also
+
+dist redis2-nginx-module-0.13
+  aliases ngx_redis2 ngx_http_redis2_module
+  modules redis2-nginx-module-0.13
+
+module redis2-nginx-module-0.13
+  aliases ngx_redis2
+  section 18 191 name
+  section 191 249 status
+  section 249 390 version
+  section 390 2195 synopsis
+  section 2195 3346 description
+  section 3346 8449 directives
+  section 3368 4092 redis2_query
+  section 4092 4514 redis2_raw_query
+  section 4514 5431 redis2_raw_queries
+  section 5431 5810 redis2_literal_raw_query
+  section 5810 6056 redis2_pass
+  section 6056 6533 redis2_connect_timeout
+  section 6533 6974 redis2_send_timeout
+  section 6974 7418 redis2_read_timeout
+  section 7418 7737 redis2_buffer_size
+  section 7737 8449 redis2_next_upstream
+  section 8449 9137 connection pool
+  section 9137 9527 selecting redis databases
+  section 9527 14874 lua interoperability
+  section 12865 14874 pipelined redis requests by lua
+  section 14874 16517 redis publish/subscribe support
+  section 15560 16517 limitations for redis publish/subscribe
+  section 16517 17324 performance tuning
+  section 17324 18878 installation
+  section 18878 19763 compatibility
+  section 19763 20050 community
+  section 19784 19920 english mailing list
+  section 19920 20050 chinese mailing list
+  section 20050 20317 bugs and patches
+  section 20317 20457 source repository
+  section 20457 20569 todo
+  section 20569 20668 author
+  section 20668 20818 getting involved
+  section 20818 22311 copyright & license
+  section 22311 22929 see also
+
+dist redis-nginx-module-0.3.7
+  aliases ngx_redis ngx_http_redis_module
+
+dist resty-cli-0.16
+  modules resty-cli-0.16
+
+module resty-cli-0.16
+  section 18 89 name
+  section 89 1304 description
+  section 1304 4224 synopsis
+  section 4224 4602 installation
+  section 4602 5369 test suite
+  section 5369 5572 authors
+  section 5572 7156 copyright and license
+
+dist set-misc-nginx-module-0.31
+  aliases ngx_set_misc ngx_http_set_misc_module
+  modules set-misc-nginx-module-0.31
+
+module set-misc-nginx-module-0.31
+  aliases ngx_set_misc
+  section 19 251 name
+  section 251 399 version
+  section 399 3508 synopsis
+  section 3508 4174 description
+  section 4174 30647 directives
+  section 4196 4756 set_if_empty
+  section 4756 6413 set_quote_sql_str
+  section 6413 6749 set_quote_pgsql_str
+  section 6749 8349 set_quote_json_str
+  section 8349 10130 set_unescape_uri
+  section 10130 10481 set_escape_uri
+  section 10481 11874 set_hashed_upstream
+  section 11874 13925 set_encode_base32
+  section 13925 14396 set_base32_padding
+  section 14396 14690 set_misc_base32_padding
+  section 14690 15204 set_base32_alphabet
+  section 15204 15590 set_decode_base32
+  section 15590 17142 set_encode_base64
+  section 17142 17523 set_decode_base64
+  section 17523 19060 set_encode_hex
+  section 19060 19434 set_decode_hex
+  section 19434 21138 set_sha1
+  section 21138 22865 set_md5
+  section 22865 24195 set_hmac_sha1
+  section 24195 25159 set_random
+  section 25159 25952 set_secure_random_alphanum
+  section 25952 26737 set_secure_random_lcalpha
+  section 26737 28253 set_rotate
+  section 28253 28886 set_local_today
+  section 28886 29764 set_formatted_gmt_time
+  section 29764 30647 set_formatted_local_time
+  section 30647 31148 caveats
+  section 31148 32950 installation
+  section 32263 32950 building as a dynamic module
+  section 32950 33936 compatibility
+  section 33936 34447 report bugs
+  section 34447 34591 source repository
+  section 34591 34758 changes
+  section 34758 35549 test suite
+  section 35549 35705 getting involved
+  section 35705 35911 author
+  section 35911 37365 copyright & license
+  section 37365 37524 see also
+
+dist srcache-nginx-module-0.31
+  aliases ngx_srcache ngx_http_srcache_filter_module
+  modules srcache-nginx-module-0.31
+
+module srcache-nginx-module-0.31
+  aliases ngx_srcache
+  section 18 220 name
+  section 220 270 status
+  section 270 422 version
+  section 422 2283 synopsis
+  section 2283 13116 description
+  section 3397 4272 subrequest caching
+  section 4272 8659 distributed memcached caching
+  section 8659 10827 caching with redis
+  section 10827 13116 cache key preprocessing
+  section 13116 30983 directives
+  section 13138 14420 srcache_fetch
+  section 14420 16146 srcache_fetch_skip
+  section 16146 17962 srcache_store
+  section 17962 18622 srcache_store_max_size
+  section 18622 19695 srcache_store_skip
+  section 19695 20509 srcache_store_statuses
+  section 20509 21188 srcache_store_ranges
+  section 21188 21861 srcache_header_buffer_size
+  section 21861 22775 srcache_store_hide_header
+  section 22775 23736 srcache_store_pass_header
+  section 23736 24556 srcache_methods
+  section 24556 25600 srcache_ignore_content_encoding
+  section 25600 26544 srcache_request_cache_control
+  section 26544 27500 srcache_response_cache_control
+  section 27500 27987 srcache_store_no_store
+  section 27987 28474 srcache_store_no_cache
+  section 28474 28957 srcache_store_private
+  section 28957 30072 srcache_default_expire
+  section 30072 30983 srcache_max_expire
+  section 30983 33437 variables
+  section 31004 32085 $srcache_expire
+  section 32085 32677 $srcache_fetch_status
+  section 32677 33437 $srcache_store_status
+  section 33437 34136 known issues
+  section 34136 35675 caveats
+  section 35675 36679 trouble shooting
+  section 36679 38530 installation
+  section 38530 39241 compatibility
+  section 39241 39528 community
+  section 39262 39398 english mailing list
+  section 39398 39528 chinese mailing list
+  section 39528 39797 bugs and patches
+  section 39797 39940 source repository
+  section 39940 41136 test suite
+  section 41136 41381 todo
+  section 41381 41531 getting involved
+  section 41531 41630 author
+  section 41630 43094 copyright & license
+  section 43094 43423 see also
+
+dist xss-nginx-module-0.05
+  aliases ngx_xss ngx_http_xss_filter_module
+  modules xss-nginx-module-0.05
+
+module xss-nginx-module-0.05
+  aliases ngx_xss
+  section 18 97 name
+  section 97 595 synopsis
+  section 595 903 description
+  section 903 2271 directives
+  section 925 1097 xss_get
+  section 1097 1471 xss_callback_arg
+  section 1471 1743 xss_override_status
+  section 1743 1977 xss_check_status
+  section 1977 2271 xss_input_types
+  section 2271 3083 limitations
+  section 3083 3200 trouble shooting
+  section 3200 4399 installation
+  section 4399 5034 compatibility
+  section 5034 5106 todo
+  section 5106 5188 author
+  section 5188 6822 copyright & license
+  section 6822 6995 see also
+
