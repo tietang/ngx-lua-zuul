@@ -14,19 +14,30 @@ _M.eureka = {
 _M.routes = {
     demoRoute="routes"
 }
+--
 _M.metrics = {
+    -- 收集计算时间窗口
     timeWindowInSeconds = 1,
+    -- 最大保留size
     maxSaveSize = 10,
+    -- 是否启用微服务收集
     enabledService = true,
+    -- 是否启用请求收集
     enabledRequest = false,
+    -- 展示最新的条目数
     showTopNum = 100
 }
-
+-- 服务限流
 _M.limiter = {
-    limitLevel = "global", --global,service,api
-    windowSeconds = 10, -- 时间窗口,单位s 1~60s
-    maxSaveSize = 10, --最大保留size
-    maxRequests = 10000, -- 单位时间窗口的最大请求数,默认10k
+    --global,service,api
+    limitLevel = "global",
+    -- 时间窗口,单位s 1~60s
+    windowSeconds = 10,
+    --最大保留size
+    maxSaveSize = 10,
+    -- 单位时间窗口的最大请求数,默认10k
+    maxRequests = 10000,
+    -- 不同微服务使用不同的限流策略，默认使用全局配置
     params = {
         ["UserService"] = { [1] = 100, [2] = 1, [3] = 60 },
     }
