@@ -1,0 +1,95 @@
+.view, .summary {
+    shape-rendering: crispEdges;
+}
+
+.view svg {
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+path.line {
+    fill: none;
+    stroke: #46f;
+    stroke-width: 1px;
+    shape-rendering: auto;
+}
+
+path.area {
+    fill: #49f;
+    opacity: .05;
+}
+
+.axis {
+    shape-rendering: crispEdges;
+}
+
+line.tick {
+    stroke: #eee;
+}
+
+.x.axis .minor {
+    stroke-opacity: .5;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.y.axis path, rect.border {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1px;
+}
+
+.summary rect.border {
+    stroke: #ddd;
+}
+
+.summary .top_border {
+    stroke: #000;
+}
+
+.slider {
+    fill: none;
+    stroke: #000;
+}
+
+.slider-top-border {
+    stroke: #fff;
+}
+
+.slider rect.handle {
+    cursor: pointer;
+    fill: #eee;
+}
+
+.slider .handle-ridges {
+    cursor: pointer;
+}
+
+.slider line.odd {
+    stroke: #fff;
+}
+
+.slider line.even {
+    stroke: #000;
+}
+
+.slider_container line.border {
+    stroke: #000;
+}
+
+.slider_container rect.sizer {
+    shape-rendering: auto;
+    fill: #eee;
+    stroke: #000;
+}
+
+.slider_container rect.sizer:hover {
+    fill: #ccc;
+    cursor: col-resize;
+}
+
+.y.axis.summary path {
+    display: none;
+}

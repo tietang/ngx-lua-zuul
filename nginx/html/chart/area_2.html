@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .graph {
+            border: solid #cccccc 1px;
+        }
+
+        .graph .axis {
+            stroke-width: 1;
+        }
+
+        .graph .axis .tick line {
+            stroke: black;
+        }
+
+        .graph .axis .tick text {
+            fill: black;
+            font-size: 0.7em;
+        }
+
+        .graph .axis .domain {
+            fill: none;
+            stroke: black;
+        }
+
+        .graph .group {
+            fill: none;
+            stroke: black;
+            stroke-width: 1;
+        }
+
+        .graph .area {
+            fill: steelblue;
+        }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="/public/js/jquery-3.1.0.min.js"></script>
+
+</head>
+
+
+<body>
+<div class="graph"></div>
+<div id="text"></div>
+<script type="application/javascript">
+
+    var Area = function (options) {
+        options = options || {}
+        this.limit = options.limit || 200;
+        this.duration = options.duration || 1000;
+        this.now = new Date(Date.now() - this.duration);
+        this.width = options.width || 800;
+        this.height = options.height || 300;
+        this.color = options.color || "blue"
+    }
+    Area.index = 1;
+
+    Area.prototype.render = function (selector) {
+        if (!selector) {
+            div = document.createElement("div");       //创建一个div
+            div.className = "graph"  //创建div的css样式
+            div.id = "graph" + Area.index++
+            divText = document.createElement("div");       //创建一个div
+//            divText.className = "graph"  //创建div的css样式
+            divText.id = "text" + Area.index++
+
+            document.body.appendChild(div);        //在body内创建一个div
+            document.body.appendChild(divText);        //在body内创建一个div
+
+
+            this.textDivId = divText.id;
+            this.graphId = div.id;
+        }
+
+        this.selector = selector || document.getElementById(this.graphId)
+        this.textDivId = this.textDivId || "text"
+        var limit = this.limit;
+        var now = this.now;
+        var duration = this.duration
+        var width = this.width
+        var height = this.height
+        this.group = {
+            value: 0,
+            color: 'green',
+            data: d3.range(limit).map(function () {
+                return 0
+            })
+        }
+
+
+        this.x = d3.time.scale()
+                .domain([now - (limit - 2), now - duration])
+                .range([0, width])
+
+        this.y = d3.scale.linear()
+                .domain([0, 100])
+                .range([height, 0])
+
+        var  x=this.x
+
+        this.area = d3.svg.area()
+                .interpolate("basis")
+                .x(function (d, i) {
+                    return this.x(now - (limit - 1 - i) * duration)
+                })
+                .y0(height)
+                .y1(function (d) {
+                    return this.y(d);
+                });
+
+
+        this.svg = d3.select(selector).append('svg')
+                .attr('class', 'chart')
+                .attr('width', width)
+                .attr('height', height + 50)
+
+        //        var axis = svg.append('g')
+        //            .attr('class', 'x axis')
+        //            .attr('transform', 'translate(0,' + height + ')')
+        //            .call(x.axis = d3.svg.axis().scale(x).orient('bottom'))
+
+        this.paths = this.svg.append('g')
+
+
+        this.group.path = this.paths.append("path")
+                .datum(this.group.data)
+                .attr("class", "area")
+                .attr("d", this.area);
+
+    }
+
+    Area.prototype.start = function () {
+        var group = this.group
+        var area = this.area
+        var textDivId = this.textDivId
+        var x = this.x
+        var paths = this.paths
+        var limit = this.limit
+        var duration = this.duration
+
+
+        function tick() {
+            var url = "/_admin/qps.json";
+            $.get(url, function (rdata) {
+
+
+                var ms = rdata.date;
+                var close = rdata.close;
+
+                $("#" + textDivId).html(close * 100 + " q/s");
+
+                now = new Date()
+                now.setTime(ms)
+
+
+                // Add new values
+                group.data.push(close);
+//                    group.data.push(Math.random() * 100);
+                group.path.attr('d', area);
+
+                // Shift domain
+                x.domain([now - (limit - 2) * duration, now - duration])
+
+                // Slide x-axis left
+//            axis.transition()
+//                .duration(500)
+//                .ease('linear')
+//                .call(x.axis)
+
+                // Slide paths left
+                paths.attr('transform', null)
+                        .transition()
+                        .duration(500)
+                        .ease('linear')
+                        .attr('transform', 'translate(' + x(now - (limit - 1) * duration) + ')')
+
+
+                // .each('end', tick)
+
+                // Remove oldest data point from each group
+                group.data.shift()
+//            console.log(group.data)
+            });
+
+        }
+
+        setInterval(tick, this.duration)
+
+    }
+
+    var a1 = new Area();
+    a1.render(".graph");
+    a1.start();
+//    var a2 = new Area();
+//    a2.render();
+//    a2.start();
+
+
+</script>
+
+</body>
+</html>
+

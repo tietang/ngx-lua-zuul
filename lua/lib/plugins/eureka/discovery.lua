@@ -66,9 +66,10 @@ end
 
 function _M:init(...)
     self.router = router or {}
+--    ngx.log(ngx.ERR, "arg type","    ", type(...))
     local arg = { ... }
+--    ngx.log(ngx.ERR, "arg type","    ", type(arg))
     ngx.log(ngx.ERR, "arg", arg[1])
-
 --    eureka:setDiscoveryServers(arg)
     eureka:setDiscoveryServers(unpack(arg))
 

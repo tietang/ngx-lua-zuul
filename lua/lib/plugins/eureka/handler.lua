@@ -91,7 +91,7 @@ function _M:initWorker()
     rateLimiter:init(ngx.shared.limiter, globalConfig.limiter)
     rateLimiter:start()
 
-    discovery:init(globalConfig.eureka.serverUrl)
+    discovery:init(unpack(globalConfig.eureka.serverUrl))
     discovery:schedule()
 end
 

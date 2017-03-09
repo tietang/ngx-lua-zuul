@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .graph .axis {
+            stroke-width: 1;
+        }
+
+        .graph .axis .tick line {
+            stroke: black;
+        }
+
+        .graph .axis .tick text {
+            fill: black;
+            font-size: 0.7em;
+        }
+
+        .graph .axis .domain {
+            fill: none;
+            stroke: black;
+        }
+
+        .graph .group {
+            fill: none;
+            stroke: black;
+            stroke-width: 1;
+        }
+
+        .graph .area {
+            fill: steelblue;
+        }
+    </style>
+    <!--<script src="http://d3js.org/d3.v4.min.js"></script>-->
+    <script src="http://d3js.org/d3.v4.js"></script>
+    <script src="/public/js/jquery-3.1.0.min.js"></script>
+
+</head>
+
+
+<body>
+<div class="graph"></div>
+<div id="text"></div>
+<script type="application/javascript">
+
+    function Area() {
+
+        this.limit = 100 * 1;
+        this.duration = 1000;
+        this.now = new Date(Date.now() - this.duration);
+        this.width = 600;
+        this.height = 300;
+        this.group = {
+            value: 0,
+            color: 'green',
+            data: d3.range(this.limit).map(function () {
+                return 0
+            })
+        };
+
+
+        this.x = d3.scaleTime()
+                .domain([this.now - ( this.limit - 2), this.now - this.duration])
+                .range([0, this.width]);
+
+        this.y = d3.scaleLinear()
+                .domain([0, 100])
+                .range([this.height, 0]);
+
+        var xFunc = this.x;
+        var yFunc = this.y;
+
+        this.area = d3.area()
+                .x(function (d, i) {
+                    return xFunc(this.now - ( this.limit - 1 - i) * this.duration);
+                })
+                .y0(this.height)
+                .y1(function (d) {
+                    return yFunc(d);
+                })
+                .curve(d3.curveBasis);
+//        console.info(this.area)
+
+
+
+        this.svg = d3.select('.graph').append('svg')
+                .attr('class', 'chart')
+                .attr('width', this.width)
+                .attr('height', this.height + 50);
+
+        //        var axis = svg.append('g')
+        //            .attr('class', 'x axis')
+        //            .attr('transform', 'translate(0,' + height + ')')
+        //            .call(x.axis = d3.svg.axis().scale(x).orient('bottom'))
+
+        this.paths = this.svg.append('g');
+
+
+        this.group.path = this.paths.append("path")
+                .datum(this.group.data)
+                .attr("class", "area")
+                .attr("d", this.area);
+        var self = this;
+        this.tick = function () {
+            var url = "/_admin/qps.json";
+
+            $.get(url, function (rdata) {
+
+
+                var ms = rdata.date;
+                var close = rdata.close;
+
+                $("#text").html(close * 100 + " q/s");
+                self.now = new Date()
+                self.now.setTime(ms)
+
+
+                // Add new values
+                self.group.data.push(close * 10);
+//                    group.data.push(Math.random() * 100);
+                self.group.path.attr('d', self.area);
+//                console.info(self.area)
+                // Shift domain
+                self.x.domain([self.now - (self.limit - 2) * self.duration, self.now - self.duration])
+
+                // Slide x-axis left
+//            axis.transition()
+//                .duration(500)
+//                .ease('linear')
+//                .call(x.axis)
+
+                // Slide paths left
+                self.paths.attr('transform', null)
+                        .transition()
+                        .duration(500)
+                        //                    .ease('linear')
+                        .attr('transform', 'translate(' + self.x(self.now - (self.limit - 1) * self.duration) + ')')
+
+
+                // .each('end', tick)
+
+                // Remove oldest data point from each group
+                self.group.data.shift()
+//            console.log(group.data)
+            });
+
+        }
+
+        this.start = function () {
+            setInterval(this.tick, 1000)
+        }
+
+
+    }
+
+    var area = new Area();
+    area.start();
+
+</script>
+
+</body>
+</html>
+

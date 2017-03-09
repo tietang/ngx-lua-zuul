@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .graph .axis {
+            stroke-width: 1;
+        }
+
+        .graph .axis .tick line {
+            stroke: black;
+        }
+
+        .graph .axis .tick text {
+            fill: black;
+            font-size: 0.7em;
+        }
+
+        .graph .axis .domain {
+            fill: none;
+            stroke: black;
+        }
+
+        .graph .group {
+            fill: none;
+            stroke: black;
+            stroke-width: 1;
+        }
+
+        .graph .area {
+            fill: steelblue;
+        }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+
+</head>
+<body>
+<div class="graph"></div>
+
+
+<script>
+    var limit = 60 * 1,
+            duration = 1000,
+            now = new Date(Date.now() - duration)
+
+    var width = 300,
+            height = 200
+
+    var groups = {
+        current: {
+            value: 0,
+            color: 'green',
+            data: d3.range(limit).map(function () {
+                return 0
+            })
+        }
+    }
+
+    var x = d3.time.scale()
+    //            .domain([now - (limit - 2), now - duration])
+            .range([0, width])
+
+    var y = d3.scale.linear()
+            .domain([0, 100])
+            .range([height, 0])
+
+    var area = d3.svg.area()
+            .interpolate("basis")
+            .x(function (d, i) {
+                return x(now - (limit - 1 - i) * duration)
+            })
+            .y0(height)
+            .y1(function (d) {
+                return y(d);
+            });
+
+
+    var svg = d3.select('.graph').append('svg')
+            .attr('class', 'chart')
+            .attr('width', width)
+            .attr('height', height + 50)
+
+    //        var axis = svg.append('g')
+    //            .attr('class', 'x axis')
+    //            .attr('transform', 'translate(0,' + height + ')')
+    //            .call(x.axis = d3.svg.axis().scale(x).orient('bottom'))
+
+    var paths = svg.append('g')
+
+
+    for (var name in groups) {
+        var group = groups[name]
+        group.path = paths.append("path")
+                .datum(group.data)
+                .attr("class", "area")
+                .attr("d", area);
+    }
+
+    function tick() {
+        now = new Date()
+
+        // Add new values
+        for (var name in groups) {
+            var group = groups[name];
+            //group.data.push(group.value) // Real values arrive at irregular intervals
+            group.data.push(Math.random() * 100);
+            // group.data.push(20  );
+            group.path.attr('d', area);
+        }
+
+        // Shift domain
+        x.domain([now - (limit - 2) * duration, now - duration])
+
+        // Slide x-axis left
+//            axis.transition()
+//                .duration(500)
+//                .ease('linear')
+//                .call(x.axis)
+
+        // Slide paths left
+        paths.attr('transform', null)
+                .transition()
+                .duration(500)
+                .ease('linear')
+                .attr('transform', 'translate(' + x(now - (limit - 1) * duration) + ')')
+
+
+        // .each('end', tick)
+
+        // Remove oldest data point from each group
+        for (var name in groups) {
+            var group = groups[name]
+            group.data.shift()
+        }
+    }
+    setInterval(tick, 1000)
+
+</script>
+</body>
+</html>
+
