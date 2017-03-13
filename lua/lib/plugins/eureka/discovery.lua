@@ -111,8 +111,8 @@ function _M:schedule()
         --         and last_executed_pid ~= currentWorkerPid -- 如果当前worker pid != 最后一次worker pid
         --         and (now-last_executed_pid_time) >= interval*c-0.1 --如果当前worker最后执行时间 >= 设定间隔*worker数量 - 0.1
         --     ) then
-        -- if  id % c==0 then -->=NGINX 1.9.1+
-        if true then -->=NGINX 1.9.1+
+         if  id % c == 0 then -->=NGINX 1.9.1+
+--        if true then -->=NGINX 1.9.1+
             -- getApps()
             local content, hosts, apps = _M:getAllApps()
             self:dealApps()

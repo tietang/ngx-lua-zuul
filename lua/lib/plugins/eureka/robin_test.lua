@@ -3,7 +3,6 @@
 local robinObj = require "robin"
 
 
-
 local servers={
 	{["weight"]=1,["name"]="a",["cweight"]=0},
 	{["weight"]=2,["name"]="b",["cweight"]=0},
@@ -18,7 +17,6 @@ print(robin2)
 
 for i=1,7 do
 	print(robin:next().name)
-
 end
 
 
@@ -31,3 +29,4 @@ local  sf
 if  sf==nil  then
 print(sf)
 end
+

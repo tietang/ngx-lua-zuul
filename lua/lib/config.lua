@@ -7,13 +7,13 @@
 local _M = {}
 -- 指定eureka server url，多个用数组表示
 _M.eureka = {
-    serverUrl ={"http://172.16.2.248:8761/eureka/","http://172.16.1.248:8761/eureka/"}
---    serverUrl ="http://172.16.1.248:8761/eureka/"
+    serverUrl = { "http://172.16.2.248:8761/eureka/", "http://172.16.1.248:8761/eureka/" }
+    --    serverUrl ="http://172.16.1.248:8761/eureka/"
 }
 -- 定义route table lua 文件名称：
 -- key为任意能区分业务的，值为route table lua文件名，该文件路径为当前文件同文件夹
 _M.routes = {
-    demoRoute="routes"
+    demoRoute = "routes"
 }
 --
 _M.metrics = {
@@ -28,6 +28,7 @@ _M.metrics = {
     -- 展示最新的条目数
     showTopNum = 100
 }
+
 -- 服务限流
 _M.limiter = {
     --global,service,api
@@ -44,11 +45,16 @@ _M.limiter = {
     }
 }
 
+_M.lb = {
+    weightModule = "weight",
+    -- 时间窗口,单位s 1~60s
+    windowInSeconds = 3,
+}
+
 _M.robin = {
     timeWindowInSeconds = 5,
     --负载均衡共享缓存
-    shared=ngx.shared.robin,
-
+    shared = ngx.shared.robin,
 }
 -- # 预先提供,调用方和服务方共同持有同样的
 _M.auth = {

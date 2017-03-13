@@ -19,6 +19,8 @@ function _M:new(o, servers)
     return o
 end
 
+
+
 function _M:reWeight()
     local totalResTime = 0;
     local shared = globalConfig.robin.shared
