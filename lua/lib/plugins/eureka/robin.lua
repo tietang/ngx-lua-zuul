@@ -6,7 +6,22 @@ local _M = {}
 --  {["weight"]=2,["name"]="b",["cweight"]=0},
 --  {["weight"]=4,["name"]="c",["cweight"]=0}
 -- }
-local weight = require "weight"
+--local hostServer = {
+--    id = id,
+--    name = appName,
+--    hostName = hostName,
+--    ip = ip,
+--    port = port,
+--    healthCheckUrl = v.healthCheckUrl,
+--    status = v.status,
+--    lastRenewalTimestamp = v.leaseInfo.lastRenewalTimestamp,
+--    url = url,
+--    hostStr = hostStr,
+--    weight = 10,
+--    cweight = 0
+--}
+
+
 
 _M.servers = {}
 

@@ -1,13 +1,11 @@
-
-
 local _M = {
-    stripPrefix=false,
-    defaultGroupName="DefaultGroup"
+    stripPrefix = false,
+    defaultGroupName = "DefaultGroup"
 }
-local json=require "cjson"
+local json = require "cjson"
 
 
-_M.groups={}
+_M.groups = {}
 
 
 --[[
@@ -38,86 +36,82 @@ local routingTable = {
 }
 --]]
 
-
-function _M:setGroupStripPrefix(name,stripPrefix)
+-- 设置或更新group stripPrefix
+function _M:setGroupStripPrefix(groupName, stripPrefix)
     if not self.groups[groupName] then
-        self.groups[groupName]={}
+        self.groups[groupName] = {}
     end
-    self.groups[groupName].stripPrefix=stripPrefix
+    self.groups[groupName].stripPrefix = stripPrefix
 end
 
 
-function _M:addRoute(route,groupName)
+function _M:addRoute(route, groupName)
     --
-   
+
     if not route then
         return
     end
 
-    local name = self:dealGroupName(groupName) 
-  
+    local name = self:dealGroupName(groupName)
+
 
     if not self.groups[name] then
-        self.groups[name]={stripPrefix=self.stripPrefix,routes={}}
+        self.groups[name] = { stripPrefix = self.stripPrefix, routes = {} }
     end
 
     -- print(dump(route))
-    local isInit=initRoute(self.groups[name],route)
+    local isInit = initRoute(self.groups[name], route)
     if isInit then
         local updated = false
-        for i,v in ipairs(self.groups[name].routes) do
-            if v.app==route.app and v.sourcePath==route.sourcePath then
-                self.groups[name].routes[i]=route
-                updated=true
+        for i, v in ipairs(self.groups[name].routes) do
+            if v.app == route.app and v.sourcePath == route.sourcePath then
+                self.groups[name].routes[i] = route
+                updated = true
             end
         end
         if not updated then
-            table.insert(self.groups[name].routes,route)
+            table.insert(self.groups[name].routes, route)
         end
     end
-    
-
 end
 
 
-function initRoute(group,route)
+function initRoute(group, route)
     if not route or not route.sourcePath then
         return false
     end
 
-    local sourceFuzzyMatchIndex=string.find(route.sourcePath,"/**",1)
-    if sourceFuzzyMatchIndex and sourceFuzzyMatchIndex>0 then
-        route.sourceIsFuzzyMatch= true
-        route.sourcePrefix=string.sub(route.sourcePath,1,sourceFuzzyMatchIndex)
+    local sourceFuzzyMatchIndex = string.find(route.sourcePath, "/**", 1)
+    if sourceFuzzyMatchIndex and sourceFuzzyMatchIndex > 0 then
+        route.sourceIsFuzzyMatch = true
+        route.sourceFuzzyMatchIndex = sourceFuzzyMatchIndex
+        route.sourcePrefix = string.sub(route.sourcePath, 1, sourceFuzzyMatchIndex)
     end
 
     if route.targetPath then
-        local targetFuzzyMatchIndex=string.find(route.targetPath,"/**",1)
-        if targetFuzzyMatchIndex and targetFuzzyMatchIndex>0 then
+        local targetFuzzyMatchIndex = string.find(route.targetPath, "/**", 1)
+        if targetFuzzyMatchIndex and targetFuzzyMatchIndex > 0 then
             route.targetIsFuzzyMatch = true
-            route.targetPrefix=string.sub(route.targetPath,1,targetFuzzyMatchIndex)
+            route.targetFuzzyMatchIndex = targetFuzzyMatchIndex
+            route.targetPrefix = string.sub(route.targetPath, 1, targetFuzzyMatchIndex)
         end
     end
 
-    if route.stripPrefix == nil and group.stripPrefix ~= nil  then
+    if route.stripPrefix == nil and group.stripPrefix ~= nil then
         route.stripPrefix = group.stripPrefix
     end
 
     return true
-
 end
 
 ---
-
-function _M:getMatchRouteTargetPath(path,groupName)
+function _M:getMatchRouteTargetPath(path, groupName)
     local name = self:dealGroupName(groupName)
-
     -- print( name )
-
-
-    return getMatchRouteTargetPath(self.groups[name],path)
+    return getMatchRouteTargetPath(self.groups[name], path)
 end
 
+-- 处理group name 如果无或者nil，则为default
 function _M:dealGroupName(groupName)
     if not groupName then
         return self.defaultGroupName
@@ -128,37 +122,37 @@ end
 
 
 
-function _M:getMatchRoute(path,groupName)
+function _M:getMatchRoute(path, groupName)
     -- ngx.log(ngx.ERR, "$$$$$$:", json.encode(self.routingTable))
     -- print( "$$$$$$:", json.encode(self.routingTable))
     local name = self:dealGroupName(groupName)
-    return getMatchRoute(self.groups[name],path)
+    return getMatchRoute(self.groups[name], path)
 end
 
-function _M:getRouteTargetPath(route,path )
+function _M:getRouteTargetPath(route, path)
 
-    return getRouteTargetPath(route,path )
+    return getRouteTargetPath(route, path)
 end
 
-function getMatchRouteTargetPath( group, path )
+function getMatchRouteTargetPath(group, path)
 
-    local route = getMatchRoute(group,path)
+    local route = getMatchRoute(group, path)
 
     if not route then
         return nil
     end
 
-    return getRouteTargetPath(route,path)
+    return getRouteTargetPath(route, path)
 end
 
 function getMatchRoute(group, path)
-     -- print( dump(group) )
-     -- print( path )
+    -- print( dump(group) )
+    -- print( path )
     if not group then return nil end
 
-    for k,v in pairs(group.routes) do
-         -- print( dump(k),dump(v) )
-        if  isMatch(path,v) then
+    for k, v in pairs(group.routes) do
+        -- print( dump(k),dump(v) )
+        if isMatch(path, v) then
             return v
         end
     end
@@ -166,36 +160,43 @@ function getMatchRoute(group, path)
 end
 
 
-function getRouteTargetPath(route,path )
+function getRouteTargetPath(route, path)
 
     local tpath = path
-    local isStrip= false
+    local isStrip = false
+    --    print(json.encode(route))
 
     if route.targetPath then
 
-        if route.targetFuzzyMatchIndex and route.targetFuzzyMatchIndex>0 then
-            if route.targetPath  then
-                route.targetPrefix=string.sub(route.targetPath,1,route.targetFuzzyMatchIndex)
-            end
-            tpath=  path
-            isStrip=true
+        if route.targetIsFuzzyMatch then
+            tpath = path
+            isStrip = true
         else
+            --            print("1:  ",tpath)
             return route.targetPath
         end
     else
-        isStrip=true
+        isStrip = true
     end
 
+
+    --
     if isStrip and route.stripPrefix then
-        if route.targetPrefix then
-            return route.targetPrefix..string.sub(tpath,string.len(route.sourcePrefix)+1)
+
+        if route.targetIsFuzzyMatch then
+            --            print("2:  ",tpath)
+            return route.targetPrefix .. string.sub(tpath, string.len(route.sourcePrefix) + 1)
         else
-            return  string.sub(tpath,string.len(route.sourcePrefix))
+            --            print("3:  ",tpath)
+            return string.sub(tpath, string.len(route.sourcePrefix))
         end
     else
-        if route.targetPrefix then
-            return route.targetPrefix..string.sub(tpath,2)
+
+        if route.targetIsFuzzyMatch then
+            --            print("4:  ",tpath)
+            return route.targetPrefix .. string.sub(tpath, 2)
         else
+            --            print("5:  ",tpath)
             return tpath
         end
     end
@@ -203,25 +204,24 @@ end
 
 
 
-function isMatch(path,route)
+function isMatch(path, route)
 
     if route.sourceIsFuzzyMatch then
 
-        local foundSub = string.find(path, route.sourcePrefix,1)
-        if foundSub and foundSub==1 then
+        local foundSub = string.find(path, route.sourcePrefix, 1)
+        if foundSub and foundSub == 1 then
             return true
         else
             return false
         end
 
     else
-        if path==route.sourcePath then
+        if path == route.sourcePath then
             return true
         else
             return false
         end
     end
-
 end
 
 return _M

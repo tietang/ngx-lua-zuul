@@ -27,21 +27,26 @@ local KEY_ROUTERS = "__ROUTERS"
 local function readRoute(routeStr)
 
 
-    ngx.log(ngx.ERR, "route", routeStr)
+    ngx.log(ngx.ERR, "route ", routeStr)
     local lines = string.split(routeStr, "\n")
 
     for i, line in ipairs(lines) do
 
-        if not (line == "") then
-            ngx.log(ngx.ERR, "routes", line)
+        if not (line == "") or not strings.startswith(line, "##") then
+            ngx.log(ngx.ERR, "routes: ", line)
             local words = string.split(line, "=")
-            if table.maxn(words) == 2 then
-
+            local len = table.getn(words)
+            local stripPrifix = false
+            if len == 2 then
                 local sourcePath = words[1]
                 local appPath = string.split(words[2], ",")
-                if table.maxn(appPath) == 2 then
+                local plen = table.getn(appPath)
+                if plen == 3 then
+                    stripPrifix = appPath[3]
+                end
+                if plen >= 2 then
                     local appName, targetPath = appPath[1], appPath[2]
-                    local route = { sourcePath = sourcePath, app = appName, targetPath = targetPath, stripPrefix = false }
+                    local route = { sourcePath = sourcePath, app = appName, targetPath = targetPath, stripPrefix = stripPrifix }
                     router:addRoute(route)
                     ngx.log(ngx.ERR, "add route: ", line)
                 end
@@ -66,11 +71,11 @@ end
 
 function _M:init(...)
     self.router = router or {}
---    ngx.log(ngx.ERR, "arg type","    ", type(...))
+    --    ngx.log(ngx.ERR, "arg type","    ", type(...))
     local arg = { ... }
---    ngx.log(ngx.ERR, "arg type","    ", type(arg))
+    --    ngx.log(ngx.ERR, "arg type","    ", type(arg))
     ngx.log(ngx.ERR, "arg", arg[1])
---    eureka:setDiscoveryServers(arg)
+    --    eureka:setDiscoveryServers(arg)
     eureka:setDiscoveryServers(unpack(arg))
 
     readRoutes()
@@ -111,8 +116,8 @@ function _M:schedule()
         --         and last_executed_pid ~= currentWorkerPid -- 如果当前worker pid != 最后一次worker pid
         --         and (now-last_executed_pid_time) >= interval*c-0.1 --如果当前worker最后执行时间 >= 设定间隔*worker数量 - 0.1
         --     ) then
-         if  id % c == 0 then -->=NGINX 1.9.1+
---        if true then -->=NGINX 1.9.1+
+        --         if  id % c == 0 then -->=NGINX 1.9.1+ by anyone worker
+        if true then -->=NGINX 1.9.1+ by per worker
             -- getApps()
             local content, hosts, apps = _M:getAllApps()
             self:dealApps()

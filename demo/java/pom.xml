@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
     <version>1.0</version>
     <properties>
-        <spring.boot.version>1.4.4.RELEASE</spring.boot.version>
-        <spring.cloud.version>Camden.SR5</spring.cloud.version>
+        <spring.boot.version>1.4.5.RELEASE</spring.boot.version>
+        <spring.cloud.version>Camden.SR6</spring.cloud.version>
     </properties>
     <modules>
         <module>discovery</module>

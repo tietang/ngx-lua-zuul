@@ -13,6 +13,7 @@ function _M:incrByTimeKey(share, key, value)
     return share:incr(time_key, value)
 end
 
+
 function _M.dump(o)
     if type(o) == 'table' then
         local s = '{ '

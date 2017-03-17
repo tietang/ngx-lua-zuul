@@ -9,21 +9,21 @@
 local _M = { _VERSION = '0.1' }
 
 function _M:split(str, delimiter)
---    if (delimiter == '') then return false end
---    local pos, arr = 0, {}
---
---    for st, sp in function() return string.find(str, delimiter, pos, true) end do
---        table.insert(arr, string.sub(str, pos, st - 1))
---        pos = sp + 1
---    end
---    table.insert(arr, string.sub(str, pos))
---    return arr
-    return string.split(str,delimiter)
+    --    if (delimiter == '') then return false end
+    --    local pos, arr = 0, {}
+    --
+    --    for st, sp in function() return string.find(str, delimiter, pos, true) end do
+    --        table.insert(arr, string.sub(str, pos, st - 1))
+    --        pos = sp + 1
+    --    end
+    --    table.insert(arr, string.sub(str, pos))
+    --    return arr
+    return string.split(str, delimiter)
 end
 
 string.split = function(s, p)
-    local rt= {}
-    string.gsub(s, '[^'..p..']+', function(w) table.insert(rt, w) end )
+    local rt = {}
+    string.gsub(s, '[^' .. p .. ']+', function(w) table.insert(rt, w) end)
     return rt
 end
 
@@ -301,6 +301,11 @@ function _M:eval(str)
     if type(str) ~= "string" then return end
     local s = string.format("return %s", str)
     return loadstring(str)()
+end
+
+
+function _M:isHttpUrl(str)
+    return self:startswith(str, "http://") or self:startswith(str, "https://")
 end
 
 return _M

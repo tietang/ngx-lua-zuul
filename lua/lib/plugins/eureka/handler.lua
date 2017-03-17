@@ -10,9 +10,11 @@ discovery = require "plugins.eureka.discovery"
 balancer = require "plugins.eureka.robin"
 router = require "plugins.eureka.router"
 rateLimiter = require "plugins.eureka.LeakyBucket"
-
-
-
+weight = require "plugins.eureka.weight"
+strings = require "utils.strings"
+utils = require "utils.utils"
+fibonacci = require "plugins.eureka.fibonacci"
+url = require "utils.url"
 local _M = {
     name = "eureka",
     upstream_name = "_eureka_route",
@@ -23,7 +25,7 @@ local _M = {
 local function newRobin(appName)
 
     local hosts = discovery.hosts[string.upper(appName)]
-    -- ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(discovery.hosts))
+    --     ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(discovery.hosts))
 
     if hosts == nil then
         ngx.log(ngx.ERR, "^^^^^^^^^", "hosts is nil", appName)
@@ -55,7 +57,7 @@ local function getTarget()
     -- ngx.log(ngx.ERR,"^^^^^^^^^", uri," ",ngx.var.request_uri)
 
 
-    -- ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(router.routingTable))
+    --     ngx.log(ngx.ERR,"^^^^^^^^^", json.encode(router.routingTable))
 
     route = router:getMatchRoute(uri)
 
@@ -65,9 +67,19 @@ local function getTarget()
         ngx.say(" not found available target route for uri ", ngx.req.get_method(), " ", uri)
         return
     end
+    ngx.log(ngx.ERR, "^^^^^^^^^", uri, " ", route.targetPath, " ", strings:isHttpUrl(route.targetPath))
+    if route.targetPath and strings:isHttpUrl(route.targetPath) then
+        ngx.ctx.by_upstream = 0
+        ngx.ctx.by_bk_host = 1
+    else
+        ngx.ctx.by_upstream = 1
+        ngx.ctx.by_bk_host = 0
+    end
+    ngx.log(ngx.ERR, "^^^^^^^^^", json.encode(route))
 
     targetAppName = route.app
     targetPath = router:getRouteTargetPath(route, uri)
+    ngx.log(ngx.ERR, "$$$$$$: targetAppName=", targetAppName, ",targetPath=", targetPath)
     return targetAppName, targetPath
 end
 
@@ -93,10 +105,19 @@ function _M:initWorker()
 
     discovery:init(unpack(globalConfig.eureka.serverUrl))
     discovery:schedule()
+
+    weight:init(ngx.shared.lb)
+    weight:start()
 end
 
 function _M:rewrite()
     self:access1()
+
+
+    if ngx.ctx.by_bk_host == 1 then
+        -- rewrite  the current request's (parsed) URI
+        ngx.req.set_uri(ngx.ctx.targetPath)
+    end
 end
 
 function _M:access1()
@@ -118,18 +139,43 @@ function _M:access1()
     --    if limit(limitLevel, "api", ngx.var.uri) then return end
 
     local targetAppName, targetPath = getTarget()
-
+    ngx.log(ngx.ERR, "$$$$$$: targetAppName=", targetAppName, ",targetPath=", targetPath)
     if targetAppName == nil then
-        --         ngx.log(ngx.ERR,"^^^^^^^^^", "targetAppName is nil for uri:  ",ngx.var.request_uri)
+        ngx.log(ngx.ERR, "Not found target app name for uri:  ", ngx.var.request_uri)
         ngx.say("targetAppName is nil for uri:  " .. ngx.var.request_uri)
         return
     end
+
+
 
     if limit(limitLevel, "service", targetAppName) then return end
 
     local appName = string.upper(targetAppName)
     --         ngx.log(ngx.ERR,"$$$$$$: targetAppName=", targetAppName,",targetPath=",targetPath)
-    --         ngx.log(ngx.ERR, "^^^^^^^^^",  targetAppName )
+    ngx.log(ngx.ERR, "^^^^^^^^^", ngx.ctx.by_bk_host, "", ngx.ctx.by_upstream)
+
+    -- 通过域名代理
+    if ngx.ctx.by_bk_host == 1 then
+        ngx.ctx.pass = true --是否能正确代理
+        ngx.ctx.appName = appName
+        ngx.ctx.uri = ngx.var.uri
+        u = url.parse(targetPath)
+        ngx.log(ngx.ERR, "^^^^^^^^^", targetAppName, " ", targetPath)
+        -- direct
+        -- ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
+        -- by upstream & balancer
+        ngx.var.bk_host = targetPath
+        ngx.ctx.targetPath = ngx.var.uri
+        ngx.ctx.b_host = u.host
+        ngx.ctx.b_port = u.port or 80
+        ngx.var.by_bk_host = ngx.ctx.by_bk_host
+        ngx.var.by_upstream = ngx.ctx.by_upstream
+
+        ngx.log(ngx.ERR, "^^^^^^^^^", ngx.ctx.b_host, " ", ngx.ctx.b_port)
+        ngx.log(ngx.ERR, "^^^^^^^^^", ngx.ctx.by_bk_host, " ", ngx.ctx.by_upstream)
+        return
+    end
+
     local robin = newRobin(targetAppName)
 
     --    ngx.log(ngx.ERR, "^^^^^^^^^", json.encode(robin))
@@ -146,6 +192,7 @@ function _M:access1()
         ngx.say(" not found available target instance for uri ", ngx.req.get_method(), " ", uri)
         return
     end
+
     -- ngx.log(ngx.ERR,"^^^^^^^^^", host.hostStr)
     -- ngx.req.set_uri(targetPath, true)
     -- ngx.var.targetUri=targetPath
@@ -157,7 +204,7 @@ function _M:access1()
     -- if newval==nil then
     -- 	api_count:set(ngx.var.uri,1)
     -- end
-
+    ngx.ctx.pass = true
     ngx.ctx.appName = appName
     ngx.ctx.uri = ngx.var.uri
 
@@ -167,42 +214,46 @@ function _M:access1()
     -- ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
     -- by upstream & balancer
     ngx.var.bk_host = self.upstream_name .. targetPath
+    ngx.ctx.targetPath = targetPath
     ngx.ctx.b_host = host.ip
     ngx.ctx.b_port = host.port
+    ngx.var.by_bk_host = ngx.ctx.by_bk_host
+    ngx.var.by_upstream = ngx.ctx.by_upstream
+    --    ngx.log(ngx.ERR, "host: ", ngx.ctx.b_host, " ", ngx.ctx.b_port)
+    ngx.log(ngx.ERR, "$$$$$$: by_bk_host=", ngx.var.by_bk_host, ", by_upstream=", ngx.var.by_upstream)
 end
 
 
 function _M:balance()
+    ngx.log(ngx.ERR, "$$$$$$: balancer: ", ngx.ctx.b_host,":",ngx.ctx.b_port, ", by_upstream=", ngx.var.by_upstream)
+    if ngx.ctx.by_upstream == "1" then
+        local balancer = require "ngx.balancer"
 
-    local balancer = require "ngx.balancer"
+        -- well, usually we calculate the peer's host and port
+        -- according to some balancing policies instead of using
+        -- hard-coded values like below
 
-    -- well, usually we calculate the peer's host and port
-    -- according to some balancing policies instead of using
-    -- hard-coded values like below
+        --    ngx.log(ngx.ERR, "^^^^^^^^^： ", ngx.ctx.b_host, ngx.ctx.b_port)
 
-    --    ngx.log(ngx.ERR, "^^^^^^^^^： ", ngx.ctx.b_host, ngx.ctx.b_port)
-
-    local ok, err = balancer.set_current_peer(ngx.ctx.b_host, ngx.ctx.b_port)
-    --    ok, err = balancer.set_more_tries(2)
-    --    state_name, status_code = balancer.get_last_failure()
-    --    ok, err = balancer.set_timeouts(connect_timeout, send_timeout, read_timeout)
+        local ok, err = balancer.set_current_peer(ngx.ctx.b_host, ngx.ctx.b_port)
+        --    ok, err = balancer.set_more_tries(2)
+        --    state_name, status_code = balancer.get_last_failure()
+        --    ok, err = balancer.set_timeouts(connect_timeout, send_timeout, read_timeout)
 
 
-    if not ok then
-        ngx.log(ngx.ERR, "failed to set the current peer: ", err)
-        return ngx.exit(500)
+        if not ok then
+            ngx.log(ngx.ERR, "failed to set the current peer: ", err)
+            return ngx.exit(500)
+        end
     end
 end
 
 
-function _M.log()
-    local req_time = tonumber(ngx.var.request_time) or 0
-    local res_time = tonumber(ngx.var.upstream_response_time) or 0
-    key = ngx.ctx.b_host .. ":" .. ngx.ctx.b_port
-    local now = ngx.time()
-    local windowSeconds = globalConfig.lb.windowInSeconds
-    local time_key = windowSeconds * math.floor(now / windowSeconds)
+function _M:log()
 
+    weight:onLog()
 end
+
+
 
 return _M
