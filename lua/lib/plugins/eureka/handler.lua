@@ -1,5 +1,5 @@
 --
--- User: Tietang Wang 铁汤 
+-- User: Tietang Wang 铁汤
 -- Date: 16/8/24 17:14
 -- Blog: http://tietang.wang
 --
@@ -20,6 +20,7 @@ local _M = {
     upstream_name = "_eureka_route",
     version = "1.0"
 }
+
 
 
 local function newRobin(appName)
@@ -69,12 +70,17 @@ local function getTarget()
     end
     ngx.log(ngx.ERR, "^^^^^^^^^", uri, " ", route.targetPath, " ", strings:isHttpUrl(route.targetPath))
     if route.targetPath and strings:isHttpUrl(route.targetPath) then
-        ngx.ctx.by_upstream = 0
-        ngx.ctx.by_bk_host = 1
+        ngx.ctx.by_upstream = "false"
+        ngx.ctx.by_bk_host = "true"
+        ngx.var.by_upstream = "false"
+        ngx.var.by_bk_host = "true"
     else
-        ngx.ctx.by_upstream = 1
-        ngx.ctx.by_bk_host = 0
+        ngx.ctx.by_upstream = "true"
+        ngx.ctx.by_bk_host = "false"
+        ngx.var.by_upstream = "true"
+        ngx.var.by_bk_host = "false"
     end
+    ngx.log(ngx.ERR, "^^^^^^^^^", ngx.ctx.by_bk_host, " ", ngx.ctx.by_upstream)
     ngx.log(ngx.ERR, "^^^^^^^^^", json.encode(route))
 
     targetAppName = route.app
@@ -114,7 +120,7 @@ function _M:rewrite()
     self:access1()
 
 
-    if ngx.ctx.by_bk_host == 1 then
+    if ngx.ctx.by_upstream == "true" then
         -- rewrite  the current request's (parsed) URI
         ngx.req.set_uri(ngx.ctx.targetPath)
     end
@@ -155,16 +161,23 @@ function _M:access1()
     ngx.log(ngx.ERR, "^^^^^^^^^", ngx.ctx.by_bk_host, "", ngx.ctx.by_upstream)
 
     -- 通过域名代理
-    if ngx.ctx.by_bk_host == 1 then
+    if ngx.ctx.by_bk_host == "true" then
         ngx.ctx.pass = true --是否能正确代理
         ngx.ctx.appName = appName
         ngx.ctx.uri = ngx.var.uri
         u = url.parse(targetPath)
         ngx.log(ngx.ERR, "^^^^^^^^^", targetAppName, " ", targetPath)
         -- direct
-        -- ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
+        --         ngx.var.bk_host = u.host .. ":" .. (u.port or '') .. targetPath
         -- by upstream & balancer
-        ngx.var.bk_host = targetPath
+
+--        if strings.startswith(targetPath, "https://") then
+--            ngx.var.bk_host = string.sub(targetPath, 9)
+--        end
+--        if strings.startswith(targetPath, "http://") then
+--            ngx.var.bk_host = string.sub(targetPath, 8)
+--        end
+        ngx.var.bk_host =targetPath
         ngx.ctx.targetPath = ngx.var.uri
         ngx.ctx.b_host = u.host
         ngx.ctx.b_port = u.port or 80
@@ -213,20 +226,21 @@ function _M:access1()
     -- direct
     -- ngx.var.bk_host = host.ip .. ":" .. host.port .. targetPath
     -- by upstream & balancer
-    ngx.var.bk_host = self.upstream_name .. targetPath
+    ngx.var.bk_host = "http://"..self.upstream_name .. targetPath
     ngx.ctx.targetPath = targetPath
     ngx.ctx.b_host = host.ip
     ngx.ctx.b_port = host.port
     ngx.var.by_bk_host = ngx.ctx.by_bk_host
     ngx.var.by_upstream = ngx.ctx.by_upstream
+
     --    ngx.log(ngx.ERR, "host: ", ngx.ctx.b_host, " ", ngx.ctx.b_port)
     ngx.log(ngx.ERR, "$$$$$$: by_bk_host=", ngx.var.by_bk_host, ", by_upstream=", ngx.var.by_upstream)
 end
 
 
 function _M:balance()
-    ngx.log(ngx.ERR, "$$$$$$: balancer: ", ngx.ctx.b_host,":",ngx.ctx.b_port, ", by_upstream=", ngx.var.by_upstream)
-    if ngx.ctx.by_upstream == "1" then
+    ngx.log(ngx.ERR, "$$$$$$: balancer: ", ngx.ctx.b_host, ":", ngx.ctx.b_port, ", by_upstream=", ngx.var.by_upstream)
+    if ngx.ctx.by_upstream == "true" then
         local balancer = require "ngx.balancer"
 
         -- well, usually we calculate the peer's host and port
