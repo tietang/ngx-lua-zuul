@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2016/12/14 14:37
  * @blog http://tietang.wang
  */
-@Component
+//@Component
 public class PreZuulFilter extends ZuulFilter {
 
     @Override
@@ -31,8 +31,8 @@ public class PreZuulFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
 
-        System.out.println(ctx.getRouteHost());
-        System.out.println(ctx.getRequest().getRequestURL());
+//        System.out.println(ctx.getRouteHost());
+//        System.out.println(ctx.getRequest().getRequestURL());
         return null;
     }
 }

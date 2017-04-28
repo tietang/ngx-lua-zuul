@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="274.75" y="83.0">com.netflix.eureka.registry.ResponseCacheImpl</node>
+    <node x="38.0" y="498.0">demo.EurekaInstanceRegisteredListener</node>
+    <node x="71.94444444444443" y="83.0">com.netflix.eureka.registry.InstanceRegistry</node>
+    <node x="159.0" y="0.0">com.netflix.eureka.lease.LeaseManager</node>
+    <node x="1.944444444444457" y="166.0">com.netflix.eureka.registry.PeerAwareInstanceRegistry</node>
+    <node x="0.0" y="0.0">com.netflix.discovery.shared.LookupService</node>
+    <node x="337.5" y="0.0">com.netflix.eureka.registry.ResponseCache</node>
+    <node x="259.25" y="166.0">com.netflix.eureka.registry.AbstractInstanceRegistry</node>
+    <node x="107.6875" y="249.0">com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl" target="com.netflix.eureka.registry.AbstractInstanceRegistry">
+      <point x="61.0" y="-16.5" />
+      <point x="290.6875" y="224.0" />
+      <point x="361.75" y="224.0" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.PeerAwareInstanceRegistry" target="com.netflix.eureka.registry.InstanceRegistry">
+      <point x="0.0" y="-16.5" />
+      <point x="-38.0" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.InstanceRegistry" target="com.netflix.discovery.shared.LookupService">
+      <point x="-38.0" y="-16.5" />
+      <point x="109.94444444444443" y="58.0" />
+      <point x="69.5" y="58.0" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.InstanceRegistry" target="com.netflix.eureka.lease.LeaseManager">
+      <point x="38.0" y="-16.5" />
+      <point x="185.94444444444443" y="58.0" />
+      <point x="227.0" y="58.0" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.AbstractInstanceRegistry" target="com.netflix.eureka.registry.ResponseCacheImpl">
+      <point x="-25.625" y="-16.5" />
+      <point x="336.125" y="141.0" />
+      <point x="318.25" y="141.0" />
+      <point x="-43.5" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.AbstractInstanceRegistry" target="com.netflix.eureka.registry.ResponseCache">
+      <point x="76.87500000000001" y="-16.5" />
+      <point x="438.625" y="141.0" />
+      <point x="459.25" y="141.0" />
+      <point x="459.25" y="58.0" />
+      <point x="447.0" y="58.0" />
+      <point x="36.5" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl" target="com.netflix.eureka.registry.PeerAwareInstanceRegistry">
+      <point x="-61.0" y="-16.5" />
+      <point x="168.6875" y="224.0" />
+      <point x="109.94444444444446" y="224.0" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.ResponseCacheImpl" target="com.netflix.eureka.registry.ResponseCache">
+      <point x="0.0" y="-16.5" />
+      <point x="361.75" y="58.0" />
+      <point x="374.0" y="58.0" />
+      <point x="-36.5" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.AbstractInstanceRegistry" target="com.netflix.eureka.registry.InstanceRegistry">
+      <point x="-76.875" y="-16.5" />
+      <point x="284.875" y="141.0" />
+      <point x="185.94444444444443" y="141.0" />
+      <point x="38.0" y="16.5" />
+    </edge>
+    <edge source="com.netflix.eureka.registry.ResponseCacheImpl" target="com.netflix.eureka.registry.AbstractInstanceRegistry">
+      <point x="43.500000000000014" y="16.5" />
+      <point x="405.25" y="141.0" />
+      <point x="387.375" y="141.0" />
+      <point x="25.625" y="-16.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.6509513466697427" x="251.64929497448944" y="103.2782204851188" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

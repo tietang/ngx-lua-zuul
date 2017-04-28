@@ -10,8 +10,12 @@
     <packaging>pom</packaging>
     <version>1.0</version>
     <properties>
-        <spring.boot.version>1.4.5.RELEASE</spring.boot.version>
-        <spring.cloud.version>Camden.SR6</spring.cloud.version>
+        <spring.boot.version>1.5.3.RELEASE</spring.boot.version>
+        <spring.cloud.version>Dalston.RELEASE</spring.cloud.version>
+
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <root.dir>${project.basedir}/..</root.dir>
     </properties>
     <modules>
         <module>discovery</module>
@@ -21,6 +25,7 @@
         <module>monitor</module>
         <module>authserver</module>
         <module>sso</module>
+        <module>lb</module>
     </modules>
     <build>
         <plugins>
@@ -31,6 +36,7 @@
                 <configuration>
                     <executable>true</executable>
                     <classifier>exec</classifier>
+                    <embeddedLaunchScript>${root.dir}/scripts/launch.sh</embeddedLaunchScript>
                     <embeddedLaunchScriptProperties>
                         <mode>service</mode>
                     </embeddedLaunchScriptProperties>
@@ -56,7 +62,7 @@
             <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.16.12.0</version>
+                <version>1.16.14.0</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -68,7 +74,25 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>kry-nexus</id>
+            <url>http://nexus.shishike.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
 
+        <repository>
+            <id>kry-nexus-snapshots</id>
+            <url>http://nexus.shishike.com/nexus/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -101,7 +125,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.12</version>
+            <version>1.16.14</version>
         </dependency>
     </dependencies>
 

@@ -1,20 +1,36 @@
+spring:
+  application:
+    name: api
 server:
   port: 7912
 banner.image.location: banner.jpg
 eureka:
   instance:
     preferIpAddress: true
-    leaseRenewalIntervalInSeconds: 10
     appname: ${spring.application.name:unknown}
+    status-page-url-path: /info
+    health-check-url-path: /health
+    #心跳周期，默认30s
+    lease-renewal-interval-in-seconds: 3
+    #eureka server 心跳等待的时间，未收到心跳会删除此实例，要比心跳值大LeaseRenewalIntervalInSeconds，默认值90s
+    lease-expiration-duration-in-seconds: 6
+    metadata-map:
+      instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+      notify: true
 
   client:
-
+  #注意要设置在application.yml中
+    healthcheck:
+      enabled: true
     registerWithEureka: true
     fetchRegistry: true
+    region: ali-hz-1
+    #从eureka server拉取注册信息的周期，默认30s
+    registry-fetch-interval-seconds: 3
     serviceUrl:
       defaultZone: http://172.16.1.248:8761/eureka/
 
-spring:
-  application:
-    name: api
+
+
+
 

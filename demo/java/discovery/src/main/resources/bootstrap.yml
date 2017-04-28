@@ -1,10 +1,13 @@
+spring:
+  application:
+    name: discovery
+  profiles:
+    active: local
 server:
   port: 8761
 
-
-
 eureka:
-  environment: nginx_demo
+  environment: local
   instance:
 #    hostname: localhost
     preferIpAddress: true
@@ -13,11 +16,25 @@ eureka:
     enabled: false
   waitTimeInMsWhenSyncEmpty: 0
   server:
+    #是否开启自我保护模式，默认为true。
     enableSelfPreservation: true
+    #默认是85%
+    renewal-percent-threshold: 0.85
+    #默认是15分钟
+    renewal-threshold-update-interval-ms: 60000
+    #缓存更新时间，默认30s
+    response-cache-update-interval-ms: 10
+    #缓存过期时间，默认180s
+    response-cache-auto-expiration-in-seconds: 30
+    # 实例过期清理时间间隔，默认60秒
+    eviction-interval-timer-in-ms: 10000
+
   client:
-    registryFetchIntervalSeconds: 5
-    registerWithEureka: false
-    fetchRegistry: false
+    healthcheck:
+      enabled: true
+    region: ali-hz-1
+    registerWithEureka: true
+    fetchRegistry: true
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname:localhost}:${server.port:8761}/eureka/
 

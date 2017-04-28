@@ -15,6 +15,7 @@ spring:
   application:
     name: zuul
 
+zuul.RibbonRoutingFilter.route.disable: true
 #api:
 #  ribbon:
 #    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
@@ -48,3 +49,19 @@ zuul.host.maxTotalConnections: 200
 zuul.host.maxPerRouteConnections: 10
 zuul.semaphore.max-semaphores: 128
 zuul.eureka.api.semaphore.maxSemaphores: 110
+
+
+
+ribbon.okhttp.enabled: true
+ribbon.NFLoadBalancerClassName: com.netflix.loadbalancer.DynamicServerListLoadBalancer
+ribbon.NIWSServerListClassName: com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList
+#ribbon.NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule
+ribbon.NFLoadBalancerRuleClassName: demo.zuul.BestAvailableRule
+ribbon.NIWSServerListFilterClassName: com.netflix.niws.loadbalancer.DefaultNIWSServerListFilter
+
+api.ribbon.NFLoadBalancerClassName: com.netflix.loadbalancer.DynamicServerListLoadBalancer
+api.ribbon.NIWSServerListClassName: com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList
+#api.ribbon.NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule
+api.ribbon.NFLoadBalancerRuleClassName: demo.zuul.BestAvailableRule
+api.ribbon.NIWSServerListFilterClassName: com.netflix.niws.loadbalancer.DefaultNIWSServerListFilter
+#infra-msm.ribbon.NFLoadBalancerPingClassName:

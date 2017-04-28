@@ -4,21 +4,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Applications;
+import demo.zuul.RibbonRoutingZuulFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.Advised;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.netflix.ribbon.support.RibbonRequestCustomizer;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
+import org.springframework.cloud.netflix.zuul.filters.route.RibbonCommandFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,11 +39,25 @@ import java.util.List;
 @EnableHystrix
 @Controller
 @Slf4j
+@EnableConfigurationProperties
 public class Application {
+
+    @SuppressWarnings("rawtypes")
+    @Autowired(required = false)
+    private List<RibbonRequestCustomizer> requestCustomizers = Collections.emptyList();
 
     @Autowired
     EurekaClient eurekaClient;
 
+    @Bean
+    public RibbonRoutingZuulFilter ribbonRoutingFilter(
+            ProxyRequestHelper helper,
+            RibbonCommandFactory<?> ribbonCommandFactory) {
+        RibbonRoutingZuulFilter filter = new RibbonRoutingZuulFilter(helper,
+                                                                     ribbonCommandFactory,
+                                                                     this.requestCustomizers);
+        return filter;
+    }
 
     @RequestMapping("/test")
     @ResponseBody

@@ -1,12 +1,11 @@
 package demo;
 
 import com.google.common.collect.Lists;
-import com.netflix.loadbalancer.BaseLoadBalancer;
-import com.netflix.loadbalancer.LoadBalancerBuilder;
-import com.netflix.loadbalancer.Server;
-import com.netflix.loadbalancer.ServerList;
+import com.netflix.loadbalancer.*;
 import com.netflix.loadbalancer.reactive.LoadBalancerCommand;
 import com.netflix.loadbalancer.reactive.ServerOperation;
+import com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList;
+import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
 import com.netflix.ribbon.RibbonRequest;
 import com.netflix.ribbon.proxy.annotation.Http;
 import com.netflix.ribbon.proxy.annotation.Var;
@@ -24,6 +23,8 @@ import java.util.List;
 public class Re {
 
     public static void main(String[] args) {
+
+
         //        Api movieService = Ribbon.from(Api.class);
         //        Observable<String> result = movieService.recommendationsByUserId("user1").observe();
 
@@ -31,22 +32,22 @@ public class Re {
             @Override
             public List<Server> getInitialListOfServers() {
                 return Lists.newArrayList(
-                        new Server("www.baidu.com", 80),
-                        new Server("www.qq.com", 80),
-                        new Server("www.163.com", 80));
+                        new Server("172.16.30.3", 18003),
+                        new Server("172.16.30.10", 9108),
+                        new Server("172.16.30.1", 9120));
             }
 
             @Override
             public List<Server> getUpdatedListOfServers() {
                 return Lists.newArrayList(
-                        new Server("www.baidu.com", 80),
-                        new Server("www.qq.com", 80),
-                        new Server("www.163.com", 80));
+                        new Server("172.16.30.3", 18003),
+                        new Server("172.16.30.10", 9108),
+                        new Server("172.16.30.10", 9120));
             }
         };
 
         BaseLoadBalancer loadBalancer = LoadBalancerBuilder.<Server>newBuilder()
-                .withRule(new FibonacciWeightedResponseTimeRule())
+                .withRule(new demo.FibonacciWeightedResponseTimeRule())
                 .buildFixedServerListLoadBalancer(
                         serverList.getInitialListOfServers());
 
@@ -61,7 +62,7 @@ public class Re {
 
                             URL url;
                             try {
-                                url = new URL("http://" + server.getHost() + ":" + server.getPort());
+                                url = new URL("http://" + server.getHost() + ":" + server.getPort()+"/info");
                                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                                 return Observable.just(conn.getResponseMessage());
                             } catch (Exception e) {
