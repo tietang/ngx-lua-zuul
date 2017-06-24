@@ -1,3 +1,13 @@
+
+## 注：
+
+
+### 由于nginx 平台和lua语言特性的众多有限，在功能实现上有一些瓶颈，所以该项目目前不在维护了。
+
+### 但已经转移到了用golang来实现，移步到[go-zuul]<(https://github.com/tietang/go-zuul)>，目前已经实现了一个最简版本，但不能用于生产。
+
+
+
 依赖：lua-resty-http
 
 
