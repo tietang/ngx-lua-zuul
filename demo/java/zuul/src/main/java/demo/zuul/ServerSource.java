@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class ServerSource implements ISource {
 
+    private String name;
     private long weight = 1;//权重
     private long currentWeight;//当前权重
     private long effectiveWeight;
@@ -19,13 +20,22 @@ public class ServerSource implements ISource {
     private boolean isBackup;
     private boolean isDown;
     private Server server;
-    private String name;
+
     //
     private long currentFailedNumbers;
     private long currentSuccessNumbers;
     private double currentFailedResTime;
     private double currentSuccessResTime;
 
+    public ServerSource(String name) {
+        this(name, 1);
+    }
+
+    public ServerSource(String name, long weight) {
+        this.name = name;
+        this.weight = weight;
+        this.effectiveWeight = weight;
+    }
 
     @Override
     public int compareTo(ISource o) {

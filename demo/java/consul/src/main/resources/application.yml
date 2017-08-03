@@ -1,0 +1,16 @@
+
+
+spring:
+  cloud:
+    consul:
+      host: 172.16.1.248
+      port: 8500
+      discovery:
+        healthCheckPath: /health
+        healthCheckInterval: 15s
+        tags: foo=bar, baz
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+
+  application:
+    name: demo1
+

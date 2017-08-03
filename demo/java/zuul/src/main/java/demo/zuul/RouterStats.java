@@ -106,7 +106,7 @@ public class RouterStats extends TimerTask {
     }
 
 
-    private List<ISource> getSources(List<Server> serverList) {
+    public List<ISource> getSources(List<Server> serverList) {
         //        List<ISource> sources = new ArrayList<>();
         long key = getCuttentTimeKey();
         //        for (Server server : serverList) {
@@ -118,9 +118,8 @@ public class RouterStats extends TimerTask {
         return serverList.stream().map(s -> {
             RollingNumbers numbers = metrics.get(s.getHostPort());
             RollingNumber rn = numbers.getRollingNumber(key);
-            ServerSource source = new ServerSource();
+            ServerSource source = new ServerSource(s.getHostPort());
             source.setServer(s);
-            source.setName(s.getHostPort());
             source.setCurrentFailedNumbers(rn.getCount(RollingNumberEvent.FAILURE));
             source.setCurrentSuccessNumbers(rn.getCount(RollingNumberEvent.SUCCESS));
             source.setCurrentFailedResTime(rn.getDouble(RollingNumberEvent.SUCCESS));

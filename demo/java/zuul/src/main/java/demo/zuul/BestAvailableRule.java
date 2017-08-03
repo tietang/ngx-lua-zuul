@@ -4,7 +4,9 @@ import com.netflix.loadbalancer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Tietang Wang 铁汤
@@ -15,36 +17,62 @@ import java.util.List;
 
 public class BestAvailableRule extends ClientConfigEnabledRoundRobinRule {
 
+
     private LoadBalancerStats loadBalancerStats;
     private static Logger stats = LoggerFactory.getLogger("STATS");
+    private List<ServerSource> serverSources = new ArrayList<>();
 
     @Override
     public Server choose(Object key) {
-        if (loadBalancerStats == null) {
-            return super.choose(key);
-        }
         List<Server> serverList = getLoadBalancer().getAllServers();
+        if (loadBalancerStats == null) {
+
+            return next(key);
+        }
+
         int minimalConcurrentConnections = Integer.MAX_VALUE;
         long currentTime = System.currentTimeMillis();
         Server chosen = null;
-        for (Server server : serverList) {
-            ServerStats serverStats = loadBalancerStats.getSingleServerStat(server);
-//            stats.info(serverStats.toString());
-            if (!serverStats.isCircuitBreakerTripped(currentTime)) {
-                int concurrentConnections = serverStats.getActiveRequestsCount(currentTime);
-                if (concurrentConnections < minimalConcurrentConnections) {
-                    minimalConcurrentConnections = concurrentConnections;
-                    chosen = server;
-                }
-            }
-        }
+
         if (chosen == null) {
-            chosen = super.choose(key);
+            chosen = next(key);
         }
 
         RouterStats.set(chosen);
 
         return chosen;
+    }
+
+    private Server next(Object key) {
+        List<Server> serverList = getLoadBalancer().getAllServers();
+        serverSources = toSources(serverList);
+        ServerSource source = RobinRound.next(serverSources);
+        return source.getServer();
+    }
+
+    public List<ServerSource> getServerSources() {
+        return serverSources;
+    }
+
+    private List<ServerSource> toSources(List<Server> serverList) {
+        return serverList.stream().map(s -> {
+            ServerSource source = source(s);
+            return source;
+        }).collect(Collectors.toList());
+    }
+
+    private ServerSource source(Server server) {
+        ServerSource[] ss = new ServerSource[1];
+        serverSources.stream().forEach(s -> {
+            if (s.getServer().equals(server)) {
+                ss[0] = s;
+            }
+        });
+        if (ss[0] == null) {
+            ss[0] = new ServerSource(server.getHostPort());
+            ss[0].setServer(server);
+        }
+        return ss[0];
     }
 
 

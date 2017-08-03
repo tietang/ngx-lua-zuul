@@ -66,6 +66,8 @@ public class RibbonRoutingZuulFilter extends RibbonRoutingFilter {
             return response;
         } catch (HystrixRuntimeException ex) {
             return handleExceptionInner(info, serviceMark, ex);
+        }finally {
+
         }
 
     }
@@ -120,7 +122,4 @@ public class RibbonRoutingZuulFilter extends RibbonRoutingFilter {
         }
     }
 
-    public static void main(String[] args) throws JsonProcessingException {
-
-    }
 }

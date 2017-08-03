@@ -6,7 +6,7 @@ package demo.zuul;
  * @blog http://tietang.wang
  */
 public interface ISource extends Comparable<ISource> {
-    long getName();
+    String getName();
 
     long getWeight();
 

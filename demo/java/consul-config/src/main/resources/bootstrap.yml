@@ -1,0 +1,28 @@
+
+spring:
+  cloud:
+    consul:
+      host: 172.16.1.248
+      port: 8500
+      config:
+        enabled: true
+        prefix: config
+        defaultContext: apps
+        profileSeparator: ':'
+        format: properties
+        data-key: data
+#格式为properties和yaml时：
+#consol中配置key/value：
+# key= {prefix}/{appName[defaultContext][profileSeparator[profile]]}/{data-key}
+# key=  /config/demo2/data
+#value内容为yaml文件内容
+# value:
+#
+#   server.port: 9090
+#   foo.bar: v
+#
+#格式为key/value时和zookeeper一样：
+# /config/demo2/server/port=9090
+  application:
+    name: demo2
+

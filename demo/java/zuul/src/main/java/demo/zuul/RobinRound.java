@@ -58,12 +58,12 @@ public class RobinRound {
     }
 
 
-    public static void main2(String[] args) {
+    public static void main(String[] args) {
         List<TestSource> list = new ArrayList<>();
 
         list.add(new TestSource("a", 3, 0));
         list.add(new TestSource("b", 2, 0));
-        list.add(new TestSource("c", 0, 0));
+        list.add(new TestSource("c", 1, 0));
         //        list.add(new Source("d", 1, 0));
         //        list.add(new Source("e", 1, 0));
 
@@ -74,8 +74,8 @@ public class RobinRound {
         }
     }
 
+
     @Data
-    //    @ToString
     static class TestSource implements ISource {
 
         private String name;
