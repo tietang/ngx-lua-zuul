@@ -21,6 +21,13 @@ spring:
 #   server.port: 9090
 #   foo.bar: v
 #
+# key=  /config/demo2:datasource/data
+#value内容为yaml文件内容
+# value:
+#
+#   server.port: 9090
+#   foo.bar: v
+#
 #格式为key/value时和zookeeper一样：
 # /config/demo2/server/port=9090
   application:

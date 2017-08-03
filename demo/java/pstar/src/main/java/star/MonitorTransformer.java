@@ -26,7 +26,7 @@ public class MonitorTransformer implements ClassFileTransformer {
             byte[] classfileBuffer) throws IllegalClassFormatException {
         Enhancer e = new Enhancer();
         e.setSuperclass(classBeingRedefined);
-        e.setCallback(interceptor);
+//        e.setCallback(interceptor.c);
         Object bean = e.create();
       Class clazz=  e.createClass();
 

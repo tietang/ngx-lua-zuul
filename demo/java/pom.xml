@@ -11,8 +11,8 @@
     <version>1.0</version>
     <properties>
         <spring.version>4.3.9.RELEASE</spring.version>
-        <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
-        <spring-cloud.version>Dalston.SR1</spring-cloud.version>
+        <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
+        <spring.cloud.version>Dalston.SR1</spring.cloud.version>
 
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
@@ -28,6 +28,8 @@
         <module>sso</module>
         <module>lb</module>
         <module>pstar</module>
+        <module>consul</module>
+        <module>consul-config</module>
     </modules>
     <build>
         <plugins>
